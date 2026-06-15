@@ -1,0 +1,2174 @@
+/* =============================================
+   KORAA-STYLE CUSTOM OVERRIDES
+   Warm, earthy, artisanal aesthetic
+   ============================================= */
+
+/* --- Color Palette --- */
+:root {
+  --koraa-bg-warm: #FFFFFF;
+  --koraa-bg-cream: #FDFDFD;
+  --koraa-bg-beige: #F8F8F8;
+  --koraa-text-dark: #2C2C2C;
+  --koraa-text-medium: #5A5A5A;
+  --koraa-text-light: #8A8A8A;
+  --koraa-accent: #B8860B;
+  --koraa-accent-soft: #D4A853;
+  --koraa-border: #EEEEEE;
+  --koraa-white: #FFFFFF;
+  --koraa-black: #1A1A1A;
+}
+
+/* --- Global Body --- */
+html, body {
+  background-color: var(--koraa-bg-warm) !important;
+  color: var(--koraa-text-dark);
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* --- Announcement Bar --- */
+.koraa-announcement {
+  background-color: var(--koraa-black);
+  color: var(--koraa-white);
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+}
+
+.koraa-announcement a {
+  color: var(--koraa-accent-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- Header Overrides + Koraa Scroll Behavior --- */
+
+/* Reset hardcoded heights and internal paddings so custom padding sliders work to 0px */
+.header,
+.header__row,
+.header__row--top,
+.header__columns,
+.header__column,
+.header-logo,
+.header__heading,
+.header__heading-link,
+.menu-list__item,
+.header-actions__action {
+  min-height: 0 !important;
+  margin-block: 0 !important;
+}
+
+.header__columns {
+  padding-block: 0 !important;
+}
+
+.header__column {
+  padding-block: 0 !important;
+}
+
+/* Apply custom padding from Theme Settings */
+.header {
+  background: var(--koraa-white);
+  padding-block: var(--custom-header-padding-desktop) !important;
+}
+
+@media screen and (max-width: 749px) {
+  .header {
+    padding-block: var(--custom-header-padding-mobile) !important;
+  }
+}
+
+.header__underlay-closed,
+.header__underlay-open {
+  background: var(--koraa-white);
+}
+
+/* ====================================
+   KORAA SCROLL STATE MACHINE
+   States: 'hidden' | 'visible'
+   Hidden = hero visible (header transparent, only logo on mobile)
+   Visible = scrolled past hero (header fades in from top)
+   ==================================== */
+
+/* Announcement bar transitions */
+#koraa-announcement {
+  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform, max-height;
+  overflow: hidden;
+}
+
+/* Hidden state for announcement bar — always hidden on hero */
+body[data-koraa-scroll-state="hidden"] #koraa-announcement {
+  opacity: 0;
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  pointer-events: none;
+}
+
+/* Fix mobile product page overlap */
+@media screen and (max-width: 749px) {
+  .buy-buttons-block,
+  .product-form-component,
+  product-form-component,
+  .line-item-property__field {
+    display: block !important;
+    height: auto !important;
+  }
+  
+  .product-details {
+    height: auto !important;
+    min-height: min-content !important;
+    padding-bottom: 30px !important;
+  }
+  
+  #shopify-section-product-recommendations,
+  .product-recommendations {
+    clear: both !important;
+    position: relative !important;
+    z-index: 10 !important;
+    margin-top: 40px !important;
+  }
+}
+
+/* Visible state for announcement bar */
+body[data-koraa-scroll-state="visible"] #koraa-announcement {
+  opacity: 1;
+  max-height: 60px;
+  pointer-events: auto;
+}
+
+/* Header section — the main transition target */
+body[data-koraa-scroll-state] .header-section {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+/* Header underlay transitions for smooth bg fade */
+body[data-koraa-scroll-state] .header__underlay-closed,
+body[data-koraa-scroll-state] .header__underlay-open {
+  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Make header overlay the hero (positioned fixed on index page) */
+body[data-koraa-scroll-state] #header-group {
+  display: block !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  pointer-events: none;
+  width: 100%;
+}
+
+body[data-koraa-scroll-state] #header-group * {
+  pointer-events: auto;
+}
+
+/* ── HIDDEN STATE: Header transparent, floating over hero ── */
+
+/* Hide header background underlays */
+body[data-koraa-scroll-state="hidden"] .header__underlay-closed,
+body[data-koraa-scroll-state="hidden"] .header__underlay-open {
+  opacity: 0 !important;
+}
+
+/* Make header transparent */
+body[data-koraa-scroll-state="hidden"] .header {
+  background: transparent !important;
+}
+
+/* Hide header border */
+body[data-koraa-scroll-state="hidden"] .header__row--top {
+  border-bottom-color: transparent !important;
+}
+
+/* Make logo white/light on hero for contrast */
+body[data-koraa-scroll-state="hidden"] .header-logo img,
+body[data-koraa-scroll-state="hidden"] .header-logo svg {
+  filter: brightness(0) invert(1);
+  transition: filter 0.4s ease;
+}
+
+/* Make all header text and icons white on hero */
+body[data-koraa-scroll-state="hidden"] .header__row {
+  --color-foreground: #FFFFFF !important;
+  --color-foreground-rgb: 255, 255, 255 !important;
+  --color-foreground-heading: #FFFFFF !important;
+  --color-foreground-heading-rgb: 255, 255, 255 !important;
+  color: #FFFFFF !important;
+}
+
+/* Ensure menu links and action icons explicitly inherit the white color */
+body[data-koraa-scroll-state="hidden"] .menu-list__link,
+body[data-koraa-scroll-state="hidden"] .menu-list__link-title,
+body[data-koraa-scroll-state="hidden"] .header-actions__action,
+body[data-koraa-scroll-state="hidden"] .dropdown-localization__button,
+body[data-koraa-scroll-state="hidden"] .currency-code,
+body[data-koraa-scroll-state="hidden"] .koraa-search-button,
+body[data-koraa-scroll-state="hidden"] .header__icon {
+  color: #FFFFFF !important;
+}
+
+body[data-koraa-scroll-state="hidden"] .header-actions__action svg,
+body[data-koraa-scroll-state="hidden"] .koraa-search-button svg,
+body[data-koraa-scroll-state="hidden"] .header__icon svg {
+  color: #FFFFFF !important;
+}
+
+/* ── VISIBLE STATE: Full header slides in from top ── */
+
+/* Show header background */
+body[data-koraa-scroll-state="visible"] .header__underlay-closed,
+body[data-koraa-scroll-state="visible"] .header__underlay-open {
+  opacity: 1 !important;
+}
+
+body[data-koraa-scroll-state="visible"] .header {
+  background: var(--koraa-white) !important;
+}
+
+body[data-koraa-scroll-state="visible"] .header__row--top {
+  border-bottom-color: #e5e5e5 !important;
+}
+
+/* Reset logo filter when header bg is visible */
+body[data-koraa-scroll-state="visible"] .header-logo img,
+body[data-koraa-scroll-state="visible"] .header-logo svg {
+  filter: none;
+  transition: filter 0.4s ease;
+}
+
+/* --- Hero Section --- */
+.koraa-hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.koraa-hero__image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Desktop image: show on 750px+, hide on mobile */
+.koraa-hero__image--desktop {
+  display: block;
+}
+.koraa-hero__image--mobile {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-hero__image--desktop {
+    display: none;
+  }
+  .koraa-hero__image--mobile {
+    display: block;
+  }
+}
+
+
+
+.koraa-hero__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 60px 48px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+  color: white;
+}
+
+.koraa-hero__subtitle {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 10px 0;
+  font-weight: 400;
+}
+
+.koraa-hero__title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+  line-height: 1.05;
+  color: white;
+}
+
+.koraa-hero__desc {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 20px 0;
+  font-weight: 300;
+}
+
+.koraa-hero__cta {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 1px solid white;
+  color: white;
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.koraa-hero__cta:hover {
+  background: white;
+  color: var(--koraa-black);
+}
+
+/* --- Section Titles --- */
+.koraa-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 24px 0;
+  max-width: var(--normal-page-width, 1200px);
+  margin: 0 auto;
+  padding-inline: 40px;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-section-header {
+    padding-inline: 20px;
+  }
+}
+
+.koraa-section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  color: var(--koraa-text-dark);
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.koraa-section-header--centered {
+  justify-content: center;
+  text-align: center;
+}
+
+.koraa-section-header--stacked {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.koraa-section-header a {
+  font-size: 0.75rem;
+  color: var(--koraa-text-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.koraa-section-header a:hover {
+  color: var(--koraa-text-medium);
+}
+
+/* --- Product Carousel --- */
+.koraa-products {
+  padding: 48px 0;
+  background: var(--koraa-bg-warm);
+}
+
+.koraa-products__grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 40px;
+  max-width: var(--normal-page-width, 1200px);
+  margin: 0 auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+.koraa-products__grid::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-products__grid {
+    padding: 0 20px;
+  }
+}
+
+.koraa-product-card {
+  flex: 0 0 calc(25% - 15px);
+  position: relative;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+
+@media screen and (max-width: 989px) {
+  .koraa-product-card {
+    flex: 0 0 calc(33.33% - 14px);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-product-card {
+    flex: 0 0 calc(75% - 10px);
+  }
+}
+
+.koraa-product-card__image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 3/4;
+  background: var(--koraa-bg-cream);
+}
+
+.koraa-product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.koraa-product-card:hover .koraa-product-card__image {
+  transform: scale(1.05);
+}
+
+.koraa-product-card__quickview {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: white;
+  color: var(--koraa-text-dark);
+  border: none;
+  padding: 10px 24px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.koraa-product-card:hover .koraa-product-card__quickview {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.koraa-product-card__info {
+  padding: 12px 0 0;
+}
+
+.koraa-product-card__title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--koraa-text-dark);
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.koraa-product-card__sale-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #B22222;
+  color: white;
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.koraa-product-card__vendor {
+  font-size: 0.75rem;
+  color: var(--koraa-text-light);
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.koraa-product-card__price {
+  font-size: 0.85rem;
+  color: var(--koraa-text-dark);
+  font-weight: 400;
+}
+
+.koraa-product-card__price--sale {
+  color: #B22222;
+}
+
+.koraa-product-card__price--compare {
+  text-decoration: line-through;
+  color: var(--koraa-text-light);
+  margin-right: 8px;
+}
+
+.koraa-product-card__save {
+  display: inline-block;
+  background: var(--koraa-bg-cream);
+  color: var(--koraa-text-medium);
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+/* --- Category Grid --- */
+.koraa-categories {
+  padding: 48px 0;
+  background: var(--koraa-bg-warm);
+}
+
+.koraa-categories__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: var(--normal-page-width, 1200px);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media screen and (max-width: 989px) {
+  .koraa-categories__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-categories__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 20px;
+  }
+}
+
+.koraa-category-card {
+  position: relative;
+  text-decoration: none;
+  color: var(--koraa-text-dark);
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.koraa-category-card__wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.koraa-category-card__image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.koraa-category-card:hover .koraa-category-card__image {
+  transform: scale(1.05);
+}
+
+.koraa-category-card__label {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background: rgba(255,255,255,0.9);
+  padding: 8px 16px;
+  z-index: 2;
+}
+
+.koraa-category-card__label span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--koraa-text-dark);
+  white-space: nowrap;
+}
+
+/* --- Lifestyle Banner --- */
+.koraa-lifestyle {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.koraa-lifestyle__image {
+  width: 100%;
+  height: 60vh;
+  object-fit: cover;
+  display: block;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-lifestyle__image {
+    height: 45vh;
+  }
+}
+
+.koraa-lifestyle__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+
+.koraa-lifestyle__subtitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 8px 0;
+}
+
+.koraa-lifestyle__title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: white;
+}
+
+.koraa-lifestyle__cta {
+  display: inline-block;
+  padding: 12px 32px;
+  border: 1px solid white;
+  color: white;
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.koraa-lifestyle__cta:hover {
+  background: white;
+  color: var(--koraa-black);
+}
+
+/* --- Brand Values --- */
+.koraa-values {
+  padding: 72px 40px;
+  background: var(--koraa-bg-cream);
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-values {
+    padding: 48px 20px;
+  }
+}
+
+.koraa-values__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  max-width: var(--normal-page-width, 1200px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-values__grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+
+.koraa-value__title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--koraa-text-dark);
+  margin: 0 0 16px 0;
+}
+
+.koraa-value__text {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--koraa-text-medium);
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* --- Instagram Grid --- */
+.koraa-instagram {
+  background: var(--koraa-bg-warm);
+  padding: 0 0 48px;
+}
+
+.koraa-instagram__header {
+  max-width: var(--normal-page-width, 1200px);
+  margin: 0 auto;
+  padding: 0 40px 24px;
+  text-align: center;
+}
+
+.koraa-instagram__header h2 {
+  margin: 0 0 8px;
+  color: var(--koraa-text-dark);
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.koraa-instagram__header p {
+  margin: 0;
+  color: var(--koraa-text-medium);
+  font-size: 0.9rem;
+}
+
+.koraa-instagram__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+}
+
+.koraa-instagram__item {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--koraa-bg-beige);
+}
+
+.koraa-instagram__image,
+.koraa-instagram__placeholder {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.koraa-instagram__icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--koraa-white);
+  background: rgba(0, 0, 0, 0.34);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.koraa-instagram__icon svg {
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+a.koraa-instagram__item:hover .koraa-instagram__image {
+  transform: scale(1.04);
+  filter: brightness(0.88);
+}
+
+a.koraa-instagram__item:hover .koraa-instagram__icon,
+a.koraa-instagram__item:focus-visible .koraa-instagram__icon {
+  opacity: 1;
+}
+
+@media screen and (max-width: 989px) {
+  .koraa-instagram__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-instagram {
+    padding-bottom: 36px;
+  }
+
+  .koraa-instagram__header {
+    padding: 0 16px 18px;
+  }
+
+  .koraa-instagram__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .koraa-instagram__icon {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.18);
+  }
+}
+
+/* --- Store Info --- */
+.koraa-store-info {
+  padding: 56px 40px;
+  background: var(--koraa-bg-warm);
+  text-align: center;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-store-info {
+    padding: 40px 20px;
+  }
+}
+
+.koraa-store-info__title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+  color: var(--koraa-text-dark);
+}
+
+.koraa-store-info__text {
+  font-size: 0.9rem;
+  color: var(--koraa-text-medium);
+  line-height: 1.8;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.koraa-store-info__text a {
+  color: var(--koraa-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- Footer Override --- */
+footer {
+  background-color: var(--koraa-bg-cream) !important;
+}
+
+footer .section-background {
+  background-color: var(--koraa-bg-cream) !important;
+}
+
+/* --- Newsletter Section --- */
+.koraa-newsletter {
+  padding: 56px 40px;
+  background: var(--koraa-black);
+  text-align: center;
+  color: var(--koraa-white);
+}
+
+.koraa-newsletter__title {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  color: var(--koraa-white);
+}
+
+.koraa-newsletter__subtitle {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  margin: 0 0 24px 0;
+}
+
+.koraa-newsletter__form {
+  display: flex;
+  gap: 0;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.koraa-newsletter__input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: transparent;
+  color: white;
+  font-size: 0.85rem;
+  border-radius: 0;
+  outline: none;
+}
+
+.koraa-newsletter__input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.koraa-newsletter__button {
+  padding: 12px 24px;
+  background: white;
+  color: var(--koraa-black);
+  border: 1px solid white;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.koraa-newsletter__button:hover {
+  background: var(--koraa-accent-soft);
+  border-color: var(--koraa-accent-soft);
+  color: white;
+}
+
+/* --- Section Backgrounds --- */
+.section-background {
+  background-color: var(--koraa-bg-warm) !important;
+}
+
+/* --- Utility --- */
+.koraa-section {
+  width: 100%;
+}
+
+.koraa-container {
+  max-width: var(--normal-page-width, 1200px);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-container {
+    padding: 0 20px;
+  }
+}
+
+/* --- View All Link at bottom --- */
+.koraa-view-all {
+  text-align: center;
+  padding: 24px 0 0;
+}
+
+.koraa-view-all a {
+  font-size: 0.85rem;
+  color: var(--koraa-text-medium);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+
+.koraa-view-all a:hover {
+  color: var(--koraa-text-dark);
+}
+
+/* --- Split Hero (Two Column) --- */
+.koraa-split-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-split-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+.koraa-split-hero__panel {
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-split-hero__panel {
+    min-height: 350px;
+  }
+}
+
+.koraa-split-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.koraa-split-hero__overlay {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 40px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.45), rgba(0,0,0,0.15));
+  color: white;
+}
+
+.koraa-split-hero__subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 8px 0;
+}
+
+.koraa-split-hero__title {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+  color: white;
+  line-height: 1.15;
+}
+
+.koraa-split-hero__desc {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.koraa-split-hero__buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.koraa-split-hero__cta {
+  display: inline-block;
+  padding: 10px 24px;
+  border: 1px solid white;
+  color: white;
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.koraa-split-hero__cta:hover {
+  background: white;
+  color: var(--koraa-black);
+}
+
+/* --- Product card 5 columns for sale --- */
+.koraa-products--5col .koraa-product-card {
+  flex: 0 0 calc(20% - 16px);
+}
+
+@media screen and (max-width: 989px) {
+  .koraa-products--5col .koraa-product-card {
+    flex: 0 0 calc(33.33% - 14px);
+  }
+}
+
+/* =============================================
+   H&M PRODUCT PAGE - ZERO SPACING, EDGE-TO-EDGE
+   ============================================= */
+
+/* Override ALL spacing on the product section - target spacing-style class */
+.product-information,
+.product-information.spacing-style,
+[data-testid="product-information"] {
+  padding-block-start: 0 !important;
+  padding-block-end: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  /* Override CSS custom properties too */
+  --padding-block-start: 0px !important;
+  --padding-block-end: 0px !important;
+}
+
+/* Also override the section background gap */
+.section-background + .product-information,
+.section-background + [data-testid="product-information"] {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+@media screen and (min-width: 990px) {
+  .product-information__grid {
+    grid-template-columns: 2fr 1fr !important;
+    gap: 0 !important;
+  }
+
+  .product-details {
+    padding: 32px 40px !important;
+    padding-block-start: 32px !important;
+    padding-block-end: 32px !important;
+    --padding-block-start: 32px;
+    --padding-block-end: 32px;
+  }
+}
+
+/* product-details block padding override */
+.product-details .group-block {
+  padding-block-start: 32px !important;
+}
+
+
+/* ===================================================
+   H&M IMAGE GALLERY - EXACT STRUCTURE OVERRIDE
+   Based on Horizon base.css: .media-gallery__grid
+   contains .product-media-container items (NOT li)
+   Pattern: Full → 2col → Full → 2col
+   =================================================== */
+
+/* Step 1: Override the base.css grid (which sets 1 column) */
+:where(media-gallery) .media-gallery__grid,
+.media-gallery__grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0 !important;
+  --image-gap: 0px !important;
+}
+
+/* Step 2: H&M pattern - positions 1,4,7... = full width */
+.media-gallery__grid > li:nth-child(3n+1),
+.media-gallery__grid > .product-media-container:nth-child(3n+1) {
+  grid-column: 1 / -1 !important;
+  aspect-ratio: 4 / 5 !important;
+}
+
+/* Step 3: positions 2,3,5,6... = 2-col portrait */
+.media-gallery__grid > li:nth-child(3n+2),
+.media-gallery__grid > li:nth-child(3n+3),
+.media-gallery__grid > .product-media-container:nth-child(3n+2),
+.media-gallery__grid > .product-media-container:nth-child(3n+3) {
+  aspect-ratio: 2 / 3 !important;
+}
+
+/* Step 4: Images fill container (override base.css contain) */
+.media-gallery__grid .product-media-container {
+  overflow: hidden !important;
+}
+
+.media-gallery__grid .product-media-container img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  aspect-ratio: inherit !important;
+}
+
+/* Step 5: Mobile - single column */
+@media screen and (max-width: 749px) {
+  :where(media-gallery) .media-gallery__grid,
+  .media-gallery__grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .media-gallery__grid > li,
+  .media-gallery__grid > .product-media-container {
+    grid-column: 1 / -1 !important;
+    aspect-ratio: 1 / 1 !important;
+  }
+}
+
+
+/* Sticky Right Info Panel */
+.product-details {
+  position: sticky !important;
+  top: 80px !important;
+  height: max-content;
+}
+
+
+/* Typography Hierarchy */
+.product-details h1, .product-details [data-testid="product-title"] {
+  font-size: clamp(1.8rem, 3vw, 2.2rem) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.1 !important;
+  margin-bottom: 8px !important;
+  text-transform: none !important;
+  color: var(--koraa-black) !important;
+}
+
+/* Price Section */
+.product-details [ref="priceContainer"] {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+  color: var(--koraa-text-dark) !important;
+  margin-bottom: 24px !important;
+  flex-wrap: wrap;
+}
+
+.product-details .price__sale .price-item--regular,
+.product-details .compare-at-price {
+  text-decoration: line-through;
+  color: var(--koraa-text-light) !important;
+  font-size: 0.95rem !important;
+}
+
+.product-details .price__sale .price-item--sale,
+.product-details .price {
+  color: var(--koraa-black) !important;
+  font-weight: 500 !important;
+}
+
+/* Tax Included Note */
+.product-details [ref="priceContainer"]::after {
+  content: "MRP inclusive of all taxes";
+  display: block;
+  width: 100%;
+  font-size: 0.75rem;
+  color: var(--koraa-text-light);
+  margin-top: 4px;
+}
+
+/* Variant & Size Selector (Minimal Boxes) */
+.product-details variant-picker legend {
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 12px !important;
+  color: var(--koraa-text-dark) !important;
+}
+
+.product-details .variant-option--buttons {
+  display: flex !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  margin-bottom: 24px !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.product-details .variant-option__button-label {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.product-details .variant-option__button-label__text {
+  border: 1px solid var(--koraa-border) !important;
+  background: transparent !important;
+  color: var(--koraa-text-dark) !important;
+  padding: 12px 16px !important;
+  min-width: 48px;
+  text-align: center;
+  font-size: 0.85rem !important;
+  font-weight: 400 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border-radius: 0 !important; /* Square boxes */
+  display: inline-block !important;
+}
+
+/* Hover & Active States for Sizes */
+.product-details .variant-option__button-label:hover .variant-option__button-label__text {
+  border-color: var(--koraa-black) !important;
+}
+
+.product-details input[type="radio"]:checked ~ .variant-option__button-label__text {
+  border-color: var(--koraa-black) !important;
+  background-color: var(--koraa-black) !important;
+  color: var(--koraa-white) !important;
+}
+
+
+
+/* Add to Bag Button */
+.product-details .add-to-cart-button,
+.product-details button.shopify-payment-button__button,
+.product-details .shopify-payment-button__button--unbranded {
+  width: 100% !important;
+  background-color: var(--koraa-black) !important;
+  color: var(--koraa-white) !important;
+  border: none !important;
+  padding: 16px 24px !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  border-radius: 2px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, transform 0.1s ease !important;
+  margin-bottom: 12px !important;
+  height: auto !important;
+  min-height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.product-details .add-to-cart-button:hover,
+.product-details button.shopify-payment-button__button:hover,
+.product-details .shopify-payment-button__button--unbranded:hover {
+  background-color: #333 !important;
+}
+
+.product-details .add-to-cart-button:active,
+.product-details button.shopify-payment-button__button:active,
+.product-details .shopify-payment-button__button--unbranded:active {
+  transform: scale(0.98) !important;
+}
+
+/* Hide extra padding on quantity box if any */
+.product-details quantity-selector {
+  margin-bottom: 24px !important;
+}
+
+/* =============================================
+   H&M EXACT ACCORDION STYLE (Native Shopify Blocks)
+   ============================================= */
+
+/* Hide raw product description text - accordions handle this */
+.product-details .product-description-block {
+  display: none !important;
+}
+
+/* Accordion wrapper */
+.product-details .accordion {
+  border-top: 1px solid #000 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Each accordion row */
+.product-details accordion-custom {
+  border-bottom: 1px solid #000 !important;
+  display: block !important;
+}
+
+/* Summary / Header row */
+.product-details .details__header {
+  padding: 20px 0 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #000 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  min-height: unset !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  width: 100% !important;
+}
+
+/* Hide default caret/arrow */
+.product-details .icon-caret,
+.product-details .icon-animated {
+  display: none !important;
+}
+
+/* Style the plus icon */
+.product-details .icon-plus {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.product-details .icon-plus svg {
+  width: 14px !important;
+  height: 14px !important;
+  stroke-width: 1.5 !important;
+}
+
+/* Open state - minus icon */
+.product-details details[open] .icon-plus svg {
+  /* Rotate to make it look like minus */
+}
+
+/* Content area */
+.product-details .details-content {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #000 !important;
+  font-weight: 400 !important;
+  padding-bottom: 20px !important;
+  padding-top: 0 !important;
+}
+
+/* RTE content inside accordion */
+.product-details .details-content p,
+.product-details .details-content li {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #000 !important;
+  margin-bottom: 6px !important;
+}
+
+/* Micro Interactions & Hover on Images */
+.product-information__media img {
+  cursor: zoom-in;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.product-information__media img:hover {
+  transform: scale(1.02);
+}
+
+/* Review Fit/Length Sliders (CSS Mock) */
+.product-details .accordion__content::after {
+  content: "";
+  display: block;
+}
+
+/* Specific styling for the review section inside an accordion */
+.review-sliders {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--koraa-border);
+}
+
+.review-slider-item {
+  margin-bottom: 16px;
+}
+
+.review-slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--koraa-text-medium);
+  margin-bottom: 8px;
+}
+
+.review-slider-bar {
+  width: 100%;
+  height: 2px;
+  background: var(--koraa-border);
+  position: relative;
+}
+
+.review-slider-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: var(--koraa-black);
+  border-radius: 50%;
+}
+
+/* --- H&M Style Accordions --- */
+accordion-custom, .accordion, .details {
+  border: none !important;
+  background: transparent !important;
+  margin-bottom: 5px;
+}
+
+.details__header {
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.5px !important;
+  padding: 16px 0 !important;
+  border: none !important;
+  border-top: 1px solid transparent !important; /* to override any existing */
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: transparent !important;
+  cursor: pointer;
+  position: relative;
+  list-style: none; /* Hide default triangle */
+}
+
+.details__header::-webkit-details-marker {
+  display: none;
+}
+
+/* Hide default Shopify SVG icons */
+.details__header .svg-wrapper,
+.details__header .icon-caret,
+.details__header .icon-plus {
+  display: none !important;
+}
+
+/* Custom H&M + / - icon */
+.details__header::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  /* Plus icon */
+  background: linear-gradient(to right, currentColor 45%, currentColor 55%) center center / 100% 1px no-repeat,
+              linear-gradient(to bottom, currentColor 45%, currentColor 55%) center center / 1px 100% no-repeat;
+}
+
+details[open] > .details__header::after,
+details[open-by-default-on-desktop] > .details__header::after {
+  /* Minus icon */
+  background: linear-gradient(to right, currentColor 45%, currentColor 55%) center center / 100% 1px no-repeat !important;
+}
+
+.details-content {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  padding: 0 0 20px 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.details-content p {
+  margin: 0 0 10px 0 !important;
+}
+
+/* --- H&M Product Details Overrides --- */
+
+/* Fix variant picker layout */
+fieldset.variant-option {
+  display: block !important; /* Prevent it from flexing items horizontally */
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.variant-options-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important; /* Prevent wrapping, force single line */
+  width: 100% !important;
+  gap: 0 !important;
+}
+
+/* Sharp corners, equal widths, and adjoining borders for sizes */
+.variant-options-grid .variant-option__button-label, 
+.variant-picker__option,
+.variant-option--swatches .variant-option__button-label {
+  flex: 1 !important; /* Stretch evenly */
+  border-radius: 0 !important;
+  margin: 0 -1px 0 0 !important; /* Makes borders collapse horizontally */
+  border: 1px solid #dcdcdc !important; /* Thin border */
+  min-width: 0 !important; /* Allow shrinking if many options */
+  text-align: center !important;
+  padding: 0 !important; /* Remove padding from outer label */
+  background: transparent !important; /* Ensure outer label is transparent */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 13px !important;
+  position: relative;
+}
+
+.variant-options-grid .variant-option__button-label:last-child {
+  margin-right: 0 !important; /* Fix end border */
+}
+
+/* Hide the default pill completely to remove the "inner rectangle" */
+.variant-options-grid .variant-option__button-label__pill {
+  display: none !important;
+}
+
+/* Style the text span to be the actual button area */
+.variant-options-grid .variant-option__button-label__text {
+  width: 100%;
+  height: 100%;
+  padding: 14px 4px !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Checked state styling applied to the text span */
+.variant-options-grid input[type="radio"]:checked ~ .variant-option__button-label__text {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.product-details .button,
+.product-details button.button {
+  border-radius: 0 !important;
+}
+
+/* Ensure the color swatch has sharp corners */
+.variant-option--swatches .swatch,
+.variant-option--swatches .swatch__shape--circle {
+  border-radius: 0 !important;
+}
+
+/* Add to Bag Button H&M Style */
+.add-to-cart-button.button {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1px solid #000 !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+  font-size: 14px;
+  height: 48px;
+  width: 100%;
+}
+
+.add-to-cart-button.button:hover {
+  background-color: #f5f5f5 !important;
+}
+
+/* Hide the cart icon inside the button */
+.add-to-cart-icon {
+  display: none !important;
+}
+
+/* Strikethrough color for disabled sizes */
+.variant-option__strikethrough line {
+  stroke: #000 !important;
+  stroke-width: 1px !important;
+}
+
+/* Make sure Price Text is bolder like H&M */
+.product-details .price__regular .price,
+.product-details .price__sale .price-item--sale {
+  font-weight: 700 !important;
+  font-size: 18px !important;
+}
+
+/* Tax note below price (Shopify default) */
+.product-details .tax-note {
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: normal;
+  color: #666;
+  display: block;
+}
+
+/* Style Quantity picker */
+.product-details .quantity-selector-wrapper {
+  display: flex !important;
+  justify-content: flex-end !important; /* Move to the right side */
+  align-items: center !important; /* Keep vertically in the middle */
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.product-details .quantity-selector,
+.product-details .quantity-selector-component,
+.product-details .quantity-selector button,
+.product-details .quantity-selector input {
+  border-radius: 0 !important; /* Remove border radius */
+}
+
+/* Hide Quantity label only if they don't want it */
+.product-details .quantity-label {
+  display: none !important;
+}
+
+/* Hide Buy It Now / Accelerated checkout buttons */
+.product-details .shopify-payment-button {
+  display: none !important;
+}
+
+/* Hide Review and Rating block globally and for all common apps */
+.product-details .rating-wrapper,
+.rating-wrapper,
+.jdgm-widget,
+.loox-rating,
+.yotpo-bottomline,
+.spr-badge,
+.stamped-product-reviews-badge,
+.ryviu-widget,
+.aliReviews-badge,
+.okeReviews-reviewsSummary,
+.product-details .rating-count,
+.product-details .rating,
+.product-review-badge,
+.product__vendor,
+div[data-rating] {
+  display: none !important;
+}
+
+/* Reduce gap between Product Title and Price */
+.product-details .text-block--product_title_NEW {
+  margin-bottom: 5px !important;
+  padding-bottom: 0 !important;
+}
+.product-details [data-block-id="price_tVjtKg"],
+.product-details product-price {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* =============================================
+   KORAA INSTAGRAM FEED (Live — koraa-instagram-feed.liquid)
+   ============================================= */
+
+.koraa-insta-feed {
+  background: var(--koraa-bg-warm);
+  padding-top: var(--section-padding-top, 48px);
+  padding-bottom: var(--section-padding-bottom, 48px);
+}
+
+/* ── Header ── */
+.koraa-insta-feed__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 0 40px 28px;
+  max-width: var(--normal-page-width, 1200px);
+  margin: 0 auto;
+}
+
+.koraa-insta-feed__title {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--koraa-text-dark);
+  margin: 0;
+}
+
+.koraa-insta-feed__handle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--koraa-text-medium);
+  font-size: 0.88rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.koraa-insta-feed__handle:hover {
+  color: var(--koraa-text-dark);
+}
+
+.koraa-insta-feed__handle-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Live grid ── */
+.koraa-insta-feed__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+}
+
+/* ── Individual post item ── */
+.koraa-insta-feed__item {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--koraa-bg-beige);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  transition: opacity 0.5s ease var(--ki-delay, 0ms),
+              transform 0.5s ease var(--ki-delay, 0ms);
+}
+
+.koraa-insta-feed__item--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.koraa-insta-feed__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.koraa-insta-feed__item:hover .koraa-insta-feed__img,
+.koraa-insta-feed__item:focus-visible .koraa-insta-feed__img {
+  transform: scale(1.05);
+  filter: brightness(0.85);
+}
+
+/* ── Overlay (icon + caption strip) ── */
+.koraa-insta-feed__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--koraa-white);
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.koraa-insta-feed__item:hover .koraa-insta-feed__overlay,
+.koraa-insta-feed__item:focus-visible .koraa-insta-feed__overlay {
+  opacity: 1;
+}
+
+.koraa-insta-feed__ig-icon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* ── Caption strip at bottom of overlay ── */
+.koraa-insta-feed__caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 10px 8px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.koraa-insta-feed__caption-text {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.92);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.koraa-insta-feed__time {
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.04em;
+}
+
+/* ── Media type badges (video / carousel) ── */
+.koraa-insta-feed__badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.koraa-insta-feed__badge svg {
+  width: 12px;
+  height: 12px;
+  color: white;
+}
+
+/* ── Skeleton loading grid ── */
+.koraa-insta-feed__skeleton {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+}
+
+.koraa-insta-feed__skeleton-item {
+  aspect-ratio: 1;
+  background: var(--koraa-bg-beige);
+  overflow: hidden;
+  position: relative;
+}
+
+.koraa-insta-feed__skeleton-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.55) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: koraa-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes koraa-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Notice / error state ── */
+.koraa-insta-feed__notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 40px;
+  text-align: center;
+  color: var(--koraa-text-medium);
+}
+
+.koraa-insta-feed__notice svg {
+  width: 40px;
+  height: 40px;
+  opacity: 0.35;
+}
+
+.koraa-insta-feed__notice p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 400px;
+  margin: 0;
+}
+
+.koraa-insta-feed__notice-link {
+  font-size: 0.8rem;
+  color: var(--koraa-text-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.koraa-insta-feed__notice-link:hover {
+  color: var(--koraa-accent);
+}
+
+/* ── Responsive ── */
+@media screen and (max-width: 989px) {
+  .koraa-insta-feed__grid,
+  .koraa-insta-feed__skeleton {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .koraa-insta-feed__header {
+    padding-inline: 24px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .koraa-insta-feed {
+    padding-bottom: 36px;
+  }
+  .koraa-insta-feed__header {
+    padding: 0 16px 18px;
+  }
+  /* Always 2 columns on mobile — ignore data-columns setting */
+  .koraa-insta-feed__grid,
+  .koraa-insta-feed[data-columns] .koraa-insta-feed__grid,
+  .koraa-insta-feed__skeleton,
+  .koraa-insta-feed[data-columns] .koraa-insta-feed__skeleton {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  /* Portrait aspect-ratio on mobile to match category card size */
+  .koraa-insta-feed__item,
+  .koraa-insta-feed__skeleton-item {
+    aspect-ratio: 4 / 5;
+  }
+  /* Show only first 4 items (2 cols × 2 rows) on mobile */
+  .koraa-insta-feed__grid .koraa-insta-feed__item:nth-child(n+5),
+  .koraa-insta-feed__skeleton .koraa-insta-feed__skeleton-item:nth-child(n+5) {
+    display: none;
+  }
+  .koraa-insta-feed__overlay {
+    opacity: 1;
+    background: rgba(0,0,0,0.18);
+    justify-content: flex-end;
+  }
+  .koraa-insta-feed__ig-icon {
+    display: none;
+  }
+}
+
+/* =============================================
+   H&M STYLE PRODUCT PAGE LAYOUT
+   Exact pixel measurements extracted from H&M
+   via JavaScript DOM inspection at 1920px
+   ============================================= */
+
+/* Desktop only - 50/50 full-bleed layout */
+@media screen and (min-width: 750px) {
+
+  /* Force the product section to be full width */
+  .product-information.section {
+    max-width: 100vw !important;
+    padding-inline: 0 !important;
+  }
+
+  /* Override the grid to 50/50 with full-bleed left */
+  .product-information__grid.product-information__grid--half {
+    grid-column: 1 / -1 !important;
+    max-width: 100vw !important;
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+    display: grid !important;
+    grid-template-columns: 0 49vw 51vw 0 !important;
+  }
+
+  /* Image column: full bleed, no padding */
+  .product-information__grid.product-information__grid--half .product-information__media {
+    grid-column: 1 / 3 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 49vw !important;
+    max-width: 49vw !important;
+    min-width: 49vw !important;
+  }
+
+  /* Product details column - H&M style with adjusted values */
+  .product-information__grid.product-information__grid--half .product-details {
+    grid-column: 3 / 4 !important;
+    width: 460px !important;
+    max-width: 460px !important;
+    margin: 0 auto !important;
+    padding-top: 24px !important;
+    padding-bottom: 32px !important;
+    padding-left: 16px !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Ensure media gallery extends full width within its column */
+  .product-information__grid.product-information__grid--half .media-gallery--extend {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* Image grid: 0 gap, sharp edges like H&M */
+  .product-information__media .media-gallery__grid {
+    gap: 0 !important;
+  }
+
+  .product-information__media .media-gallery__grid li {
+    border-radius: 0 !important;
+  }
+
+  .product-information__media .media-gallery__grid li img {
+    border-radius: 0 !important;
+  }
+}
+
+/* =============================================
+   H&M STYLE COLOR SWATCHES
+   ============================================= */
+
+.hm-color-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 0 !important;
+  margin-bottom: 24px !important;
+  /* Add padding to ensure negative margins and outlines aren't clipped */
+  padding: 2px !important;
+}
+
+/* Hide the radio input but keep it accessible */
+.hm-color-grid input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.hm-color-swatch-wrapper {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 2 / 3 !important;
+  border: 1px solid #e5e5e5 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  padding: 0 !important; 
+  display: block !important;
+  /* Negative margin to collapse borders and prevent double thickness */
+  margin: 0 -1px -1px 0 !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  z-index: 1;
+}
+
+/* Active / Hover State */
+.hm-color-grid input[type="radio"]:checked + .hm-color-swatch-wrapper {
+  border-color: #222 !important;
+  outline: 1px solid #222 !important;
+  z-index: 2 !important;
+}
+
+.hm-color-grid input[type="radio"]:focus-visible + .hm-color-swatch-wrapper {
+  outline: 2px solid #222 !important;
+  outline-offset: 2px !important;
+  z-index: 2 !important;
+}
+
+/* Override all theme default button styles for the label */
+.hm-color-grid .variant-option__button-label {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  min-width: 0 !important;
+  border-radius: 0 !important;
+}
+
+.hm-color-grid .variant-option__button-label::before,
+.hm-color-grid .variant-option__button-label::after {
+  display: none !important;
+}
+
+.hm-color-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: #f9f9f9 !important; /* light grey bg helps with contain */
+}
+
+.hm-color-fallback {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #f5f5f5 !important;
+  color: #222 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  border: none !important;
+}

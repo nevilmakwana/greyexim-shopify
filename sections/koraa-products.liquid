@@ -1,0 +1,346 @@
+<!-- Koraa-Style Product Carousel Section with Premium Slide-In -->
+{% assign dummy_images = "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80&auto=format,https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80&auto=format,https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&q=80&auto=format,https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=600&q=80&auto=format,https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80&auto=format" | split: "," %}
+{% assign dummy_titles = "Chunky Windowpane Crop Top,Quilted Crop Top,Cecily Vest - Denim,Spencer Barrel Pant,Adrian Wrap Pant" | split: "," %}
+{% assign dummy_vendors = "Ersa Fibers,Ersa Fibers,Pamut Apparel,Pamut Apparel,Pamut Apparel" | split: "," %}
+{% assign dummy_prices = "$142.00,$142.00,$148.00,$238.00,$238.00" | split: "," %}
+
+<div class="koraa-products koraa-section">
+  <div class="koraa-section-header">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <h2>{{ section.settings.heading }}</h2>
+      {% if section.settings.view_all_link != blank %}
+        <a href="{{ section.settings.view_all_link }}">View all</a>
+      {% endif %}
+    </div>
+    
+    <div class="koraa-carousel-nav" style="display: flex; gap: 12px;">
+      <button class="koraa-nav-btn koraa-nav-prev" aria-label="Previous">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="koraa-nav-btn koraa-nav-next" aria-label="Next">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  {%- assign my_collection = section.settings.collection -%}
+  {%- if my_collection.products == blank -%}
+    {%- assign my_collection = collections[section.settings.collection] -%}
+  {%- endif -%}
+  
+  {% if my_collection != blank and my_collection.products.size > 0 %}
+    <!-- Real products from collection -->
+    {%- assign required_tags = section.settings.product_tag | split: ',' -%}
+    {%- assign has_required_tags = false -%}
+    {%- for required_tag in required_tags -%}
+      {%- assign normalized_required_tag = required_tag | strip | downcase -%}
+      {%- if normalized_required_tag != blank -%}
+        {%- assign has_required_tags = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    <div style="display:none;" data-debug="Collection: {{ my_collection.title }}, Products: {{ my_collection.products.size }}{% if section.settings.product_tag != blank %}, Tags: {{ section.settings.product_tag }}{% endif %}"></div>
+    <div class="koraa-products__grid" id="koraa-grid-{{ section.id }}">
+      {%- assign product_count = 0 -%}
+      {%- for product in my_collection.products -%}
+        {%- assign prod_title_check = product.title | downcase -%}
+        {%- if prod_title_check contains 'custom design' -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if has_required_tags -%}
+          {%- assign matches_required_tag = false -%}
+          {%- for required_tag in required_tags -%}
+            {%- assign normalized_required_tag = required_tag | strip | downcase -%}
+            {%- if normalized_required_tag == blank -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- for product_tag in product.tags -%}
+              {%- assign normalized_product_tag = product_tag | strip | downcase -%}
+              {%- if normalized_product_tag == normalized_required_tag -%}
+                {%- assign matches_required_tag = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if matches_required_tag -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- unless matches_required_tag -%}
+            {%- continue -%}
+          {%- endunless -%}
+        {%- endif -%}
+        {%- if product_count >= section.settings.max_products -%}
+          {%- break -%}
+        {%- endif -%}
+        {%- assign product_count = product_count | plus: 1 -%}
+        <div class="koraa-product-card">
+          <a href="{{ product.url }}" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">
+            <div class="koraa-product-card__image-wrapper">
+              {% if product.featured_image %}
+                <img
+                  class="koraa-product-card__image"
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.title }}"
+                  loading="lazy"
+                >
+              {% endif %}
+              <button class="koraa-product-card__quickview" type="button">Quick view</button>
+            </div>
+            <div class="koraa-product-card__info">
+              <p class="koraa-product-card__title">{{ product.title }}</p>
+
+              {% if product.compare_at_price > product.price %}
+                <p class="koraa-product-card__price">
+                  <span class="koraa-product-card__price--compare">{{ product.compare_at_price | money }}</span>
+                  <span class="koraa-product-card__price--sale">{{ product.price | money }}</span>
+                </p>
+                {% assign savings = product.compare_at_price | minus: product.price %}
+                <span class="koraa-product-card__save">Save {{ savings | money }}</span>
+              {% else %}
+                <p class="koraa-product-card__price">{{ product.price | money }}</p>
+              {% endif %}
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  {% else %}
+    {%- if my_collection != blank and my_collection.products.size == 0 -%}
+      <div style="text-align: center; padding: 20px; background: #ffebee; color: #c62828; margin: 0 40px 20px;">
+        <strong>Notice:</strong> The collection you selected ("{{ my_collection.title }}") has 0 products. Please select a different collection or add products to it. Displaying placeholders instead.
+      </div>
+    {%- endif -%}
+    <!-- Placeholder products for preview -->
+    <div class="koraa-products__grid" id="koraa-grid-{{ section.id }}">
+      {%- for i in (0..4) -%}
+        <div class="koraa-product-card">
+          <a href="#" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">
+            <div class="koraa-product-card__image-wrapper">
+              <img
+                class="koraa-product-card__image"
+                src="{{ dummy_images[i] }}"
+                alt="{{ dummy_titles[i] }}"
+                loading="lazy"
+              >
+              <button class="koraa-product-card__quickview" type="button">Quick view</button>
+            </div>
+            <div class="koraa-product-card__info">
+              <p class="koraa-product-card__title">{{ dummy_titles[i] }}</p>
+
+              <p class="koraa-product-card__price">{{ dummy_prices[i] }}</p>
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  {% endif %}
+
+</div>
+
+<style>
+  .koraa-nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--koraa-border, #E5DFD4);
+    background: transparent;
+    color: var(--koraa-text-dark, #1A1A1A);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .koraa-nav-btn:hover {
+    background: var(--koraa-text-dark, #1A1A1A);
+    color: #fff;
+    border-color: var(--koraa-text-dark, #1A1A1A);
+  }
+
+  @media screen and (max-width: 749px) {
+    .koraa-carousel-nav {
+      display: none !important;
+    }
+  }
+
+  /* Premium Right-to-Left Slide-In Animation */
+  .koraa-products__grid .koraa-product-card {
+    opacity: 0;
+    transform: translate3d(60px, 0, 0); /* Starts slightly from the right */
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: opacity, transform;
+  }
+
+  /* Triggered state */
+  .koraa-products__grid.is-visible .koraa-product-card {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Smooth Stagger Delays using CSS instead of JS for better performance */
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(1) { transition-delay: 0.00s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(2) { transition-delay: 0.08s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(3) { transition-delay: 0.16s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(4) { transition-delay: 0.24s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(5) { transition-delay: 0.32s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(6) { transition-delay: 0.40s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(7) { transition-delay: 0.48s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(8) { transition-delay: 0.56s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(9) { transition-delay: 0.64s; }
+  .koraa-products__grid.is-visible .koraa-product-card:nth-child(n+10) { transition-delay: 0.72s; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('.koraa-products');
+    if (!sections.length) return;
+
+    sections.forEach(section => {
+      if (section.dataset.koraaProductsInitialized === 'true') return;
+      section.dataset.koraaProductsInitialized = 'true';
+
+      const grid = section.querySelector('.koraa-products__grid');
+      const prevBtn = section.querySelector('.koraa-nav-prev');
+      const nextBtn = section.querySelector('.koraa-nav-next');
+
+      // 1. Setup Intersection Observer for Slide-In Animation
+      if (grid) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // Add visibility class to the grid container to trigger pure CSS animation
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: "0px 0px -50px 0px"
+        });
+
+        observer.observe(grid);
+      }
+
+      // 2. Setup Premium Slider Navigation
+      if (grid && prevBtn && nextBtn) {
+        const getScrollAmount = () => {
+          const card = grid.querySelector('.koraa-product-card');
+          if (card) {
+            const gap = parseInt(window.getComputedStyle(grid).gap) || 20;
+            return card.offsetWidth + gap;
+          }
+          return 300;
+        };
+
+        nextBtn.addEventListener('click', () => {
+          const scrollAmount = getScrollAmount() * 2;
+          grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+          const scrollAmount = getScrollAmount() * 2;
+          grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        const updateButtons = () => {
+          const scrollLeft = grid.scrollLeft;
+          const maxScroll = grid.scrollWidth - grid.clientWidth;
+
+          prevBtn.style.opacity = scrollLeft <= 0 ? '0.3' : '1';
+          prevBtn.style.cursor = scrollLeft <= 0 ? 'default' : 'pointer';
+
+          nextBtn.style.opacity = scrollLeft >= maxScroll - 10 ? '0.3' : '1';
+          nextBtn.style.cursor = scrollLeft >= maxScroll - 10 ? 'default' : 'pointer';
+        };
+
+        grid.addEventListener('scroll', updateButtons, { passive: true });
+        window.addEventListener('resize', updateButtons, { passive: true });
+        setTimeout(updateButtons, 100);
+
+        // Premium drag to scroll
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        grid.addEventListener('mousedown', (e) => {
+          isDown = true;
+          grid.style.cursor = 'grabbing';
+          grid.style.scrollBehavior = 'auto'; // Disable smooth scroll while dragging
+          startX = e.pageX - grid.offsetLeft;
+          scrollLeft = grid.scrollLeft;
+        });
+
+        grid.addEventListener('mouseleave', () => {
+          isDown = false;
+          grid.style.cursor = 'grab';
+          grid.style.scrollBehavior = 'smooth';
+        });
+
+        grid.addEventListener('mouseup', () => {
+          isDown = false;
+          grid.style.cursor = 'grab';
+          grid.style.scrollBehavior = 'smooth';
+        });
+
+        grid.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - grid.offsetLeft;
+          const walk = (x - startX) * 1.5; // Drag speed multiplier
+          grid.scrollLeft = scrollLeft - walk;
+        });
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Koraa Product Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Shop spring arrivals 🌱"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "product_tag",
+      "label": "Only show products with tag",
+      "info": "Optional. Add one or more tags separated by commas, for example best, best-seller, new, or markdown."
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Max Products",
+      "min": 3,
+      "max": 12,
+      "default": 6
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All at bottom",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Koraa Product Carousel"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,66 @@
+<!-- Koraa-Style Brand Values Section -->
+<div class="koraa-values koraa-section">
+  <div class="koraa-values__grid">
+    {% for block in section.blocks %}
+      <div class="koraa-value" {{ block.shopify_attributes }}>
+        <h3 class="koraa-value__title">{{ block.settings.title }}</h3>
+        <p class="koraa-value__text">{{ block.settings.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Koraa Brand Values",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "CREATED"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Rooted in fair trade and created with the people + planet in mind, we're proud to present our artisanal collections.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Koraa Brand Values",
+      "blocks": [
+        {
+          "type": "value",
+          "settings": {
+            "title": "CREATED",
+            "text": "<p>Rooted in fair trade and created with the people + planet in mind, we're proud to present our in-house artisanal collections of products.</p>"
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "title": "CURATED",
+            "text": "<p>We partner with value aligned makers and brands from across the world to bring you a curated selection of ethically made and mindfully crafted products you'll cherish.</p>"
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "title": "CONNECTED",
+            "text": "<p>We believe that our human journey is connected, that each created and curated product holds its unique heritage and purpose for us to share and celebrate.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

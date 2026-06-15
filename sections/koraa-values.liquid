@@ -1,0 +1,251 @@
+<!-- Koraa-Style Brand Values Section -->
+
+{%- comment -%} Collect unique Google Fonts needed by blocks {%- endcomment -%}
+{%- assign gf_fonts = '' -%}
+{%- for block in section.blocks -%}
+  {%- assign bf = block.settings.font_family -%}
+  {%- if bf == 'Archivo' or bf == 'Inter' or bf == 'Playfair+Display' or bf == 'Lato' or bf == 'Montserrat' or bf == 'Raleway' or bf == 'Merriweather' or bf == 'Nunito' or bf == 'Oswald' or bf == 'Poppins' or bf == 'Cormorant+Garamond' or bf == 'EB+Garamond' or bf == 'Libre+Baskerville' or bf == 'Cinzel' or bf == 'DM+Serif+Display' or bf == 'Josefin+Sans' or bf == 'Roboto' -%}
+    {%- unless gf_fonts contains bf -%}
+      {%- assign gf_fonts = gf_fonts | append: bf | append: '|' -%}
+    {%- endunless -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign sf = section.settings.font_family -%}
+{%- if sf == 'Archivo' or sf == 'Inter' or sf == 'Playfair+Display' or sf == 'Lato' or sf == 'Montserrat' or sf == 'Raleway' or sf == 'Merriweather' or sf == 'Nunito' or sf == 'Oswald' or sf == 'Poppins' or sf == 'Cormorant+Garamond' or sf == 'EB+Garamond' or sf == 'Libre+Baskerville' or sf == 'Cinzel' or sf == 'DM+Serif+Display' or sf == 'Josefin+Sans' or sf == 'Roboto' -%}
+  {%- unless gf_fonts contains sf -%}
+    {%- assign gf_fonts = gf_fonts | append: sf | append: '|' -%}
+  {%- endunless -%}
+{%- endif -%}
+
+{%- if gf_fonts != '' -%}
+  {%- assign gf_list = gf_fonts | split: '|' -%}
+  {%- assign gf_query = '' -%}
+  {%- for f in gf_list -%}
+    {%- if f != '' -%}
+      {%- assign gf_query = gf_query | append: 'family=' | append: f | append: ':wght@300;400;500;600;700&' -%}
+    {%- endif -%}
+  {%- endfor -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?{{ gf_query }}display=swap" rel="stylesheet">
+{%- endif -%}
+
+{%- comment -%} Build CSS font-family values for Google Fonts {%- endcomment -%}
+<style>
+  {%- for block in section.blocks -%}
+    {%- assign bf = block.settings.font_family -%}
+    {%- case bf -%}
+      {%- when 'Archivo' -%}{%- assign css_font = "'Archivo', sans-serif" -%}
+      {%- when 'Inter' -%}{%- assign css_font = "'Inter', sans-serif" -%}
+      {%- when 'Playfair+Display' -%}{%- assign css_font = "'Playfair Display', serif" -%}
+      {%- when 'Lato' -%}{%- assign css_font = "'Lato', sans-serif" -%}
+      {%- when 'Montserrat' -%}{%- assign css_font = "'Montserrat', sans-serif" -%}
+      {%- when 'Raleway' -%}{%- assign css_font = "'Raleway', sans-serif" -%}
+      {%- when 'Merriweather' -%}{%- assign css_font = "'Merriweather', serif" -%}
+      {%- when 'Nunito' -%}{%- assign css_font = "'Nunito', sans-serif" -%}
+      {%- when 'Oswald' -%}{%- assign css_font = "'Oswald', sans-serif" -%}
+      {%- when 'Poppins' -%}{%- assign css_font = "'Poppins', sans-serif" -%}
+      {%- when 'Cormorant+Garamond' -%}{%- assign css_font = "'Cormorant Garamond', serif" -%}
+      {%- when 'EB+Garamond' -%}{%- assign css_font = "'EB Garamond', serif" -%}
+      {%- when 'Libre+Baskerville' -%}{%- assign css_font = "'Libre Baskerville', serif" -%}
+      {%- when 'Cinzel' -%}{%- assign css_font = "'Cinzel', serif" -%}
+      {%- when 'DM+Serif+Display' -%}{%- assign css_font = "'DM Serif Display', serif" -%}
+      {%- when 'Josefin+Sans' -%}{%- assign css_font = "'Josefin Sans', sans-serif" -%}
+      {%- when 'Roboto' -%}{%- assign css_font = "'Roboto', sans-serif" -%}
+      {%- when 'Georgia' -%}{%- assign css_font = "Georgia, 'Times New Roman', serif" -%}
+      {%- when 'Arial' -%}{%- assign css_font = "Arial, Helvetica, sans-serif" -%}
+      {%- when 'Verdana' -%}{%- assign css_font = "Verdana, Geneva, sans-serif" -%}
+      {%- when 'Tahoma' -%}{%- assign css_font = "Tahoma, Geneva, sans-serif" -%}
+      {%- when 'Palatino' -%}{%- assign css_font = "'Palatino Linotype', Palatino, serif" -%}
+      {%- when 'Times' -%}{%- assign css_font = "'Times New Roman', Times, serif" -%}
+      {%- when 'Courier' -%}{%- assign css_font = "'Courier New', Courier, monospace" -%}
+      {%- when 'Impact' -%}{%- assign css_font = "Impact, Charcoal, sans-serif" -%}
+      {%- when 'Trebuchet' -%}{%- assign css_font = "'Trebuchet MS', sans-serif" -%}
+      {%- else -%}{%- assign css_font = "inherit" -%}
+    {%- endcase -%}
+    [data-block-id="{{ block.id }}"] .koraa-value__title,
+    [data-block-id="{{ block.id }}"] .koraa-value__text { font-family: {{ css_font }}; }
+  {%- endfor -%}
+</style>
+
+<div class="koraa-values koraa-section" style="padding-left: {{ section.settings.padding_horizontal }}px; padding-right: {{ section.settings.padding_horizontal }}px;">
+  <div class="koraa-values__grid" style="max-width: {{ section.settings.section_max_width }}px;">
+    {% for block in section.blocks %}
+      {%- assign align = block.settings.text_align -%}
+      {%- if align == 'left' -%}
+        {%- assign text_margin = 'margin: 0; max-width: 100%;' -%}
+      {%- elsif align == 'right' -%}
+        {%- assign text_margin = 'margin: 0 0 0 auto; max-width: 100%;' -%}
+      {%- else -%}
+        {%- assign text_margin = 'margin: 0 auto; max-width: 360px;' -%}
+      {%- endif -%}
+      <div class="koraa-value" {{ block.shopify_attributes }} data-block-id="{{ block.id }}" style="text-align: {{ align }};">
+        <h3 class="koraa-value__title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title }}</h3>
+        <div class="koraa-value__text" style="font-size: {{ block.settings.text_size }}px; {{ text_margin }}">{{ block.settings.text }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Koraa Brand Values",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Width"
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Side Padding (Left & Right)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_max_width",
+      "label": "Max Width",
+      "min": 400,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "CREATED"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "Title Font Size",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Rooted in fair trade and created with the people + planet in mind, we're proud to present our artisanal collections.</p>"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "label": "Description Font Size",
+          "min": 10,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text Alignment",
+          "default": "center",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Font"
+        },
+        {
+          "type": "select",
+          "id": "font_family",
+          "label": "Font Family",
+          "default": "inherit",
+          "options": [
+            { "value": "inherit", "label": "— Theme Default —" },
+            { "value": "Archivo", "label": "Archivo (Google)" },
+            { "value": "Inter", "label": "Inter (Google)" },
+            { "value": "Roboto", "label": "Roboto (Google)" },
+            { "value": "Poppins", "label": "Poppins (Google)" },
+            { "value": "Montserrat", "label": "Montserrat (Google)" },
+            { "value": "Raleway", "label": "Raleway (Google)" },
+            { "value": "Oswald", "label": "Oswald (Google)" },
+            { "value": "Nunito", "label": "Nunito (Google)" },
+            { "value": "Lato", "label": "Lato (Google)" },
+            { "value": "Josefin+Sans", "label": "Josefin Sans (Google)" },
+            { "value": "Playfair+Display", "label": "Playfair Display (Google)" },
+            { "value": "Merriweather", "label": "Merriweather (Google)" },
+            { "value": "Cormorant+Garamond", "label": "Cormorant Garamond (Google)" },
+            { "value": "EB+Garamond", "label": "EB Garamond (Google)" },
+            { "value": "Libre+Baskerville", "label": "Libre Baskerville (Google)" },
+            { "value": "Cinzel", "label": "Cinzel (Google)" },
+            { "value": "DM+Serif+Display", "label": "DM Serif Display (Google)" },
+            { "value": "Georgia", "label": "Georgia (System)" },
+            { "value": "Times", "label": "Times New Roman (System)" },
+            { "value": "Arial", "label": "Arial (System)" },
+            { "value": "Verdana", "label": "Verdana (System)" },
+            { "value": "Tahoma", "label": "Tahoma (System)" },
+            { "value": "Trebuchet", "label": "Trebuchet MS (System)" },
+            { "value": "Palatino", "label": "Palatino (System)" },
+            { "value": "Impact", "label": "Impact (System)" },
+            { "value": "Courier", "label": "Courier New (System)" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Koraa Brand Values",
+      "blocks": [
+        {
+          "type": "value",
+          "settings": {
+            "title": "DELIVER WITH QUALITY",
+            "title_size": 14,
+            "text": "<p>Every product is crafted with care and attention to detail, ensuring the best for your customers.</p>",
+            "text_size": 14,
+            "text_align": "center",
+            "font_family": "inherit"
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "title": "GLOBAL SHIPPING",
+            "title_size": 14,
+            "text": "<p>We bring you the best scarves from around the world, perfect for fashionistas.</p>",
+            "text_size": 14,
+            "text_align": "center",
+            "font_family": "inherit"
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "title": "RESPONSIBLE MANUFACTURING",
+            "title_size": 14,
+            "text": "<p>Grey Exim is all about quality and honesty, from choosing fabrics to digital printing and finishing.</p>",
+            "text_size": 14,
+            "text_align": "center",
+            "font_family": "inherit"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

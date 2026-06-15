@@ -1,0 +1,106 @@
+<div id="koraaSearchMenu" class="koraa-search-menu">
+  <!-- Top Search Bar -->
+  <div class="koraa-search-menu__header">
+    <form action="{{ routes.search_url }}" method="get" class="koraa-search-menu__form">
+      <button type="submit" class="koraa-search-menu__submit" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="koraa-icon-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+      <input type="search" name="q" placeholder="Search products..." class="koraa-search-menu__input">
+    </form>
+    <button type="button" class="koraa-search-menu__close" id="closeKoraaSearchMenu" aria-label="Close">
+      Cancel
+    </button>
+  </div>
+
+  <!-- Horizontal Tabs -->
+  <div class="koraa-search-menu__tabs">
+    {% for link in linklists['main-menu'].links %}
+      <button class="koraa-search-menu__tab {% if forloop.first %}is-active{% endif %}" data-target="koraa-menu-tab-{{ forloop.index }}">
+        {{ link.title }}
+      </button>
+    {% endfor %}
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="koraa-search-menu__contents">
+    {% for link in linklists['main-menu'].links %}
+      <div class="koraa-search-menu__content {% if forloop.first %}is-active{% endif %}" id="koraa-menu-tab-{{ forloop.index }}">
+        {% if link.links != blank %}
+          <ul class="koraa-search-menu__list">
+            {% for childlink in link.links %}
+              {% assign lower_title = childlink.title | downcase %}
+              <li class="koraa-search-menu__list-item">
+                <a href="{{ childlink.url }}" class="koraa-search-menu__link {% if lower_title contains 'sale' %}is-highlight{% endif %}">{{ childlink.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <ul class="koraa-search-menu__list">
+            <li class="koraa-search-menu__list-item">
+              <a href="{{ link.url }}" class="koraa-search-menu__link">Shop All {{ link.title }}</a>
+            </li>
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.koraa-search-menu__tab');
+    const contents = document.querySelectorAll('.koraa-search-menu__content');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all
+        tabs.forEach(t => t.classList.remove('is-active'));
+        contents.forEach(c => c.classList.remove('is-active'));
+        
+        // Add active class to clicked tab and corresponding content
+        this.classList.add('is-active');
+        const targetId = this.getAttribute('data-target');
+        const targetContent = document.getElementById(targetId);
+        if (targetContent) {
+          targetContent.classList.add('is-active');
+        }
+      });
+    });
+
+    const closeBtn = document.getElementById('closeKoraaSearchMenu');
+    const menu = document.getElementById('koraaSearchMenu');
+    
+    // Select both the bottom nav button and any header search buttons
+    const openBtns = document.querySelectorAll('#openKoraaSearchMenu, .search-action button');
+    
+    if (openBtns.length > 0 && menu) {
+      openBtns.forEach(btn => {
+        // Remove the theme's default modal trigger attribute
+        if (btn.hasAttribute('on:click')) {
+          btn.removeAttribute('on:click');
+        }
+
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation(); // Stop any other click handlers
+          
+          menu.classList.add('is-open');
+          document.body.style.overflow = 'hidden'; // Prevent background scroll
+          
+          // Auto focus search input after animation
+          setTimeout(() => {
+            const input = menu.querySelector('input[type="search"]');
+            if(input) input.focus();
+          }, 400);
+        });
+      });
+    }
+
+    if (closeBtn && menu) {
+      closeBtn.addEventListener('click', function() {
+        menu.classList.remove('is-open');
+        document.body.style.overflow = ''; // Restore scroll
+      });
+    }
+  });
+</script>

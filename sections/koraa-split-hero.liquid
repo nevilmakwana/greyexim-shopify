@@ -1,0 +1,149 @@
+<!-- Koraa-Style Split Hero (Two Column) -->
+
+<style>
+/* ── Image: slide in from left ── */
+@keyframes ksh-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Image hidden by default */
+.koraa-split-hero__panel .koraa-split-hero__image {
+  opacity: 0;
+}
+
+/* Trigger image animation when panel is visible */
+.koraa-split-hero__panel.ksh-ready .koraa-split-hero__image {
+  animation: ksh-slide-left 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0s forwards;
+}
+
+/* ── Text: Fade-up keyframe ── */
+@keyframes ksh-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Elements start hidden, animate when .ksh-ready is added ── */
+.koraa-split-hero__panel .koraa-split-hero__subtitle,
+.koraa-split-hero__panel .koraa-split-hero__title,
+.koraa-split-hero__panel .koraa-split-hero__desc,
+.koraa-split-hero__panel .koraa-split-hero__cta {
+  opacity: 0;
+}
+
+.koraa-split-hero__panel.ksh-ready .koraa-split-hero__subtitle {
+  animation: ksh-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+
+.koraa-split-hero__panel.ksh-ready .koraa-split-hero__title {
+  animation: ksh-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+
+.koraa-split-hero__panel.ksh-ready .koraa-split-hero__desc {
+  animation: ksh-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+}
+
+.koraa-split-hero__panel.ksh-ready .koraa-split-hero__cta {
+  animation: ksh-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+}
+</style>
+
+<div class="koraa-split-hero">
+  {% for block in section.blocks %}
+    <div class="koraa-split-hero__panel" {{ block.shopify_attributes }}>
+      {% if block.settings.image %}
+        <img class="koraa-split-hero__image" src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.heading }}" loading="eager">
+      {% else %}
+        {% if forloop.index == 1 %}
+          <img class="koraa-split-hero__image" src="https://images.unsplash.com/photo-1544413660-299165566b1d?q=80&w=1200&auto=format" alt="{{ block.settings.heading }}" loading="eager" style="object-position: center 30%;">
+        {% else %}
+          <img class="koraa-split-hero__image" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=80&auto=format" alt="{{ block.settings.heading }}" loading="eager">
+        {% endif %}
+      {% endif %}
+      <div class="koraa-split-hero__overlay">
+        {% if block.settings.subtitle != blank %}
+          <span class="koraa-split-hero__subtitle">{{ block.settings.subtitle }}</span>
+        {% endif %}
+        <h2 class="koraa-split-hero__title">{{ block.settings.heading }}</h2>
+        {% if block.settings.description != blank %}
+          <p class="koraa-split-hero__desc">{{ block.settings.description }}</p>
+        {% endif %}
+        <div class="koraa-split-hero__buttons">
+          {% if block.settings.button_1_label != blank and block.settings.button_1_link != blank %}
+            <a href="{{ block.settings.button_1_link }}" class="koraa-split-hero__cta">{{ block.settings.button_1_label }}</a>
+          {% endif %}
+          {% if block.settings.button_2_label != blank and block.settings.button_2_link != blank %}
+            <a href="{{ block.settings.button_2_link }}" class="koraa-split-hero__cta">{{ block.settings.button_2_label }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+(function () {
+  var panels = document.querySelectorAll('.koraa-split-hero__panel');
+  if (!panels.length) return;
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('ksh-ready');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    panels.forEach(function (p) { io.observe(p); });
+  } else {
+    panels.forEach(function (p) { p.classList.add('ksh-ready'); });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Koraa Split Hero",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Panel",
+      "limit": 2,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "HELLO PIEDMONT AVE" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "OPEN IN OAKLAND!" },
+        { "type": "text", "id": "description", "label": "Description", "default": "Visit us at 4167 Piedmont Ave, Oakland" },
+        { "type": "text", "id": "button_1_label", "label": "Button 1 Label" },
+        { "type": "url", "id": "button_1_link", "label": "Button 1 Link" },
+        { "type": "text", "id": "button_2_label", "label": "Button 2 Label" },
+        { "type": "url", "id": "button_2_link", "label": "Button 2 Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Koraa Split Hero",
+      "blocks": [
+        { "type": "panel", "settings": { "subtitle": "HELLO PIEDMONT AVE", "heading": "OPEN IN OAKLAND!", "description": "Visit us at 4167 Piedmont Ave, Oakland" } },
+        { "type": "panel", "settings": { "subtitle": "SHOP", "heading": "BOGO SALE", "description": "BUY ONE GET ONE FREE\nAll Rover & Kin accessories!", "button_1_label": "EARRINGS", "button_2_label": "NECKLACES" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

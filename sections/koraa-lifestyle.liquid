@@ -1,0 +1,43 @@
+<!-- Koraa-Style Lifestyle Banner Section -->
+<div class="koraa-lifestyle">
+  {% if section.settings.image %}
+    <img class="koraa-lifestyle__image" src="{{ section.settings.image | image_url: width: 2000 }}" alt="{{ section.settings.heading }}" loading="lazy">
+  {% elsif section.settings.fallback_style == 'makers' %}
+    <img class="koraa-lifestyle__image" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=2000&q=80&auto=format" alt="{{ section.settings.heading }}" loading="lazy">
+  {% else %}
+    <img class="koraa-lifestyle__image" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=2000&q=80&auto=format" alt="{{ section.settings.heading }}" loading="lazy">
+  {% endif %}
+  <div class="koraa-lifestyle__overlay">
+    {% if section.settings.subtitle != blank %}
+      <span class="koraa-lifestyle__subtitle">{{ section.settings.subtitle }}</span>
+    {% endif %}
+    <h2 class="koraa-lifestyle__title">{{ section.settings.heading }}</h2>
+    {% if section.settings.button_label != blank %}
+      <a href="{{ section.settings.button_link }}" class="koraa-lifestyle__cta">{{ section.settings.button_label }}</a>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Koraa Lifestyle Banner",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Banner Image" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle (small text above heading)" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Meet the makers" },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Meet your makers" },
+    { "type": "url", "id": "button_link", "label": "Button Link" },
+    {
+      "type": "select",
+      "id": "fallback_style",
+      "label": "Fallback Image Style",
+      "options": [
+        { "value": "makers", "label": "Artisan / Makers" },
+        { "value": "home", "label": "Home / Interior" }
+      ],
+      "default": "makers"
+    }
+  ],
+  "presets": [{ "name": "Koraa Lifestyle Banner" }]
+}
+{% endschema %}

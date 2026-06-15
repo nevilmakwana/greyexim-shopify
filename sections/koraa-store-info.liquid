@@ -1,0 +1,32 @@
+<!-- Koraa-Style Store Info Section -->
+<div class="koraa-store-info koraa-section">
+  <h3 class="koraa-store-info__title">{{ section.settings.heading }}</h3>
+  <div class="koraa-store-info__text">
+    {{ section.settings.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Koraa Store Info",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Visit us"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>2840 College Ave, Berkeley<br>4167 Piedmont Ave, Oakland</p><p>Both are open Monday to Saturday 11am-6pm and Sunday 11am to 5pm</p><p>Have a question? Shoot us a <a href='/pages/contact'>message</a>.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Koraa Store Info"
+    }
+  ]
+}
+{% endschema %}

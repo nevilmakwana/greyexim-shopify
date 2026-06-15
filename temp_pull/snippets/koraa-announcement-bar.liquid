@@ -1,0 +1,294 @@
+<!-- Koraa-Style Custom Announcement Bar — Premium Transitions v4 -->
+{%- if settings.koraa_announcement_show -%}
+  {%- liquid
+    assign bg_color = settings.koraa_announcement_bg | default: '#1A1A1A'
+    assign text_color = settings.koraa_announcement_text_color | default: '#ffffff'
+    assign speed = settings.koraa_announcement_speed | default: 5
+    assign effect = settings.koraa_announcement_effect | default: 'crossfade'
+    assign font_size = settings.koraa_announcement_font_size | default: 12
+  -%}
+
+  {%- comment -%} Build slides data with text + link pairs {%- endcomment -%}
+  {%- capture slides_html -%}
+    {%- assign slide_count = 0 -%}
+
+    {%- if settings.koraa_announcement_text_1 != blank and settings.koraa_announcement_show_1 -%}
+      {%- assign slide_count = slide_count | plus: 1 -%}
+      <div class="koraa-announcement__slide {% if slide_count == 1 %}is-active{% endif %}">
+        {%- if settings.koraa_announcement_link_1 != blank -%}
+          <a href="{{ settings.koraa_announcement_link_1 }}" class="koraa-announcement__link">
+            <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_1 }}</p>
+          </a>
+        {%- else -%}
+          <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_1 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if settings.koraa_announcement_text_2 != blank and settings.koraa_announcement_show_2 -%}
+      {%- assign slide_count = slide_count | plus: 1 -%}
+      <div class="koraa-announcement__slide {% if slide_count == 1 %}is-active{% endif %}">
+        {%- if settings.koraa_announcement_link_2 != blank -%}
+          <a href="{{ settings.koraa_announcement_link_2 }}" class="koraa-announcement__link">
+            <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_2 }}</p>
+          </a>
+        {%- else -%}
+          <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_2 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if settings.koraa_announcement_text_3 != blank and settings.koraa_announcement_show_3 -%}
+      {%- assign slide_count = slide_count | plus: 1 -%}
+      <div class="koraa-announcement__slide {% if slide_count == 1 %}is-active{% endif %}">
+        {%- if settings.koraa_announcement_link_3 != blank -%}
+          <a href="{{ settings.koraa_announcement_link_3 }}" class="koraa-announcement__link">
+            <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_3 }}</p>
+          </a>
+        {%- else -%}
+          <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_3 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if settings.koraa_announcement_text_4 != blank and settings.koraa_announcement_show_4 -%}
+      {%- assign slide_count = slide_count | plus: 1 -%}
+      <div class="koraa-announcement__slide {% if slide_count == 1 %}is-active{% endif %}">
+        {%- if settings.koraa_announcement_link_4 != blank -%}
+          <a href="{{ settings.koraa_announcement_link_4 }}" class="koraa-announcement__link">
+            <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_4 }}</p>
+          </a>
+        {%- else -%}
+          <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_4 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if settings.koraa_announcement_text_5 != blank and settings.koraa_announcement_show_5 -%}
+      {%- assign slide_count = slide_count | plus: 1 -%}
+      <div class="koraa-announcement__slide {% if slide_count == 1 %}is-active{% endif %}">
+        {%- if settings.koraa_announcement_link_5 != blank -%}
+          <a href="{{ settings.koraa_announcement_link_5 }}" class="koraa-announcement__link">
+            <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_5 }}</p>
+          </a>
+        {%- else -%}
+          <p class="koraa-announcement__text">{{ settings.koraa_announcement_text_5 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if slide_count > 0 -%}
+  <div 
+    class="koraa-announcement" 
+    id="koraa-announcement"
+    style="
+      background-color: {{ bg_color }};
+      color: {{ text_color }};
+      font-size: {{ font_size }}px;
+    "
+    data-speed="{{ speed }}"
+    data-effect="{{ effect }}"
+  >
+    <div class="koraa-announcement__track">
+      {{ slides_html }}
+    </div>
+  </div>
+  {%- endif -%}
+
+  <style>
+    /* Hide original Horizon announcement bar */
+    .announcement-bar { display: none !important; }
+
+    .koraa-announcement {
+      width: 100%;
+      text-align: center;
+      padding: var(--custom-announcement-padding-desktop, 10px) 20px;
+      position: relative;
+      overflow: hidden;
+      z-index: 100;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+
+    @media screen and (max-width: 749px) {
+      .koraa-announcement {
+        padding: var(--custom-announcement-padding-mobile, 8px) 16px;
+      }
+    }
+
+    .koraa-announcement__text {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Clickable link styling — override ALL theme defaults */
+    .koraa-announcement__link,
+    .koraa-announcement__link:link,
+    .koraa-announcement__link:visited,
+    .koraa-announcement__link:active,
+    .koraa-announcement__link:focus {
+      color: inherit !important;
+      text-decoration: none !important;
+      border: none !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+      background: none !important;
+      display: block;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      padding: 0 !important;
+      margin: 0 !important;
+      line-height: inherit !important;
+      font-size: inherit !important;
+      min-height: auto !important;
+    }
+    .koraa-announcement__link:hover {
+      opacity: 0.75 !important;
+      text-decoration: none !important;
+      color: inherit !important;
+    }
+
+    /* CSS Grid stacking — zero jerk */
+    .koraa-announcement__track {
+      display: grid;
+      width: 100%;
+    }
+
+    .koraa-announcement__slide {
+      grid-area: 1 / 1;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      will-change: opacity, transform, filter;
+    }
+
+    .koraa-announcement__slide.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ===== 1. CROSSFADE ===== */
+    [data-effect="crossfade"] .koraa-announcement__slide {
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ===== 2. SLIDE UP ===== */
+    [data-effect="slide-up"] .koraa-announcement__slide {
+      transform: translateY(100%);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    [data-effect="slide-up"] .koraa-announcement__slide.is-active {
+      transform: translateY(0);
+    }
+    [data-effect="slide-up"] .koraa-announcement__slide.is-exiting {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    /* ===== 3. BLUR FADE ===== */
+    [data-effect="blur-fade"] .koraa-announcement__slide {
+      filter: blur(8px);
+      transform: scale(0.92);
+      transition: opacity 0.7s ease, filter 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    [data-effect="blur-fade"] .koraa-announcement__slide.is-active {
+      filter: blur(0);
+      transform: scale(1);
+    }
+    [data-effect="blur-fade"] .koraa-announcement__slide.is-exiting {
+      filter: blur(8px);
+      transform: scale(1.08);
+      opacity: 0;
+    }
+
+    /* ===== 4. SLIDE HORIZONTAL ===== */
+    [data-effect="slide"] .koraa-announcement__slide {
+      transform: translateX(80px);
+      transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    [data-effect="slide"] .koraa-announcement__slide.is-active {
+      transform: translateX(0);
+    }
+    [data-effect="slide"] .koraa-announcement__slide.is-exiting {
+      transform: translateX(-80px);
+      opacity: 0;
+    }
+
+    /* ===== 5. SCALE FADE ===== */
+    [data-effect="scale-fade"] .koraa-announcement__slide {
+      transform: scale(1.2);
+      transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    [data-effect="scale-fade"] .koraa-announcement__slide.is-active {
+      transform: scale(1);
+    }
+    [data-effect="scale-fade"] .koraa-announcement__slide.is-exiting {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    /* ===== 6. FLIP ===== */
+    [data-effect="flip"] .koraa-announcement__track {
+      perspective: 500px;
+    }
+    [data-effect="flip"] .koraa-announcement__slide {
+      transform: rotateX(90deg);
+      transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      backface-visibility: hidden;
+    }
+    [data-effect="flip"] .koraa-announcement__slide.is-active {
+      transform: rotateX(0deg);
+    }
+    [data-effect="flip"] .koraa-announcement__slide.is-exiting {
+      transform: rotateX(-90deg);
+      opacity: 0;
+    }
+
+    /* ===== 7. STATIC ===== */
+    [data-effect="static"] .koraa-announcement__slide {
+      transition: none;
+    }
+  </style>
+
+  <script>
+    (function() {
+      var bar = document.getElementById('koraa-announcement');
+      if (!bar) return;
+
+      var slides = bar.querySelectorAll('.koraa-announcement__slide');
+      if (slides.length <= 1) return;
+
+      var speed = parseInt(bar.dataset.speed, 10) * 1000 || 5000;
+      var effect = bar.dataset.effect || 'crossfade';
+      var current = 0;
+      var busy = false;
+
+      if (effect === 'static') return;
+
+      function next() {
+        if (busy) return;
+        busy = true;
+
+        var prev = current;
+        current = (current + 1) % slides.length;
+
+        slides[prev].classList.add('is-exiting');
+        slides[prev].classList.remove('is-active');
+
+        setTimeout(function() {
+          slides[current].classList.add('is-active');
+        }, 20);
+
+        setTimeout(function() {
+          slides[prev].classList.remove('is-exiting');
+          busy = false;
+        }, 850);
+      }
+
+      setInterval(next, speed);
+    })();
+  </script>
+{%- endif -%}

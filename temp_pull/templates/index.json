@@ -1,0 +1,210 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "koraa_hero": {
+      "type": "koraa-hero",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "subtitle": "SPRING HAS ARRIVED",
+            "heading": "Artisanal Clothing",
+            "description": "Shop handmade styles you'll cherish",
+            "button_label": "Shop Apparel",
+            "button_link": "shopify://collections/all",
+            "text_position": "bottom-left",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "slide_1"
+      ],
+      "settings": {
+        "autoplay": true,
+        "slide_duration": 5,
+        "transition_effect": "crossfade"
+      }
+    },
+    "koraa_featured": {
+      "type": "koraa-products",
+      "settings": {
+        "heading": "Shop spring arrivals 🌱",
+        "collection": "all",
+        "max_products": 6,
+        "view_all_link": "shopify://collections/all",
+        "show_view_all": true
+      }
+    },
+    "koraa_split": {
+      "type": "koraa-split-hero",
+      "blocks": {
+        "panel_1": {
+          "type": "panel",
+          "settings": {
+            "subtitle": "CUSTOMIZATION AVAILABLE",
+            "heading": "BRING YOUR DESIGN TO LIFE",
+            "description": "Upload your custom design and we'll craft it for you in your preferred size.",
+            "button_1_label": "CUSTOMIZE NOW",
+            "button_1_link": "/products/custom-design"
+          }
+        },
+        "panel_2": {
+          "type": "panel",
+          "settings": {
+            "subtitle": "SHOP",
+            "heading": "BOGO SALE",
+            "description": "BUY ONE GET ONE FREE\nAll Rover & Kin accessories!",
+            "button_1_label": "EARRINGS",
+            "button_2_label": "NECKLACES"
+          }
+        }
+      },
+      "block_order": [
+        "panel_1",
+        "panel_2"
+      ],
+      "settings": {}
+    },
+    "koraa_sale": {
+      "type": "koraa-products",
+      "settings": {
+        "heading": "Shop markdowns",
+        "collection": "all",
+        "max_products": 5,
+        "view_all_link": "shopify://collections/all",
+        "show_view_all": true
+      }
+    },
+    "koraa_lifestyle_1": {
+      "type": "koraa-lifestyle",
+      "settings": {
+        "subtitle": "Check out our partners from around the world",
+        "heading": "Meet the makers",
+        "button_label": "Meet your makers",
+        "button_link": "/pages/about",
+        "fallback_style": "makers"
+      }
+    },
+    "koraa_categories": {
+      "type": "koraa-categories",
+      "blocks": {
+        "cat_1": {
+          "type": "category",
+          "settings": {
+            "title": "Baskets + Organization",
+            "link": "shopify://collections/all"
+          }
+        },
+        "cat_2": {
+          "type": "category",
+          "settings": {
+            "title": "Throw Pillows",
+            "link": "shopify://collections/all"
+          }
+        },
+        "cat_3": {
+          "type": "category",
+          "settings": {
+            "title": "Felt Flowers + Vases",
+            "link": "shopify://collections/all"
+          }
+        },
+        "cat_4": {
+          "type": "category",
+          "settings": {
+            "title": "Ceramics + Kitchen",
+            "link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "cat_1",
+        "cat_2",
+        "cat_3",
+        "cat_4"
+      ],
+      "settings": {
+        "heading": "Shop home + kitchen"
+      }
+    },
+    "koraa_lifestyle_2": {
+      "type": "koraa-lifestyle",
+      "settings": {
+        "subtitle": "HANDCRAFTED DECOR TO",
+        "heading": "Brighten your home",
+        "button_label": "Shop Baskets + Organization",
+        "button_link": "shopify://collections/all",
+        "fallback_style": "home"
+      }
+    },
+    "koraa_values": {
+      "type": "koraa-values",
+      "blocks": {
+        "val_1": {
+          "type": "value",
+          "settings": {
+            "title": "CREATED",
+            "text": "<p>Rooted in fair trade and created with the people + planet in mind, we're proud to present our in-house artisanal collections of products.</p>"
+          }
+        },
+        "val_2": {
+          "type": "value",
+          "settings": {
+            "title": "CURATED",
+            "text": "<p>We partner with value aligned makers and brands from across the world to bring you a curated selection of ethically made and mindfully crafted products you'll cherish.</p>"
+          }
+        },
+        "val_3": {
+          "type": "value",
+          "settings": {
+            "title": "CONNECTED",
+            "text": "<p>We believe that our human journey is connected, that each created and curated product holds its unique heritage and purpose for us to share and celebrate.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "val_1",
+        "val_2",
+        "val_3"
+      ],
+      "settings": {}
+    },
+    "koraa_store": {
+      "type": "koraa-store-info",
+      "settings": {
+        "heading": "Visit us in Berkeley + Oakland",
+        "content": "<p>2840 College Ave, Berkeley<br>4167 Piedmont Ave, Oakland</p><p>Both are open Monday to Saturday 11am-6pm and Sunday 11am to 5pm</p><p>Have a question? Shoot us a <a href=\"/pages/contact\">message</a>.</p>"
+      }
+    },
+    "koraa_newsletter": {
+      "type": "koraa-newsletter",
+      "settings": {
+        "heading": "Join us",
+        "subheading": "Subscribe to get 10% off your first order. No spam ever, just the good stuff.",
+        "placeholder": "Your email address",
+        "button_label": "Subscribe"
+      }
+    }
+  },
+  "order": [
+    "koraa_hero",
+    "koraa_featured",
+    "koraa_split",
+    "koraa_sale",
+    "koraa_lifestyle_1",
+    "koraa_categories",
+    "koraa_lifestyle_2",
+    "koraa_values",
+    "koraa_store",
+    "koraa_newsletter"
+  ]
+}
