@@ -373,8 +373,9 @@
             const closeBtn = document.getElementById('closeHmFavourites');
             if (closeBtn) closeBtn.click();
 
-            // If the theme has a Cart Drawer configured to auto-open, dispatch the event
-            if (document.querySelector('cart-drawer-component[auto-open]')) {
+            // If the theme has a Cart Drawer, update sections and open it smoothly
+            const cartDrawer = document.querySelector('cart-drawer-component');
+            if (cartDrawer) {
               document.dispatchEvent(new CustomEvent('cart:update', {
                 bubbles: true,
                 detail: {
@@ -384,8 +385,11 @@
                   }
                 }
               }));
+              if (typeof cartDrawer.open === 'function') {
+                cartDrawer.open();
+              }
             } else {
-              // Otherwise, redirect to the cart page
+              // Otherwise, redirect to the cart page if no drawer is found
               window.location.href = window.Shopify.routes.root + 'cart';
             }
           });
