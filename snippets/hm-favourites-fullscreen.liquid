@@ -389,8 +389,8 @@
                 }
               }));
             } else {
-              // Otherwise, redirect to the cart page
-              window.location.href = window.Shopify.routes.root + 'cart';
+              // Otherwise, redirect to the cart page with a cache buster
+              window.location.href = window.Shopify.routes.root + 'cart?update=' + new Date().getTime();
             }
           });
       })
