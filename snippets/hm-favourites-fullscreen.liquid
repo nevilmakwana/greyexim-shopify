@@ -320,16 +320,14 @@
     display: block;
     appearance: none;
     -webkit-appearance: none;
-    background-color: #fff;
-    border: 1.5px solid #ddd;
+    background-color: transparent;
+    border: 1px solid #111;
     border-radius: 50%;
     position: relative;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
   .hm-favourite-checkbox:checked {
-    background-color: #fff;
-    border-color: #111;
+    background-color: #111;
   }
   .hm-favourite-checkbox:checked::after {
     content: '';
@@ -338,8 +336,8 @@
     left: 8px;
     width: 4px;
     height: 8px;
-    border: solid #111;
-    border-width: 0 2px 2px 0;
+    border: solid white;
+    border-width: 0 1.5px 1.5px 0;
     transform: rotate(45deg);
   }
   .hm-favourites-grid.is-select-mode .hm-favourite-card-checkbox {
