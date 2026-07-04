@@ -248,6 +248,41 @@
     text-decoration: none;
     font-weight: 500;
   }
+
+  /* Footer for Add All */
+  .hm-favourites-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .hm-btn-add-all {
+    width: 100%;
+    background: #111;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  .hm-btn-add-all:active {
+    transform: scale(0.98);
+  }
+  .hm-btn-add-all.is-loading {
+    background: #666;
+    pointer-events: none;
+  }
+  .hm-btn-add-all.is-loading .hm-spinner {
+    display: block;
+    border-top-color: #fff;
+  }
 </style>
 
 <div class="hm-favourites-backdrop" id="hmFavouritesBackdrop"></div>
@@ -267,6 +302,13 @@
     <div id="hmFavouritesContainer" class="hm-favourites-grid">
       <!-- Products will be rendered here by JS -->
     </div>
+  </div>
+
+  <div class="hm-favourites-footer" id="hmFavouritesFooter" style="display: none;">
+    <button class="hm-btn-add-all" onclick="hmAddAllFavouritesToCart(this)">
+      <span class="hm-spinner"></span>
+      <span class="btn-text">Add All to Cart</span>
+    </button>
   </div>
 </div>
 
@@ -406,10 +448,86 @@
       });
     };
 
+    window.hmAddAllFavouritesToCart = function(btn) {
+      const items = getWishlistData();
+      if (items.length === 0) return;
+
+      btn.classList.add('is-loading');
+      const textSpan = btn.querySelector('.btn-text');
+      if(textSpan) textSpan.textContent = 'Adding All...';
+
+      let sectionIds = [];
+      document.querySelectorAll('cart-items, cart-drawer-component, cart-icon-bubble, cart-live-region-text').forEach(el => {
+        const id = el.dataset.sectionId || el.closest('[id^="shopify-section-"]')?.id.replace('shopify-section-', '');
+        if (id && !sectionIds.includes(id)) sectionIds.push(id);
+      });
+
+      const itemsToAdd = items.map(item => ({ id: item.variantId, quantity: 1 }));
+
+      let formData = {
+        'items': itemsToAdd,
+        'sections': sectionIds.join(',')
+      };
+
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.description || 'Error adding to cart');
+        }
+        return response.json();
+      })
+      .then(data => {
+        return fetch(window.Shopify.routes.root + 'cart.js')
+          .then(res => res.json())
+          .then(cartData => {
+            if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
+            else if (typeof updateCartBadge === 'function') updateCartBadge();
+
+            const autoOpenDrawer = document.querySelector('cart-drawer-component[auto-open]');
+            if (autoOpenDrawer) {
+              btn.classList.remove('is-loading');
+              if (textSpan) textSpan.textContent = 'Added All';
+              setTimeout(() => { if (textSpan) textSpan.textContent = 'Add All to Cart'; }, 2000);
+
+              const closeBtn = document.getElementById('closeHmFavourites');
+              if (closeBtn) closeBtn.click();
+
+              document.dispatchEvent(new CustomEvent('cart:update', {
+                bubbles: true,
+                detail: {
+                  resource: cartData,
+                  data: {
+                    sections: data.sections || {}
+                  }
+                }
+              }));
+            } else {
+              if (textSpan) textSpan.textContent = 'Redirecting...';
+              window.location.href = window.Shopify.routes.root + 'cart?update=' + new Date().getTime();
+            }
+          });
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        btn.classList.remove('is-loading');
+        if(textSpan) textSpan.textContent = 'Error';
+        setTimeout(() => { if (textSpan) textSpan.textContent = 'Add All to Cart'; }, 3000);
+        alert(error.message);
+      });
+    };
+
     function renderFavourites() {
       const items = getWishlistData();
+      const container = document.getElementById('hmFavouritesContainer');
+      const footer = document.getElementById('hmFavouritesFooter');
       
       if (items.length === 0) {
+        if (footer) footer.style.display = 'none';
         container.classList.remove('hm-favourites-grid');
         container.innerHTML = `
           <div class="hm-favourites-empty">
@@ -422,6 +540,10 @@
           </div>
         `;
         return;
+      }
+
+      if (footer) {
+        footer.style.display = items.length > 1 ? 'block' : 'none';
       }
 
       container.classList.add('hm-favourites-grid');
