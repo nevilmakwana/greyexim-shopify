@@ -364,21 +364,21 @@
         return fetch(window.Shopify.routes.root + 'cart.js')
           .then(res => res.json())
           .then(cartData => {
-            btn.classList.remove('is-loading');
-            if (textSpan) textSpan.textContent = 'Added';
-            setTimeout(() => { if (textSpan) textSpan.textContent = 'Add'; }, 2000);
-
             // Update the global cart badge if present
             if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
             else if (typeof updateCartBadge === 'function') updateCartBadge();
 
-            // Close the favourites overlay
-            const closeBtn = document.getElementById('closeHmFavourites');
-            if (closeBtn) closeBtn.click();
-
             // If the theme has a Cart Drawer configured to auto-open, dispatch the event
             const autoOpenDrawer = document.querySelector('cart-drawer-component[auto-open]');
             if (autoOpenDrawer) {
+              btn.classList.remove('is-loading');
+              if (textSpan) textSpan.textContent = 'Added';
+              setTimeout(() => { if (textSpan) textSpan.textContent = 'Add'; }, 2000);
+
+              // Close the favourites overlay only if we are using the drawer
+              const closeBtn = document.getElementById('closeHmFavourites');
+              if (closeBtn) closeBtn.click();
+
               document.dispatchEvent(new CustomEvent('cart:update', {
                 bubbles: true,
                 detail: {
@@ -390,6 +390,9 @@
               }));
             } else {
               // Otherwise, redirect to the cart page with a cache buster
+              // We intentionally do NOT remove the 'is-loading' class or close the overlay
+              // to provide a smooth transition while the browser navigates to the new page.
+              if (textSpan) textSpan.textContent = 'Redirecting...';
               window.location.href = window.Shopify.routes.root + 'cart?update=' + new Date().getTime();
             }
           });
