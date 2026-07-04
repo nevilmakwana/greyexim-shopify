@@ -64,9 +64,9 @@
   }
 
   .hm-favourites-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -80,16 +80,19 @@
     padding: 0;
     margin: 0;
     transition: all 0.2s ease;
+    box-sizing: border-box;
   }
   .hm-favourites-close:active {
     transform: scale(0.92);
     background: rgba(44, 36, 28, 0.7);
   }
   .hm-favourites-close svg {
-    stroke: #ffffff;
+    stroke: currentColor;
     width: 22px;
     height: 22px;
     stroke-width: 1.8;
+    display: block;
+    margin: auto;
   }
 
   /* Scrollable Content */
@@ -309,9 +312,9 @@
     border-top-color: #fff;
   }
   .hm-favourites-select-mode-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -325,12 +328,15 @@
     padding: 0;
     margin: 0;
     transition: all 0.2s ease;
+    box-sizing: border-box;
   }
   .hm-favourites-select-mode-btn svg {
-    stroke: #ffffff;
+    stroke: currentColor;
     width: 22px;
     height: 22px;
     stroke-width: 1.8;
+    display: block;
+    margin: auto;
   }
   .hm-favourites-select-mode-btn:active {
     transform: scale(0.92);
@@ -381,7 +387,7 @@
 <div class="hm-favourites-overlay" id="hmFavouritesOverlay">
   <div class="hm-favourites-header">
     <button class="hm-favourites-select-mode-btn" id="hmFavouritesSelectModeBtn" onclick="toggleFavouritesSelectMode()" style="display: none;" aria-label="Select">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="m3 17 2 2 4-4"/>
         <path d="m3 7 2 2 4-4"/>
         <path d="M13 6h8"/>
@@ -391,7 +397,7 @@
     </button>
     <h1 class="hm-favourites-title">Favourites</h1>
     <button class="hm-favourites-close" id="closeHmFavourites" aria-label="Close">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
@@ -470,12 +476,12 @@
       const footer = document.getElementById('hmFavouritesFooter');
       
       if (window.isSelectMode) {
-        btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1,0)"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></g></svg>`;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`;
         container.classList.add('is-select-mode');
         footer.style.display = 'block';
         window.updateFavouritesSelectedCount();
       } else {
-        btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>`;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>`;
         container.classList.remove('is-select-mode');
         footer.style.display = 'none';
         document.querySelectorAll('.hm-favourite-checkbox').forEach(cb => cb.checked = false);
