@@ -249,11 +249,11 @@
     font-weight: 500;
   }
 
-  /* Bulk Action for Add All */
-  .hm-favourites-bulk-action {
-    padding: 12px 16px;
-    border-bottom: 1px solid #eee;
-    background: #fafafa;
+  /* Footer for Add All */
+  .hm-favourites-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+    background: #fff;
     flex-shrink: 0;
   }
   .hm-btn-add-all {
@@ -261,20 +261,24 @@
     background: #111;
     color: #fff;
     border: none;
-    padding: 12px;
-    font-size: 13px;
-    font-weight: 600;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    border-radius: 4px;
     transition: background 0.2s;
   }
   .hm-btn-add-all:active {
     transform: scale(0.98);
+  }
+  .hm-btn-add-all:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
   }
   .hm-btn-add-all.is-loading {
     background: #666;
@@ -284,12 +288,45 @@
     display: block;
     border-top-color: #fff;
   }
+  .hm-favourites-select-mode-btn {
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #111;
+    cursor: pointer;
+    padding: 8px;
+    margin-left: -8px;
+    flex: 0 0 auto;
+  }
+  .hm-favourite-card-checkbox {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    background: #fff;
+    border-radius: 4px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: none;
+  }
+  .hm-favourite-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin: 0;
+    display: block;
+  }
+  .hm-favourites-grid.is-select-mode .hm-favourite-card-checkbox {
+    display: block;
+  }
 </style>
 
 <div class="hm-favourites-backdrop" id="hmFavouritesBackdrop"></div>
 <div class="hm-favourites-overlay" id="hmFavouritesOverlay">
   <div class="hm-favourites-header">
-    <div style="width:36px;"></div> <!-- spacer -->
+    <button class="hm-favourites-select-mode-btn" id="hmFavouritesSelectModeBtn" onclick="toggleFavouritesSelectMode()" style="display: none;">Select</button>
     <h1 class="hm-favourites-title">Favourites</h1>
     <button class="hm-favourites-close" id="closeHmFavourites" aria-label="Close">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -299,17 +336,17 @@
     </button>
   </div>
   
-  <div class="hm-favourites-bulk-action" id="hmFavouritesFooter" style="display: none;">
-    <button class="hm-btn-add-all" onclick="hmAddAllFavouritesToCart(this)">
-      <span class="hm-spinner"></span>
-      <span class="btn-text">Add All to Cart</span>
-    </button>
-  </div>
-
   <div class="hm-favourites-content">
     <div id="hmFavouritesContainer" class="hm-favourites-grid">
       <!-- Products will be rendered here by JS -->
     </div>
+  </div>
+
+  <div class="hm-favourites-footer" id="hmFavouritesFooter" style="display: none; padding-bottom: 90px;">
+    <button class="hm-btn-add-all" id="hmBtnAddSelected" onclick="hmAddSelectedFavouritesToCart(this)" disabled>
+      <span class="hm-spinner"></span>
+      <span class="btn-text">Select Items</span>
+    </button>
   </div>
 </div>
 
@@ -337,12 +374,47 @@
       overlay.classList.remove('is-active');
       backdrop.classList.remove('is-active');
       document.body.style.overflow = '';
+      if (window.isSelectMode) window.toggleFavouritesSelectMode();
     });
 
     // Close on backdrop click
     backdrop.addEventListener('click', () => {
       closeBtn.click();
     });
+
+    window.isSelectMode = false;
+    window.toggleFavouritesSelectMode = function() {
+      window.isSelectMode = !window.isSelectMode;
+      const btn = document.getElementById('hmFavouritesSelectModeBtn');
+      const container = document.getElementById('hmFavouritesContainer');
+      const footer = document.getElementById('hmFavouritesFooter');
+      
+      if (window.isSelectMode) {
+        btn.textContent = 'Cancel';
+        container.classList.add('is-select-mode');
+        footer.style.display = 'block';
+        window.updateFavouritesSelectedCount();
+      } else {
+        btn.textContent = 'Select';
+        container.classList.remove('is-select-mode');
+        footer.style.display = 'none';
+        document.querySelectorAll('.hm-favourite-checkbox').forEach(cb => cb.checked = false);
+      }
+    };
+
+    window.updateFavouritesSelectedCount = function() {
+      const selectedCount = document.querySelectorAll('.hm-favourite-checkbox:checked').length;
+      const btn = document.getElementById('hmBtnAddSelected');
+      const btnText = btn.querySelector('.btn-text');
+      
+      if (selectedCount > 0) {
+        btn.disabled = false;
+        btnText.textContent = `Add to Cart (${selectedCount})`;
+      } else {
+        btn.disabled = true;
+        btnText.textContent = 'Select Items';
+      }
+    };
 
     function getWishlistData() {
       try { return JSON.parse(localStorage.getItem('greyexim_wishlist')) || []; }
@@ -449,13 +521,13 @@
       });
     };
 
-    window.hmAddAllFavouritesToCart = function(btn) {
-      const items = getWishlistData();
-      if (items.length === 0) return;
+    window.hmAddSelectedFavouritesToCart = function(btn) {
+      const selectedCheckboxes = Array.from(document.querySelectorAll('.hm-favourite-checkbox:checked'));
+      if (selectedCheckboxes.length === 0) return;
 
       btn.classList.add('is-loading');
       const textSpan = btn.querySelector('.btn-text');
-      if(textSpan) textSpan.textContent = 'Adding All...';
+      if(textSpan) textSpan.textContent = 'Adding...';
 
       let sectionIds = [];
       document.querySelectorAll('cart-items, cart-drawer-component, cart-icon-bubble, cart-live-region-text').forEach(el => {
@@ -463,7 +535,7 @@
         if (id && !sectionIds.includes(id)) sectionIds.push(id);
       });
 
-      const itemsToAdd = items.map(item => ({ id: item.variantId, quantity: 1 }));
+      const itemsToAdd = selectedCheckboxes.map(cb => ({ id: cb.value, quantity: 1 }));
 
       let formData = {
         'items': itemsToAdd,
@@ -492,8 +564,10 @@
             const autoOpenDrawer = document.querySelector('cart-drawer-component[auto-open]');
             if (autoOpenDrawer) {
               btn.classList.remove('is-loading');
-              if (textSpan) textSpan.textContent = 'Added All';
-              setTimeout(() => { if (textSpan) textSpan.textContent = 'Add All to Cart'; }, 2000);
+              if (textSpan) textSpan.textContent = 'Added';
+              setTimeout(() => { if (textSpan) textSpan.textContent = 'Select Items'; }, 2000);
+              
+              if (window.isSelectMode) window.toggleFavouritesSelectMode();
 
               const closeBtn = document.getElementById('closeHmFavourites');
               if (closeBtn) closeBtn.click();
@@ -517,7 +591,7 @@
         console.error('Error:', error);
         btn.classList.remove('is-loading');
         if(textSpan) textSpan.textContent = 'Error';
-        setTimeout(() => { if (textSpan) textSpan.textContent = 'Add All to Cart'; }, 3000);
+        setTimeout(() => { if (textSpan) textSpan.textContent = 'Select Items'; }, 3000);
         alert(error.message);
       });
     };
@@ -526,9 +600,13 @@
       const items = getWishlistData();
       const container = document.getElementById('hmFavouritesContainer');
       const footer = document.getElementById('hmFavouritesFooter');
+      const selectBtn = document.getElementById('hmFavouritesSelectModeBtn');
       
       if (items.length === 0) {
         if (footer) footer.style.display = 'none';
+        if (selectBtn) selectBtn.style.display = 'none';
+        if (window.isSelectMode) window.toggleFavouritesSelectMode();
+        
         container.classList.remove('hm-favourites-grid');
         container.innerHTML = `
           <div class="hm-favourites-empty">
@@ -543,8 +621,8 @@
         return;
       }
 
-      if (footer) {
-        footer.style.display = items.length > 1 ? 'block' : 'none';
+      if (selectBtn) {
+        selectBtn.style.display = 'block';
       }
 
       container.classList.add('hm-favourites-grid');
@@ -552,6 +630,9 @@
       items.reverse().forEach(item => {
         html += `
           <div class="hm-favourite-card">
+            <div class="hm-favourite-card-checkbox">
+              <input type="checkbox" value="${item.variantId}" class="hm-favourite-checkbox" onchange="window.updateFavouritesSelectedCount()">
+            </div>
             <div class="hm-favourite-card__image-wrapper">
               <a href="${item.url}">
                 <img src="${item.image || '//cdn.shopify.com/s/images/themes/product-1.png'}" alt="" class="hm-favourite-card__image" loading="lazy">
