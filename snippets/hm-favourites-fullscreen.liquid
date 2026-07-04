@@ -291,19 +291,12 @@
   .hm-favourites-select-mode-btn {
     background: transparent;
     border: none;
-    font-size: 12px;
-    font-weight: 400;
-    text-transform: uppercase;
-    color: #666;
-    letter-spacing: 0.5px;
-    cursor: pointer;
     padding: 8px;
     margin-left: -8px;
-    flex: 0 0 auto;
-    transition: color 0.2s;
-  }
-  .hm-favourites-select-mode-btn:hover {
-    color: #111;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .hm-favourite-card-checkbox {
     position: absolute;
@@ -330,17 +323,13 @@
   .hm-favourite-checkbox:checked {
     background-color: #fff;
     border-color: #111;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: 14px;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   .hm-favourite-checkbox:checked::after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 8px;
-    width: 5px;
-    height: 10px;
-    border: solid #111;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+    display: none;
   }
   .hm-favourites-grid.is-select-mode .hm-favourite-card-checkbox {
     display: block;
@@ -350,7 +339,12 @@
 <div class="hm-favourites-backdrop" id="hmFavouritesBackdrop"></div>
 <div class="hm-favourites-overlay" id="hmFavouritesOverlay">
   <div class="hm-favourites-header">
-    <button class="hm-favourites-select-mode-btn" id="hmFavouritesSelectModeBtn" onclick="toggleFavouritesSelectMode()" style="display: none;">Select</button>
+    <button class="hm-favourites-select-mode-btn" id="hmFavouritesSelectModeBtn" onclick="toggleFavouritesSelectMode()" style="display: none;" aria-label="Select">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 11 12 14 22 4"></polyline>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+      </svg>
+    </button>
     <h1 class="hm-favourites-title">Favourites</h1>
     <button class="hm-favourites-close" id="closeHmFavourites" aria-label="Close">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -432,12 +426,12 @@
       const footer = document.getElementById('hmFavouritesFooter');
       
       if (window.isSelectMode) {
-        btn.textContent = 'Cancel';
+        btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`;
         container.classList.add('is-select-mode');
         footer.style.display = 'block';
         window.updateFavouritesSelectedCount();
       } else {
-        btn.textContent = 'Select';
+        btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`;
         container.classList.remove('is-select-mode');
         footer.style.display = 'none';
         document.querySelectorAll('.hm-favourite-checkbox').forEach(cb => cb.checked = false);
