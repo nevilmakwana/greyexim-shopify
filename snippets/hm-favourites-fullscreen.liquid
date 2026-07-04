@@ -352,8 +352,11 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
-      .then(response => {
-        if (!response.ok) throw new Error('Error adding to cart');
+      .then(async (response) => {
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.description || 'Error adding to cart');
+        }
         return response.json();
       })
       .then(data => {
@@ -397,8 +400,9 @@
       .catch((error) => {
         console.error('Error:', error);
         btn.classList.remove('is-loading');
-        if(textSpan) textSpan.textContent = 'Error';
-        setTimeout(() => { if (textSpan) textSpan.textContent = 'Add'; }, 2000);
+        if(textSpan) textSpan.textContent = 'Sold Out';
+        setTimeout(() => { if (textSpan) textSpan.textContent = 'Add'; }, 3000);
+        alert(error.message);
       });
     };
 
