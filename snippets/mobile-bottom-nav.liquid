@@ -23,7 +23,7 @@
     </div>
   </a>
 
-  <a href="/account" class="mobile-bottom-nav__item {% if template.name == 'customers/account' or template.name == 'customers/login' %}mobile-bottom-nav__item--active{% endif %}" aria-label="Account">
+  <a href="#" class="mobile-bottom-nav__item {% if template.name == 'customers/account' or template.name == 'customers/login' %}mobile-bottom-nav__item--active{% endif %}" aria-label="Account" onclick="event.preventDefault();if(typeof openAccountDrawer==='function')openAccountDrawer();">
     <svg class="mobile-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
       <circle cx="12" cy="7" r="4"></circle>

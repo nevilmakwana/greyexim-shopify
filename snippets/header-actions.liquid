@@ -82,35 +82,29 @@
         assign account_actions_style = '--header-actions-font-family: ' | append: font_family_safe | append: '; --header-actions-font-weight: ' | append: font_obj.weight | append: ';'
       endif
     %}
-    <div
-      class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-{{ settings.popover_color_scheme }}"
+    <button
+      type="button"
+      class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} button-unstyled"
+      aria-label="Account"
+      onclick="if(typeof openAccountDrawer==='function')openAccountDrawer();"
     >
-      <shopify-account
-        menu="{{ customer_account_menu }}"
-        {% if account_actions_style != blank %}
-          style="{{ account_actions_style }}"
-        {% endif %}
-      >
-        {% if customer %}
-          <div class="account-button__fallback"></div>
-        {% else %}
-          <span
-            slot="signed-out-avatar"
-            class="account-button__text header-actions__text-style {% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}"
-          >
-            {{ 'content.account_title' | t }}
-          </span>
+      {% if customer %}
+        <div class="account-button__fallback"></div>
+      {% else %}
+        <span
+          class="account-button__text header-actions__text-style {% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}"
+        >
+          {{ 'content.account_title' | t }}
+        </span>
 
-          <span
-            slot="signed-out-avatar"
-            class="{% if display_style != 'icon' %}desktop:hidden{% endif %}"
-            aria-hidden="true"
-          >
-            {{ account_icon }}
-          </span>
-        {% endif %}
-      </shopify-account>
-    </div>
+        <span
+          class="{% if display_style != 'icon' %}desktop:hidden{% endif %}"
+          aria-hidden="true"
+        >
+          {{ account_icon }}
+        </span>
+      {% endif %}
+    </button>
   {% endif %}
 
   <button
