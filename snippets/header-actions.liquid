@@ -88,22 +88,22 @@
       aria-label="Account"
       onclick="if(typeof openAccountDrawer==='function')openAccountDrawer();"
     >
-      {% if customer %}
-        <div class="account-button__fallback"></div>
-      {% else %}
-        <span
-          class="account-button__text header-actions__text-style {% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}"
-        >
+      <span
+        class="account-button__text header-actions__text-style {% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}"
+      >
+        {% if customer %}
+          {{ customer.first_name | default: ('content.account_title' | t) }}
+        {% else %}
           {{ 'content.account_title' | t }}
-        </span>
+        {% endif %}
+      </span>
 
-        <span
-          class="svg-wrapper {% if display_style != 'icon' %}desktop:hidden{% endif %}"
-          aria-hidden="true"
-        >
-          {{ account_icon }}
-        </span>
-      {% endif %}
+      <span
+        class="svg-wrapper {% if display_style != 'icon' %}desktop:hidden{% endif %}"
+        aria-hidden="true"
+      >
+        {{ account_icon }}
+      </span>
     </button>
   {% endif %}
 
