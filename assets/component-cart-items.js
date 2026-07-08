@@ -113,7 +113,7 @@ class CartItemsComponent extends Component {
         }
       };
 
-      if (prefersReducedMotion()) return remove();
+      if (prefersReducedMotion() || isEmptyCart) return remove();
 
       // Set the height so the CSS animation can transition it to 0 smoothly
       row.style.setProperty('--row-height', `${row.clientHeight}px`);

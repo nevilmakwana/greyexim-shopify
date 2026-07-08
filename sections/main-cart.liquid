@@ -17,10 +17,12 @@
         style="{% render 'spacing-style', settings: section.settings %}"
       >
         <div class="cart-page__title">
-          {%- content_for 'block', id: 'cart-page-title', type: '_cart-title', force_empty: true %}
+          <div class="cart-title spacing-style text-center"><h1 class="h2">{{ 'content.your_cart_is_empty' | t }}</h1></div>
         </div>
         <div class="cart-page__items">
-          {%- content_for 'block', id: 'cart-page-items', type: '_cart-products', force_empty: true %}
+          <div class="cart-items__wrapper">
+            <a class="button cart-items__empty-button" href="{{ settings.empty_cart_button_link | default: routes.all_products_collection_url }}">{{ 'actions.continue_shopping' | t }}</a>
+          </div>
         </div>
         {{ cart_page_more_blocks_content }}
       </div>
