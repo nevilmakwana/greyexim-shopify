@@ -491,17 +491,18 @@
 
   .cart-items__table-row.removing {
     overflow: hidden;
-    animation: removeRow var(--animation-speed) var(--animation-easing) forwards;
+    animation: removeRow 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   @keyframes removeRow {
     0% {
-      height: var(--row-height);
+      opacity: 1;
+      max-height: var(--row-height);
+      margin-bottom: var(--margin-lg);
     }
-
     100% {
       opacity: 0;
-      height: 0;
+      max-height: 0;
       padding-bottom: 0;
       margin-bottom: 0;
       border-color: transparent;

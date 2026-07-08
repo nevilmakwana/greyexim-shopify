@@ -122,8 +122,9 @@ class CartItemsComponent extends Component {
       row.style.setProperty('--row-height', `${row.clientHeight}px`);
       row.classList.add('removing');
 
-      // Remove the row from DOM only after the smooth collapse animation ends
-      onAnimationEnd(row, remove);
+      // Remove the row from DOM strictly after the CSS animation duration (300ms)
+      // to avoid bugs with infinite subtree animations causing delays.
+      setTimeout(remove, 300);
     });
   }
 
