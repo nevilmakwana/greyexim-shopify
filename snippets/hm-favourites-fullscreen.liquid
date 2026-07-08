@@ -507,11 +507,11 @@
       catch(e) { return []; }
     }
 
-    function removeWishlistItemOverlay(id) {
-      bulkRemoveWishlistItemOverlay([String(id)]);
+    function removeWishlistItemOverlay(id, skipRender = false) {
+      bulkRemoveWishlistItemOverlay([String(id)], skipRender);
     }
 
-    function bulkRemoveWishlistItemOverlay(ids) {
+    function bulkRemoveWishlistItemOverlay(ids, skipRender = false) {
       let list = getWishlistData();
       list = list.filter(item => !ids.includes(String(item.id)));
       localStorage.setItem('greyexim_wishlist', JSON.stringify(list));
@@ -524,7 +524,9 @@
         });
       });
       
-      renderFavourites();
+      if (!skipRender) {
+        renderFavourites();
+      }
     }
 
     window.hmRemoveFavourite = function(id) {
@@ -574,10 +576,12 @@
             if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
             else if (typeof updateCartBadge === 'function') updateCartBadge();
             
-            if (productId) removeWishlistItemOverlay(productId);
-
-            // If the theme has a Cart Drawer configured to auto-open, dispatch the event
             const autoOpenDrawer = document.querySelector('cart-drawer-component[auto-open]');
+            
+            if (productId) {
+              // Pass !autoOpenDrawer as skipRender so it doesn't flash empty before redirecting
+              removeWishlistItemOverlay(productId, !autoOpenDrawer);
+            }
             if (autoOpenDrawer) {
               btn.classList.remove('is-loading');
               if (textSpan) textSpan.textContent = 'Added';
@@ -655,9 +659,10 @@
             if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
             else if (typeof updateCartBadge === 'function') updateCartBadge();
 
-            bulkRemoveWishlistItemOverlay(productIdsToRemove);
-
             const autoOpenDrawer = document.querySelector('cart-drawer-component[auto-open]');
+            
+            // Pass !autoOpenDrawer as skipRender so it doesn't flash empty before redirecting
+            bulkRemoveWishlistItemOverlay(productIdsToRemove, !autoOpenDrawer);
             if (autoOpenDrawer) {
               btn.classList.remove('is-loading');
               if (textSpan) textSpan.textContent = 'Added';
