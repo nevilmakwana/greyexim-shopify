@@ -47,6 +47,16 @@
               <a href="{{ link.url }}" class="koraa-search-menu__link">Shop All {{ link.title }}</a>
             </li>
           </ul>
+          {% if link.type == 'collection_link' and link.object.products.size > 0 %}
+            <div class="koraa-search-menu__bestsellers">
+              <h4 class="koraa-search-menu__bestsellers-title">Bestsellers</h4>
+              <div class="koraa-search-menu__bestsellers-grid">
+                {% for product in link.object.products limit: 4 %}
+                  {% render 'product-card', product: product, show_vendor: false %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
         {% endif %}
       </div>
       {% assign first_content_active = true %}

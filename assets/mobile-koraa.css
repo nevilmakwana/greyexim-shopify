@@ -836,5 +836,31 @@
   color: #FF5252;
 }
 .koraa-search-menu__link.is-highlight::after {
-  color: #FF5252;
+  background: #d44d4d;
+}
+
+.koraa-search-menu__bestsellers {
+  padding: 16px 20px 32px;
+  border-top: 1px solid #e5e5e5;
+  margin-top: 16px;
+}
+
+.koraa-search-menu__bestsellers-title {
+  font-family: var(--font-heading-family);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+.koraa-search-menu__bestsellers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+  row-gap: 24px;
+}
+
+.koraa-search-menu__bestsellers-grid product-card {
+  --product-card-gap: 8px;
 }
