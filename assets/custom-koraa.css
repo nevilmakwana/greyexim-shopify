@@ -270,13 +270,18 @@ body[data-koraa-scroll-state="visible"] .header__row--top {
   border-bottom-color: #e5e5e5 !important;
 }
 
-/* Reset logo filter when header bg is visible and reduce its size slightly for a compact sticky header */
+/* Scale logo consistently in ALL states (hero + scrolled) for uniform size */
+#header-component .header-logo img,
+#header-component .header-logo svg {
+  max-height: calc(var(--header-logo-image-height-mobile, 40px) * 0.75) !important;
+  width: auto !important;
+}
+
+/* Reset logo filter when header bg is visible */
 body[data-koraa-scroll-state="visible"] .header-logo img,
 body[data-koraa-scroll-state="visible"] .header-logo svg {
   filter: none;
-  max-height: calc(var(--header-logo-image-height-mobile, 40px) * 0.75);
-  width: auto;
-  transition: filter 0.4s ease, max-height 0.4s ease;
+  transition: filter 0.4s ease;
 }
 
 @media screen and (min-width: 750px) {
@@ -2969,7 +2974,7 @@ div[data-rating] {
 /* Reduce spacing between right-side header icons for a premium look (All breakpoints) */
 #header-component[data-menu-style='drawer'] .header__columns,
 #header-component[data-menu-style='menu'] .header__columns {
-  column-gap: 2px !important;
+  column-gap: 0px !important;
 }
 
 /* Reduce the bookend width to avoid huge gaps on the right */
@@ -2983,15 +2988,15 @@ div[data-rating] {
 #header-component .header__icon--menu {
   min-width: 28px !important;
   min-height: 28px !important;
-  padding: 0 2px !important;
+  padding: 0 0px !important;
 }
 
 /* Localization button specific tweaks */
 #header-component .dropdown-localization__button {
-  padding: 0 2px !important;
+  padding: 0 0px !important;
   min-width: auto !important;
   margin-right: 0px !important;
-  font-size: 0.7rem !important;
+  font-size: 0.65rem !important;
 }
 
 /* Mobile */

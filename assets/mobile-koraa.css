@@ -88,7 +88,7 @@
     align-items: center !important;
     justify-content: flex-end !important;
     position: relative !important;
-    padding-inline: 12px !important;
+    padding-inline: 8px !important;
     /* Reset theme grid */
     grid-template-columns: none !important;
     grid-template-areas: none !important;
