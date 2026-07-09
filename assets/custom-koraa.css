@@ -2986,6 +2986,70 @@ div[data-rating] {
   padding: 0 6px !important;
 }
 
+/* Ensure localization dropdown stays flex so it's visible */
+#header-component .dropdown-localization {
+  display: flex !important;
+}
+
+/* ---------------------------------------------------------
+   FORCE FLEX LAYOUT FOR DRAWER MENU
+   This ensures Logo is on the far left, and Loc + Search + Hamburger are clustered on the right
+--------------------------------------------------------- */
+#header-component[data-menu-style='drawer'] .header__columns {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  grid-template-columns: none !important;
+  grid-template-areas: none !important;
+  grid-template-rows: none !important;
+  gap: 5px !important;
+}
+
+#header-component[data-menu-style='drawer'] .header__column {
+  display: contents !important;
+}
+
+/* 1. Logo pushes everything else to the right */
+#header-component[data-menu-style='drawer'] .header-logo {
+  margin-right: auto !important;
+  order: 1 !important;
+  position: static !important;
+  transform: none !important;
+  left: auto !important;
+}
+
+/* 2. Localization */
+#header-component[data-menu-style='drawer'] .dropdown-localization,
+#header-component[data-menu-style='drawer'] dropdown-localization-component {
+  order: 2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+
+/* 3. Search */
+#header-component[data-menu-style='drawer'] .search-action,
+#header-component[data-menu-style='drawer'] .search-action--hidden-on-drawer {
+  order: 3 !important;
+  margin: 0 !important;
+  display: flex !important;
+}
+
+/* 4. Hamburger */
+#header-component[data-menu-style='drawer'] header-drawer,
+#header-component[data-menu-style='drawer'] .header__drawer {
+  order: 4 !important;
+  margin: 0 !important;
+  display: flex !important;
+}
+
+/* Hide duplicate elements if any */
+#header-component[data-menu-style='drawer'] .search-action--hidden-on-menu,
+#header-component[data-menu-style='drawer'] header-actions {
+  display: none !important;
+}
+
 /* Localization button specific tweaks */
 #header-component .dropdown-localization__button {
   padding: 0 6px !important;
