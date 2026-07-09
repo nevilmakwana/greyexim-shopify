@@ -1162,3 +1162,45 @@
 .product-card-action-btn-wrapper .add-to-cart-text__content {
   display: none !important; /* Hide text, only show icon */
 }
+
+/* Bottom Slide-Up Cart Drawer for Mobile */
+@media screen and (max-width: 749px) {
+  .cart-drawer__dialog {
+    top: auto !important;
+    bottom: 0 !important;
+    height: 85vh !important; /* Drawer height */
+    width: 100% !important;
+    max-width: 100% !important;
+    border-top-left-radius: 24px !important;
+    border-top-right-radius: 24px !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1) !important;
+    margin: 0 !important;
+  }
+  
+  .cart-drawer__dialog[open],
+  .cart-drawer__dialog:modal,
+  .cart-drawer__dialog.is-closing {
+    transform: translateY(0) !important;
+  }
+
+  /* When JS applies dynamic transform during swipe */
+  .cart-drawer__dialog[style*="transform"] {
+    transition: none !important;
+  }
+  
+  .cart-drawer__dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(5px) !important;
+  }
+  
+  /* Sticky Footer */
+  .cart-drawer__summary {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #fff !important;
+    z-index: 10 !important;
+    padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08) !important;
+  }
+}

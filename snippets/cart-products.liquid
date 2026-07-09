@@ -220,6 +220,46 @@
                           {%- endfor -%}
                         </dl>
                       {%- endif -%}
+                      
+                      <!-- Inline Size Selector -->
+                      {%- if item.product.has_only_default_variant == false and item.item_components.size == 0 -%}
+                        {%- for option in item.product.options_with_values -%}
+                          {%- assign downcased_option = option.name | downcase -%}
+                          {%- if downcased_option == 'size' or downcased_option == 'ukuran' -%}
+                            <cart-variant-updater data-line-key="{{ item.key }}" data-product-id="{{ item.product.id }}">
+                              <div class="cart-item__size-selector" style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                                {%- for value in option.values -%}
+                                  {%- assign variant_for_value = item.product.variants | where: "option1", value | first -%}
+                                  {%- if variant_for_value == blank -%}
+                                     {%- assign variant_for_value = item.product.variants | where: "option2", value | first -%}
+                                  {%- endif -%}
+                                  {%- if variant_for_value == blank -%}
+                                     {%- assign variant_for_value = item.product.variants | where: "option3", value | first -%}
+                                  {%- endif -%}
+                                  
+                                  {%- if variant_for_value -%}
+                                    {%- assign is_selected = false -%}
+                                    {%- assign option_index = option.position | minus: 1 -%}
+                                    {%- if value == item.variant.options[option_index] -%}
+                                      {%- assign is_selected = true -%}
+                                    {%- endif -%}
+                                    <button 
+                                      type="button" 
+                                      class="cart-size-btn {% if is_selected %}is-selected{% endif %}"
+                                      data-variant-id="{{ variant_for_value.id }}"
+                                      data-qty="{{ item.quantity }}"
+                                      style="min-width: 44px; height: 44px; border-radius: 8px; border: 1px solid {% if is_selected %}#000{% else %}#ddd{% endif %}; background: {% if is_selected %}#000{% else %}#fff{% endif %}; color: {% if is_selected %}#fff{% else %}#000{% endif %}; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; transition: all 0.2s ease;"
+                                    >
+                                      {{ value }}
+                                    </button>
+                                  {%- endif -%}
+                                {%- endfor -%}
+                              </div>
+                            </cart-variant-updater>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      {%- endif -%}
+                      <!-- End Inline Size Selector -->
 
                       {%- liquid
                         assign has_visible_properties = false
