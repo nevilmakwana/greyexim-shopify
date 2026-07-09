@@ -89,21 +89,25 @@
                 <div class="koraa-product-card__badge-bestseller" style="position: absolute; top: 12px; left: 12px; background: #000; color: #fff; font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; z-index: 2; letter-spacing: 0.5px;">Best Seller</div>
               {% endif %}
 
-              {% if product.featured_image %}
-                <img
-                  class="koraa-product-card__image"
-                  src="{{ product.featured_image | image_url: width: 600 }}"
-                  alt="{{ product.title }}"
-                  loading="lazy"
-                >
-              {% endif %}
+              <a href="{{ product.url }}" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">
+                {% if product.featured_image %}
+                  <img
+                    class="koraa-product-card__image"
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    alt="{{ product.title }}"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </a>
 
-              <div class="product-card__action-icons" style="position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 8px; z-index: 9999; pointer-events: none;">
+              <!-- Floating Action Icons (Outside the Anchor Tag to prevent navigation) -->
+              <div class="product-card__action-icons" style="position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 8px; z-index: 9999;">
+                
                 <!-- Wishlist Icon -->
                 <button
                   type="button"
-                  class="product-title-wishlist-btn product-card-action-btn"
-                  style="pointer-events: auto; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border: none; color: #111; padding: 0; cursor: pointer;"
+                  class="product-title-wishlist-btn product-card-action-btn custom-wishlist-trigger"
+                  style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border: none; color: #111; padding: 0; cursor: pointer; transition: transform 0.2s;"
                   data-product-id="{{ product.id }}"
                   data-variant-id="{{ product.selected_or_first_available_variant.id }}"
                   data-product-url="{{ product.url }}"
@@ -111,19 +115,32 @@
                   data-product-image="{{ product.featured_image | image_url: width: 200 }}"
                   data-product-price="{{ product.price | money }}"
                   aria-label="Add to wishlist"
+                  onclick="handleCustomWishlistClick(event, this)"
                 >
                   <svg style="width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                   </svg>
                 </button>
 
-                <!-- Cart Icon / Quick Add -->
-                <div class="product-card-action-btn-wrapper" style="pointer-events: auto;">
-                  {% render 'quick-add', product: product, section_id: section.id %}
-                </div>
+                <!-- Cart / Quick Add Icon -->
+                <button
+                  type="button"
+                  class="product-card-action-btn custom-cart-trigger"
+                  style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border: none; color: #111; padding: 0; cursor: pointer; transition: transform 0.2s;"
+                  data-product-url="{{ product.url }}"
+                  aria-label="Quick add"
+                  onclick="handleCustomCartClick(event, '{{ product.url }}')"
+                >
+                  <svg style="width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-9.8-3.6c-.2.5-.7 1.1-1.2 1.6H19v2H5a2 2 0 0 1-2-2.5l2-9.5h16l-1.5 7.5H7.2z"></path>
+                  </svg>
+                </button>
+
               </div>
 
-              <button class="koraa-product-card__quickview" type="button">Quick view</button>
+              <a href="{{ product.url }}" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">
+                <button class="koraa-product-card__quickview" type="button">Quick view</button>
+              </a>
             </div>
             <div class="koraa-product-card__info">
               <p class="koraa-product-card__title">{{ product.title }}</p>
@@ -332,6 +349,75 @@
         });
       }
     });
+  });
+</script>
+
+<script>
+  function handleCustomWishlistClick(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (typeof addToWishlist === 'undefined' || typeof removeFromWishlist === 'undefined' || typeof isInWishlist === 'undefined') {
+      console.warn('Wishlist functions not loaded');
+      return;
+    }
+
+    const productId = btn.dataset.productId;
+    
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
+      btn.classList.remove('is-wishlisted');
+      btn.querySelector('svg').style.fill = 'none';
+      btn.querySelector('svg').style.stroke = '#111';
+      if (typeof showToast === 'function') showToast('Removed from Wishlist');
+    } else {
+      addToWishlist({
+        id: productId,
+        variantId: btn.dataset.variantId,
+        url: btn.dataset.productUrl,
+        title: btn.dataset.productTitle,
+        image: btn.dataset.productImage,
+        price: btn.dataset.productPrice,
+        addedAt: Date.now()
+      });
+      btn.classList.add('is-wishlisted');
+      btn.querySelector('svg').style.fill = '#e74c3c';
+      btn.querySelector('svg').style.stroke = '#e74c3c';
+      if (typeof showToast === 'function') showToast('Added to Wishlist ♥');
+    }
+    
+    if (typeof updateWishlistBadge === 'function') updateWishlistBadge();
+  }
+
+  function handleCustomCartClick(e, productUrl) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Find the quick view button on the same card and trigger it
+    const card = e.target.closest('.koraa-product-card');
+    if (card) {
+      const quickViewBtn = card.querySelector('.koraa-product-card__quickview');
+      if (quickViewBtn) {
+        quickViewBtn.click();
+        return;
+      }
+    }
+    
+    // Fallback: navigate to product page
+    window.location.href = productUrl;
+  }
+  
+  // Set initial state on load
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof isInWishlist !== 'undefined') {
+      document.querySelectorAll('.custom-wishlist-trigger').forEach(btn => {
+        if (isInWishlist(btn.dataset.productId)) {
+          btn.classList.add('is-wishlisted');
+          btn.querySelector('svg').style.fill = '#e74c3c';
+          btn.querySelector('svg').style.stroke = '#e74c3c';
+        }
+      });
+    }
   });
 </script>
 
