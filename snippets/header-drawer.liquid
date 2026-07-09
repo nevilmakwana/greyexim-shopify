@@ -578,14 +578,7 @@
       >
         {% liquid
           assign show_language = section.settings.show_language
-          if localization.available_languages.size <= 1
-            assign show_language = false
-          endif
-
           assign show_country = section.settings.show_country
-          if localization.available_countries.size <= 1
-            assign show_country = false
-          endif
         %}
         {% if data_header_drawer_type == 'mobile-drawer' and show_country or show_language %}
           {% liquid
