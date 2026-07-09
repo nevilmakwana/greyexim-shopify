@@ -3041,9 +3041,4 @@ div[data-rating] {
   }
 }
 
-/* Hide localization in header on mobile */
-@media screen and (max-width: 989px) {
-  header.header .dropdown-localization {
-    display: none !important;
-  }
-}
+/* Localization in header on mobile — VISIBLE, positioned by mobile-koraa.css */
