@@ -83,27 +83,39 @@
   =================================================== */
 
     /* ===================================================
-       PREMIUM MOBILE HEADER GRID (Logo left, Actions right)
+       BULLETPROOF MOBILE HEADER FLEX LAYOUT
        =================================================== */
     #header-component .header__columns {
-      display: grid !important;
-      grid-template-columns: 1fr auto auto auto !important;
-      grid-template-areas: 'logo loc search menu' !important;
+      display: flex !important;
+      flex-direction: row !important;
       align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
       padding-inline: 15px !important;
       gap: 0 !important;
-      column-gap: 12px !important; /* Premium grouping gap */
     }
 
-    /* Dissolve wrapper columns so items fall perfectly into grid slots */
+    /* Make all columns standard flex containers */
     #header-component .header__column {
-      display: contents !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important; /* Premium gap between icons */
     }
 
-    /* 1. Logo (Takes all available space, pushing the rest right) */
+    /* The column with the logo takes all available space and pushes other items inside it to the right */
+    #header-component .header__column:has(.header-logo) {
+      flex: 1 1 auto !important;
+      justify-content: space-between !important;
+    }
+
+    /* Columns without the logo just hug their contents on the right */
+    #header-component .header__column:not(:has(.header-logo)) {
+      flex: 0 0 auto !important;
+      justify-content: flex-end !important;
+    }
+
+    /* 1. Logo */
     #header-component .header-logo {
-      grid-area: logo !important;
-      justify-self: start !important;
       margin: 0 !important;
       position: static !important;
       transform: none !important;
@@ -112,21 +124,17 @@
     /* 2. Localization (INR/EN) */
     #header-component dropdown-localization-component,
     #header-component .dropdown-localization {
-      grid-area: loc !important;
       position: static !important;
       transform: none !important;
       margin: 0 !important;
       padding: 0 !important;
-      justify-self: end !important;
     }
 
     /* 3. Search */
     #header-component .search-action--hidden-on-drawer,
     #header-component .search-action {
-      grid-area: search !important;
       margin: 0 !important;
       position: static !important;
-      justify-self: end !important;
       min-width: 44px !important;
       min-height: 44px !important;
       display: flex !important;
@@ -137,10 +145,8 @@
     /* 4. Hamburger Menu */
     #header-component header-drawer,
     #header-component .header__drawer {
-      grid-area: menu !important;
       margin: 0 !important;
       position: static !important;
-      justify-self: end !important;
       min-width: 44px !important;
       min-height: 44px !important;
       display: flex !important;
