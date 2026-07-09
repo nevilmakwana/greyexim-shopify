@@ -738,13 +738,14 @@
   border-bottom: 1px solid #e5e5e5;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  gap: 12px;
 }
 .koraa-search-menu__tabs::-webkit-scrollbar { display: none; }
 
 .koraa-search-menu__tab {
   background: none;
   border: none;
-  padding: 0 16px 12px;
+  padding: 0 4px 12px;
   font-size: 0.9rem;
   font-family: var(--font-heading-family);
   letter-spacing: 0.1em;
@@ -753,6 +754,7 @@
   cursor: pointer;
   position: relative;
   transition: color 0.3s;
+  flex-shrink: 0;
 }
 
 .koraa-search-menu__tab::after {
