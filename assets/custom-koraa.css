@@ -225,7 +225,7 @@ body[data-koraa-scroll-state="hidden"] .header__row--top {
 body[data-koraa-scroll-state="hidden"] .header-logo img,
 body[data-koraa-scroll-state="hidden"] .header-logo svg {
   filter: brightness(0) invert(1);
-  transition: filter 0.4s ease;
+  transition: filter 0.4s ease, max-height 0.4s ease;
 }
 
 /* Make all header text and icons white on hero */
@@ -270,11 +270,20 @@ body[data-koraa-scroll-state="visible"] .header__row--top {
   border-bottom-color: #e5e5e5 !important;
 }
 
-/* Reset logo filter when header bg is visible */
+/* Reset logo filter when header bg is visible and reduce its size slightly for a compact sticky header */
 body[data-koraa-scroll-state="visible"] .header-logo img,
 body[data-koraa-scroll-state="visible"] .header-logo svg {
   filter: none;
-  transition: filter 0.4s ease;
+  max-height: calc(var(--header-logo-image-height-mobile, 40px) * 0.75);
+  width: auto;
+  transition: filter 0.4s ease, max-height 0.4s ease;
+}
+
+@media screen and (min-width: 750px) {
+  body[data-koraa-scroll-state="visible"] .header-logo img,
+  body[data-koraa-scroll-state="visible"] .header-logo svg {
+    max-height: calc(var(--header-logo-image-height, 60px) * 0.75);
+  }
 }
 
 /* --- Hero Section --- */
