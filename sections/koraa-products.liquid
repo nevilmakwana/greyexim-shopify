@@ -106,7 +106,7 @@
               <button
                 type="button"
                 class="product-title-wishlist-btn product-card-action-btn custom-wishlist-trigger"
-                style="display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); border: none; color: #111; padding: 0; cursor: pointer; transition: transform 0.2s;"
+                style="display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); border: none; color: #111; padding: 0; cursor: pointer; transition: transform 0.2s;"
                 data-product-id="{{ product.id }}"
                 data-variant-id="{{ product.selected_or_first_available_variant.id }}"
                 data-product-url="{{ product.url }}"
@@ -116,7 +116,7 @@
                 aria-label="Add to wishlist"
                 onclick="handleCustomWishlistClick(event, this)"
               >
-                <svg style="width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <svg style="width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
               </button>
@@ -125,12 +125,12 @@
               <button
                 type="button"
                 class="product-card-action-btn custom-cart-trigger"
-                style="display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); border: none; color: #111; padding: 0; cursor: pointer; transition: transform 0.2s;"
+                style="display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); border: none; color: #111; padding: 0; cursor: pointer; transition: transform 0.2s;"
                 data-product-url="{{ product.url }}"
                 aria-label="Quick add"
                 onclick="handleCustomCartClick(event, '{{ product.url }}')"
               >
-                <svg style="width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <svg style="width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                   <line x1="3" y1="6" x2="21" y2="6"></line>
                   <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -356,25 +356,41 @@
 </script>
 
 <script>
+  function koraaGetWishlist() {
+    try { return JSON.parse(localStorage.getItem('greyexim_wishlist')) || []; }
+    catch(e) { return []; }
+  }
+
+  function koraaSaveWishlist(list) {
+    localStorage.setItem('greyexim_wishlist', JSON.stringify(list));
+    // Trigger badge update globally if the function exists
+    if (typeof window.updateWishlistBadge === 'function') window.updateWishlistBadge();
+    if (typeof window.updateBadge === 'function') window.updateBadge(); // some themes use this
+  }
+
+  function koraaIsInWishlist(productId) {
+    return koraaGetWishlist().some(item => String(item.id) === String(productId));
+  }
+
   function handleCustomWishlistClick(e, btn) {
     e.preventDefault();
     e.stopPropagation();
     
-    if (typeof addToWishlist === 'undefined' || typeof removeFromWishlist === 'undefined' || typeof isInWishlist === 'undefined') {
-      console.warn('Wishlist functions not loaded');
-      return;
-    }
-
     const productId = btn.dataset.productId;
     
-    if (isInWishlist(productId)) {
-      removeFromWishlist(productId);
+    if (koraaIsInWishlist(productId)) {
+      // Remove from wishlist
+      const list = koraaGetWishlist().filter(item => String(item.id) !== String(productId));
+      koraaSaveWishlist(list);
+      
       btn.classList.remove('is-wishlisted');
       btn.querySelector('svg').style.fill = 'none';
       btn.querySelector('svg').style.stroke = '#111';
       if (typeof showToast === 'function') showToast('Removed from Wishlist');
     } else {
-      addToWishlist({
+      // Add to wishlist
+      const list = koraaGetWishlist();
+      list.push({
         id: productId,
         variantId: btn.dataset.variantId,
         url: btn.dataset.productUrl,
@@ -383,13 +399,13 @@
         price: btn.dataset.productPrice,
         addedAt: Date.now()
       });
+      koraaSaveWishlist(list);
+
       btn.classList.add('is-wishlisted');
       btn.querySelector('svg').style.fill = '#e74c3c';
       btn.querySelector('svg').style.stroke = '#e74c3c';
       if (typeof showToast === 'function') showToast('Added to Wishlist ♥');
     }
-    
-    if (typeof updateWishlistBadge === 'function') updateWishlistBadge();
   }
 
   function handleCustomCartClick(e, productUrl) {
@@ -412,15 +428,13 @@
   
   // Set initial state on load
   document.addEventListener('DOMContentLoaded', function() {
-    if (typeof isInWishlist !== 'undefined') {
-      document.querySelectorAll('.custom-wishlist-trigger').forEach(btn => {
-        if (isInWishlist(btn.dataset.productId)) {
-          btn.classList.add('is-wishlisted');
-          btn.querySelector('svg').style.fill = '#e74c3c';
-          btn.querySelector('svg').style.stroke = '#e74c3c';
-        }
-      });
-    }
+    document.querySelectorAll('.custom-wishlist-trigger').forEach(btn => {
+      if (koraaIsInWishlist(btn.dataset.productId)) {
+        btn.classList.add('is-wishlisted');
+        btn.querySelector('svg').style.fill = '#e74c3c';
+        btn.querySelector('svg').style.stroke = '#e74c3c';
+      }
+    });
   });
 </script>
 
