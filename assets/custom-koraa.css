@@ -2955,6 +2955,35 @@ div[data-rating] {
   border-color: #222;
 }
 
+
+
+/* Reduce spacing between right-side header icons for a premium look (All breakpoints) */
+#header-component[data-menu-style='drawer'] .header__columns,
+#header-component[data-menu-style='menu'] .header__columns {
+  column-gap: 5px !important;
+}
+
+/* Reduce the bookend width to avoid huge gaps on the right */
+#header-component .header__columns {
+  --header-mobile-bookend: 32px !important;
+}
+
+/* Make action icons smaller and tighter */
+#header-component .header-actions__action,
+#header-component .search-action,
+#header-component .header__icon--menu {
+  min-width: 32px !important;
+  min-height: 32px !important;
+  padding: 0 6px !important;
+}
+
+/* Localization button specific tweaks */
+#header-component .dropdown-localization__button {
+  padding: 0 6px !important;
+  min-width: auto !important;
+  margin-right: 4px !important;
+}
+
 /* Mobile */
 @media screen and (max-width: 749px) {
   .wishlist-drawer {
