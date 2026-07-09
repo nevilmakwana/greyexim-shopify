@@ -82,84 +82,80 @@
      SCROLLED: [Logo] ──────────────── [INR/EN] (slim)
   =================================================== */
 
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 989px) {
+    /* ===================================================
+       PREMIUM MOBILE HEADER GRID (Logo left, Actions right)
+       =================================================== */
     #header-component .header__columns {
-      display: flex !important;
+      display: grid !important;
+      grid-template-columns: 1fr auto auto auto !important;
+      grid-template-areas: 'logo loc search menu' !important;
       align-items: center !important;
-      justify-content: flex-end !important;
-      position: relative !important;
-      padding-inline: 8px 8px !important;
-      /* Reset theme grid */
-      grid-template-columns: none !important;
-      grid-template-areas: none !important;
-      grid-template-rows: none !important;
+      padding-inline: 15px !important;
       gap: 0 !important;
+      column-gap: 12px !important; /* Premium grouping gap */
     }
 
-    /* Dissolve wrapper columns if they exist so elements become direct flex items */
+    /* Dissolve wrapper columns so items fall perfectly into grid slots */
     #header-component .header__column {
       display: contents !important;
     }
 
-    /* 1. Logo: Far Left */
+    /* 1. Logo (Takes all available space, pushing the rest right) */
     #header-component .header-logo {
+      grid-area: logo !important;
+      justify-self: start !important;
+      margin: 0 !important;
       position: static !important;
-      left: auto !important;
       transform: none !important;
-      top: auto !important;
-      margin-right: auto !important; /* Pushes the rest to the right */
-      order: 1 !important;
-      display: flex !important;
-      align-items: center !important;
     }
 
-    /* 2. Localization: Right side, first */
+    /* 2. Localization (INR/EN) */
     #header-component dropdown-localization-component,
     #header-component .dropdown-localization {
+      grid-area: loc !important;
       position: static !important;
-      right: auto !important;
-      top: auto !important;
       transform: none !important;
-      display: flex !important;
-      align-items: center !important;
-      order: 2 !important;
       margin: 0 !important;
-      padding-right: 8px !important;
+      padding: 0 !important;
+      justify-self: end !important;
     }
 
-    /* 3. Search: Right side, second */
-    #header-component .search-action--hidden-on-drawer {
-      display: flex !important;
-      flex: 0 0 44px !important;
-      justify-content: center !important;
-      align-items: center !important;
-      order: 3 !important;
+    /* 3. Search */
+    #header-component .search-action--hidden-on-drawer,
+    #header-component .search-action {
+      grid-area: search !important;
+      margin: 0 !important;
       position: static !important;
-      margin: 0 !important;
+      justify-self: end !important;
+      min-width: 44px !important;
+      min-height: 44px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
-    /* 4. Hamburger: Right side, far right edge */
+    /* 4. Hamburger Menu */
     #header-component header-drawer,
     #header-component .header__drawer {
-      display: flex !important;
-      flex: 0 0 44px !important;
-      justify-content: center !important;
-      align-items: center !important;
-      order: 4 !important;
-      position: static !important;
+      grid-area: menu !important;
       margin: 0 !important;
+      position: static !important;
+      justify-self: end !important;
+      min-width: 44px !important;
+      min-height: 44px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
-    /* Hide the duplicate search icon the theme generates */
-    #header-component .search-action--hidden-on-menu {
-      display: none !important;
-    }
-
-    /* Hide account and cart entirely */
+    /* Hide duplicate elements if any */
+    #header-component .search-action--hidden-on-menu,
     #header-component header-actions,
     #header-component .header-actions {
       display: none !important;
     }
+
 
     /* === SCROLLED STATE === */
     /* Hide hamburger + search when scrolled */
