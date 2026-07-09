@@ -180,74 +180,15 @@
       "settings": {}
     },
     "koraa_instagram": {
-      "type": "koraa-instagram-grid",
-      "blocks": {
-        "post_1": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_2": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_3": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_4": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_5": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_6": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_7": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_8": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_9": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_10": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_11": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_12": {
-          "type": "post",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "post_1",
-        "post_2",
-        "post_3",
-        "post_4",
-        "post_5",
-        "post_6",
-        "post_7",
-        "post_8",
-        "post_9",
-        "post_10",
-        "post_11",
-        "post_12"
-      ],
+      "type": "koraa-instagram-feed",
       "settings": {
         "heading": "Follow us on Instagram",
-        "subheading": "@greyexim"
+        "instagram_handle": "greyexim",
+        "post_count": 12,
+        "columns_desktop": "6",
+        "access_token": "",
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     },
     "koraa_store": {
