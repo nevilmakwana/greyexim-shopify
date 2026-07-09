@@ -274,7 +274,13 @@ body[data-koraa-scroll-state="visible"] .header__row--top {
 body[data-koraa-scroll-state="visible"] .header-logo img,
 body[data-koraa-scroll-state="visible"] .header-logo svg {
   filter: none;
-  transition: filter 0.4s ease;
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+/* Fix logo size growing in visible state due to intrinsic image padding differences */
+body[data-koraa-scroll-state="visible"] .header-logo__image {
+  transform: scale(0.75); /* Reduce size to match transparent logo */
+  transform-origin: left center;
 }
 
 /* --- Hero Section --- */
