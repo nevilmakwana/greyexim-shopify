@@ -141,9 +141,9 @@
                 type="button"
                 class="custom-cart-trigger"
                 style="display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; min-width: 0 !important; min-height: 0 !important; border-radius: 50%; background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); border: none; color: #111; padding: 0; cursor: pointer;"
-                data-product-handle="{{ product.handle }}"
+                data-product-url="{{ product.url }}"
                 aria-label="Quick add"
-                onclick="handleCustomCartClick(event, '{{ product.handle }}')"
+                onclick="handleCustomCartClick(event, '{{ product.url }}')"
               >
                 <svg style="width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -557,171 +557,28 @@
     }
   }
 
-  function handleCustomCartClick(e, productHandle) {
+  function handleCustomCartClick(e, productUrl) {
     e.preventDefault();
     e.stopPropagation();
-    openQuickAddDrawer(productHandle);
-  }
-
-  /* ── Quick Add Bottom Drawer (Evara-style) ── */
-  let qaDrawerEl = null;
-  let qaOverlayEl = null;
-  let qaProductData = null;
-  let qaSelectedVariant = null;
-  let qaQuantity = 1;
-
-  function getOrCreateDrawer() {
-    if (qaDrawerEl) return;
-    // Overlay
-    qaOverlayEl = document.createElement('div');
-    qaOverlayEl.id = 'qa-overlay';
-    qaOverlayEl.addEventListener('click', closeQuickAddDrawer);
-    document.body.appendChild(qaOverlayEl);
-    // Drawer
-    qaDrawerEl = document.createElement('div');
-    qaDrawerEl.id = 'qa-drawer';
-    document.body.appendChild(qaDrawerEl);
-  }
-
-  async function openQuickAddDrawer(handle) {
-    getOrCreateDrawer();
-    qaQuantity = 1;
-    qaDrawerEl.innerHTML = '<div class="qa-loading"><div class="qa-spinner"></div></div>';
-    qaOverlayEl.classList.add('active');
-    qaDrawerEl.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    try {
-      const res = await fetch(`/products/${handle}.js`);
-      qaProductData = await res.json();
-      qaSelectedVariant = qaProductData.variants[0];
-      renderDrawerContent();
-    } catch(err) {
-      qaDrawerEl.innerHTML = '<p style="padding:24px;text-align:center;">Could not load product.</p>';
-    }
-  }
-
-  function closeQuickAddDrawer() {
-    if (qaDrawerEl) qaDrawerEl.classList.remove('active');
-    if (qaOverlayEl) qaOverlayEl.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  function renderDrawerContent() {
-    const p = qaProductData;
-    const v = qaSelectedVariant;
-    const comparePrice = v.compare_at_price && v.compare_at_price > v.price ? v.compare_at_price : null;
-    const formatMoney = (cents) => {
-      if (window.Shopify && Shopify.formatMoney) return Shopify.formatMoney(cents);
-      return '₹' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    };
-
-    // Build options HTML
-    let optionsHTML = '';
-    if (!p.has_only_default_variant) {
-      p.options.forEach((optName, optIdx) => {
-        const uniqueVals = [...new Set(p.variants.map(vr => vr.options[optIdx]))];
-        optionsHTML += `<div class="qa-option-group">
-          <div class="qa-option-label">${optName}</div>
-          <div class="qa-option-values">`;
-        uniqueVals.forEach(val => {
-          const isActive = v.options[optIdx] === val;
-          optionsHTML += `<button type="button" class="qa-opt-btn${isActive ? ' active' : ''}" data-option-index="${optIdx}" data-value="${val}">${val}</button>`;
-        });
-        optionsHTML += `</div></div>`;
-      });
-    }
-
-    qaDrawerEl.innerHTML = `
-      <div class="qa-handle"></div>
-      <button class="qa-close" onclick="closeQuickAddDrawer()" aria-label="Close">&times;</button>
-      <div class="qa-body">
-        <div class="qa-product-header">
-          <img class="qa-product-img" src="${v.featured_image ? v.featured_image.src : p.featured_image}" alt="${p.title}">
-          <div class="qa-product-meta">
-            <div class="qa-product-title">${p.title}</div>
-            <div class="qa-product-price">
-              <span class="qa-price-current">${formatMoney(v.price)}</span>
-              ${comparePrice ? `<span class="qa-price-compare">${formatMoney(comparePrice)}</span>` : ''}
-            </div>
-            ${!v.available ? '<div class="qa-sold-out">Sold Out</div>' : ''}
-          </div>
-        </div>
-        ${optionsHTML}
-        <div class="qa-option-group">
-          <div class="qa-option-label">Quantity</div>
-          <div class="qa-qty-row">
-            <button type="button" class="qa-qty-btn" onclick="qaChangeQty(-1)">−</button>
-            <span class="qa-qty-val" id="qa-qty-val">${qaQuantity}</span>
-            <button type="button" class="qa-qty-btn" onclick="qaChangeQty(1)">+</button>
-          </div>
-        </div>
-      </div>
-      <div class="qa-footer">
-        <button type="button" class="qa-add-btn" id="qa-add-btn" ${!v.available ? 'disabled' : ''} onclick="qaAddToCart()">
-          ${v.available ? 'ADD TO CART' : 'SOLD OUT'}
-        </button>
-      </div>
-    `;
-
-    // Attach option button listeners
-    qaDrawerEl.querySelectorAll('.qa-opt-btn').forEach(btn => {
-      btn.addEventListener('click', () => qaSelectOption(parseInt(btn.dataset.optionIndex), btn.dataset.value));
-    });
-
-    // Swipe to close
-    let touchStartY = 0;
-    qaDrawerEl.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, {passive:true});
-    qaDrawerEl.addEventListener('touchend', e => {
-      const diff = e.changedTouches[0].clientY - touchStartY;
-      if (diff > 100) closeQuickAddDrawer();
-    });
-  }
-
-  function qaSelectOption(optionIndex, value) {
-    // Find matching variant
-    const currentOptions = [...qaSelectedVariant.options];
-    currentOptions[optionIndex] = value;
-    const match = qaProductData.variants.find(v => v.options.every((o, i) => o === currentOptions[i]));
-    if (match) {
-      qaSelectedVariant = match;
-      renderDrawerContent();
-    }
-  }
-
-  function qaChangeQty(delta) {
-    qaQuantity = Math.max(1, qaQuantity + delta);
-    const el = document.getElementById('qa-qty-val');
-    if (el) el.textContent = qaQuantity;
-  }
-
-  async function qaAddToCart() {
-    const btn = document.getElementById('qa-add-btn');
-    if (!btn || !qaSelectedVariant || !qaSelectedVariant.available) return;
-    btn.disabled = true;
-    btn.textContent = 'ADDING...';
-
-    try {
-      const res = await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ items: [{ id: qaSelectedVariant.id, quantity: qaQuantity }] })
-      });
-      if (res.ok) {
-        btn.textContent = 'ADDED ✓';
-        btn.style.background = '#2e7d32';
-        // Refresh cart bubble
-        const cartDrawer = document.querySelector('cart-drawer-component');
-        if (cartDrawer && cartDrawer.fetchCart) cartDrawer.fetchCart();
-        setTimeout(() => closeQuickAddDrawer(), 1200);
-      } else {
-        btn.textContent = 'ERROR';
-        setTimeout(() => { btn.textContent = 'ADD TO CART'; btn.disabled = false; }, 2000);
+    
+    // Find the quick add button and trigger it
+    const card = e.target.closest('product-card');
+    if (card) {
+      const quickAddBtn = card.querySelector('quick-add-component .add-to-cart-button');
+      if (quickAddBtn) {
+        quickAddBtn.click();
+        return;
       }
-    } catch(err) {
-      btn.textContent = 'ERROR';
-      setTimeout(() => { btn.textContent = 'ADD TO CART'; btn.disabled = false; }, 2000);
+      
+      const quickViewBtn = card.querySelector('.koraa-product-card__quickview');
+      if (quickViewBtn) {
+        quickViewBtn.click();
+        return;
+      }
     }
+    
+    // Fallback: navigate to product page
+    window.location.href = productUrl;
   }
   
   // Set initial state on load

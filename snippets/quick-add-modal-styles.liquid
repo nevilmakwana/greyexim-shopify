@@ -26,19 +26,26 @@
 
     @media screen and (max-width: 749px) {
       position: fixed;
-      margin: auto 0 0 0;
+      bottom: 0;
+      top: auto;
+      margin: 0;
       min-height: unset;
+      width: 100%;
       max-width: 100%;
       border-radius: 0;
       overflow: clip;
-      height: fit-content;
+      height: auto;
+      max-height: 85vh; /* Max height to ensure it fits on screen */
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
     }
   }
 
   .quick-add-modal[open] {
     @media screen and (max-width: 750px) {
-      border-top-left-radius: var(--style-border-radius-popover);
-      border-top-right-radius: var(--style-border-radius-popover);
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
     }
   }
 
@@ -57,9 +64,43 @@
   .quick-add-modal[open] {
     animation: modalSlideInTop var(--animation-speed) var(--animation-easing) forwards;
   }
+  
+  @media screen and (max-width: 749px) {
+    .quick-add-modal[open] {
+      animation: modalSlideUpBottom 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards !important;
+    }
+  }
 
   .quick-add-modal.dialog-closing {
     animation: modalSlideOutTop var(--animation-speed) var(--animation-easing) forwards;
+  }
+  
+  @media screen and (max-width: 749px) {
+    .quick-add-modal.dialog-closing {
+      animation: modalSlideDownBottom 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards !important;
+    }
+  }
+
+  @keyframes modalSlideUpBottom {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes modalSlideDownBottom {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
   }
 
   .quick-add-modal__close {
@@ -108,8 +149,9 @@
       flex: 1;
       min-height: 0;
       overflow-y: auto;
-      height: auto; /* Prevent a bug in Safari where height:fit-content is not respected */
-      max-height: 100vh;
+      height: auto;
+      max-height: 85vh;
+      padding-bottom: max(var(--padding-xl), env(safe-area-inset-bottom));
     }
   }
 

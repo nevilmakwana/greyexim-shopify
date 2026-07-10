@@ -23,9 +23,7 @@
   endif
 
   assign quick_add_button = 'choose'
-  if product.variants_count == 1 or product.options.size == 1 and product.selected_variant
-    assign quick_add_button = 'add'
-  endif
+  # Always use choose to show the slide-up modal with quantity selector
 %}
 
 <quick-add-component
