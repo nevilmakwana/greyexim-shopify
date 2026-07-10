@@ -27,8 +27,8 @@
 
     {%- render 'meta-tags' -%}
     {%- render 'stylesheets' -%}
-    {{ 'custom-koraa.css' | asset_url | append: '&v=7' | stylesheet_tag }}
-    {{ 'mobile-koraa.css' | asset_url | append: '&v=16' | stylesheet_tag }}
+    {{ 'custom-koraa.css' | asset_url | stylesheet_tag }}
+    {{ 'mobile-koraa.css' | asset_url | stylesheet_tag }}
     <style>
       :root {
         --custom-announcement-padding-desktop: {{ settings.announcement_padding_desktop | default: 10 }}px;
