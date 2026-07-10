@@ -564,7 +564,8 @@
     // Find the quick add button and trigger it
     const card = e.target.closest('product-card');
     if (card) {
-      const quickAddBtn = card.querySelector('quick-add-component .add-to-cart-button');
+      // Always click the 'choose' button to open the variant/quantity modal
+      const quickAddBtn = card.querySelector('quick-add-component .quick-add__button--choose');
       if (quickAddBtn) {
         quickAddBtn.click();
         return;
