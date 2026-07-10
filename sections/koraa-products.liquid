@@ -142,13 +142,13 @@
                 class="custom-cart-trigger"
                 style="display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; min-width: 0 !important; min-height: 0 !important; border-radius: 50%; background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); border: none; color: #111; padding: 0; cursor: pointer;"
                 data-product-handle="{{ product.handle }}"
-                data-product-url="{{ product.url }}"
                 aria-label="Quick add"
-                onclick="handleCustomCartClick(event, this)"
+                onclick="handleCustomCartClick(event, '{{ product.handle }}')"
               >
-                <svg style="width: 12px; height: 12px; stroke: currentColor; stroke-width: 2px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                <svg style="width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.5px; fill: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
               </button>
 
@@ -328,159 +328,7 @@
     background: #fff;
     transform: scale(1.3);
   }
-  /* Quick Add Bottom Drawer */
-  .koraa-quick-add-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(4px);
-    z-index: 99999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  .koraa-quick-add-overlay.is-open {
-    opacity: 1;
-    visibility: visible;
-  }
-  .koraa-quick-add-drawer {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: #fff;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    z-index: 100000;
-    transform: translateY(100%);
-    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 0 0 env(safe-area-inset-bottom, 0px) 0;
-    box-shadow: 0 -8px 30px rgba(0,0,0,0.15);
-  }
-  .koraa-quick-add-drawer.is-open {
-    transform: translateY(0);
-  }
-  .koraa-qa-handle {
-    width: 36px; height: 4px;
-    background: #ddd; border-radius: 2px;
-    margin: 10px auto 0;
-  }
-  .koraa-qa-close {
-    position: absolute; top: 12px; right: 16px;
-    background: none; border: none; font-size: 22px;
-    cursor: pointer; color: #333; padding: 4px;
-    line-height: 1;
-  }
-  .koraa-qa-product {
-    display: flex; gap: 14px;
-    padding: 16px 20px 12px;
-    align-items: flex-start;
-  }
-  .koraa-qa-product img {
-    width: 90px; height: 120px;
-    object-fit: cover; border-radius: 8px;
-    flex-shrink: 0; background: #f5f5f5;
-  }
-  .koraa-qa-product-info {
-    flex: 1; min-width: 0;
-  }
-  .koraa-qa-product-title {
-    font-size: 14px; font-weight: 600;
-    margin: 0 0 4px; color: #111;
-    line-height: 1.3;
-  }
-  .koraa-qa-product-price {
-    font-size: 15px; font-weight: 700;
-    color: #111; margin: 0 0 2px;
-  }
-  .koraa-qa-product-price--compare {
-    font-size: 12px; color: #999;
-    text-decoration: line-through;
-    margin-left: 6px; font-weight: 400;
-  }
-  .koraa-qa-section {
-    padding: 0 20px 14px;
-  }
-  .koraa-qa-section-title {
-    font-size: 12px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.8px;
-    color: #666; margin: 0 0 10px;
-  }
-  .koraa-qa-sizes {
-    display: flex; flex-wrap: wrap; gap: 8px;
-  }
-  .koraa-qa-size-btn {
-    min-width: 48px; height: 44px;
-    border: 1.5px solid #ddd;
-    background: #fff; color: #111;
-    border-radius: 8px; font-size: 13px;
-    font-weight: 600; cursor: pointer;
-    display: flex; align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    padding: 0 12px;
-  }
-  .koraa-qa-size-btn.is-selected {
-    background: #111; color: #fff;
-    border-color: #111;
-  }
-  .koraa-qa-size-btn.is-unavailable {
-    opacity: 0.35; cursor: not-allowed;
-    text-decoration: line-through;
-  }
-  .koraa-qa-qty {
-    display: flex; align-items: center;
-    gap: 0; border: 1.5px solid #ddd;
-    border-radius: 8px; overflow: hidden;
-    width: fit-content;
-  }
-  .koraa-qa-qty button {
-    width: 44px; height: 44px;
-    border: none; background: #fff;
-    font-size: 18px; cursor: pointer;
-    display: flex; align-items: center;
-    justify-content: center; color: #111;
-  }
-  .koraa-qa-qty button:active { background: #f0f0f0; }
-  .koraa-qa-qty-val {
-    width: 44px; text-align: center;
-    font-size: 15px; font-weight: 600;
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
-    line-height: 44px;
-  }
-  .koraa-qa-atc {
-    padding: 12px 20px 16px;
-    padding-bottom: max(16px, env(safe-area-inset-bottom));
-  }
-  .koraa-qa-atc-btn {
-    width: 100%; height: 52px;
-    background: #111; color: #fff;
-    border: none; border-radius: 12px;
-    font-size: 15px; font-weight: 700;
-    cursor: pointer; letter-spacing: 0.5px;
-    transition: background 0.2s ease;
-  }
-  .koraa-qa-atc-btn:active { background: #333; }
-  .koraa-qa-atc-btn:disabled {
-    background: #ccc; cursor: not-allowed;
-  }
-  .koraa-qa-loading {
-    display: flex; align-items: center;
-    justify-content: center; padding: 60px 0;
-    color: #999; font-size: 14px;
-  }
 </style>
-
-<!-- Quick Add Bottom Drawer (Global, injected once) -->
-<div class="koraa-quick-add-overlay" id="koraaQuickAddOverlay" onclick="koraaCloseQuickAdd()"></div>
-<div class="koraa-quick-add-drawer" id="koraaQuickAddDrawer">
-  <div class="koraa-qa-handle"></div>
-  <button class="koraa-qa-close" onclick="koraaCloseQuickAdd()" aria-label="Close">✕</button>
-  <div id="koraaQuickAddContent">
-    <div class="koraa-qa-loading">Loading...</div>
-  </div>
-</div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -709,168 +557,171 @@
     }
   }
 
-  // Quick Add Bottom Drawer Logic
-  let koraaQAData = null;
-  let koraaQASelectedVariant = null;
-  let koraaQAQty = 1;
-
-  function handleCustomCartClick(e, btn) {
+  function handleCustomCartClick(e, productHandle) {
     e.preventDefault();
     e.stopPropagation();
-    const handle = btn.dataset.productHandle;
-    if (!handle) return;
-    koraaOpenQuickAdd(handle);
+    openQuickAddDrawer(productHandle);
   }
 
-  async function koraaOpenQuickAdd(handle) {
-    const overlay = document.getElementById('koraaQuickAddOverlay');
-    const drawer = document.getElementById('koraaQuickAddDrawer');
-    const content = document.getElementById('koraaQuickAddContent');
-    content.innerHTML = '<div class="koraa-qa-loading">Loading...</div>';
-    overlay.classList.add('is-open');
-    drawer.classList.add('is-open');
+  /* ── Quick Add Bottom Drawer (Evara-style) ── */
+  let qaDrawerEl = null;
+  let qaOverlayEl = null;
+  let qaProductData = null;
+  let qaSelectedVariant = null;
+  let qaQuantity = 1;
+
+  function getOrCreateDrawer() {
+    if (qaDrawerEl) return;
+    // Overlay
+    qaOverlayEl = document.createElement('div');
+    qaOverlayEl.id = 'qa-overlay';
+    qaOverlayEl.addEventListener('click', closeQuickAddDrawer);
+    document.body.appendChild(qaOverlayEl);
+    // Drawer
+    qaDrawerEl = document.createElement('div');
+    qaDrawerEl.id = 'qa-drawer';
+    document.body.appendChild(qaDrawerEl);
+  }
+
+  async function openQuickAddDrawer(handle) {
+    getOrCreateDrawer();
+    qaQuantity = 1;
+    qaDrawerEl.innerHTML = '<div class="qa-loading"><div class="qa-spinner"></div></div>';
+    qaOverlayEl.classList.add('active');
+    qaDrawerEl.classList.add('active');
     document.body.style.overflow = 'hidden';
 
     try {
       const res = await fetch(`/products/${handle}.js`);
-      koraaQAData = await res.json();
-      koraaQAQty = 1;
-      // Select first available variant
-      koraaQASelectedVariant = koraaQAData.variants.find(v => v.available) || koraaQAData.variants[0];
-      koraaRenderQuickAdd();
+      qaProductData = await res.json();
+      qaSelectedVariant = qaProductData.variants[0];
+      renderDrawerContent();
     } catch(err) {
-      content.innerHTML = '<div class="koraa-qa-loading">Failed to load product</div>';
+      qaDrawerEl.innerHTML = '<p style="padding:24px;text-align:center;">Could not load product.</p>';
     }
   }
 
-  function koraaRenderQuickAdd() {
-    const p = koraaQAData;
-    const v = koraaQASelectedVariant;
-    const content = document.getElementById('koraaQuickAddContent');
-
-    // Product info
-    let priceHtml = `<span>${koraaFormatMoney(v.price)}</span>`;
-    if (v.compare_at_price && v.compare_at_price > v.price) {
-      priceHtml += `<span class="koraa-qa-product-price--compare">${koraaFormatMoney(v.compare_at_price)}</span>`;
-    }
-
-    let html = `
-      <div class="koraa-qa-product">
-        <img src="${v.featured_image?.src || p.featured_image}" alt="${p.title}">
-        <div class="koraa-qa-product-info">
-          <p class="koraa-qa-product-title">${p.title}</p>
-          <p class="koraa-qa-product-price" id="koraaQAPrice">${priceHtml}</p>
-        </div>
-      </div>
-    `;
-
-    // Options (size, color, etc.)
-    if (!p.has_only_default_variant) {
-      p.options.forEach((optionName, optIdx) => {
-        const values = [];
-        const seen = new Set();
-        p.variants.forEach(vr => {
-          const val = vr.options[optIdx];
-          if (!seen.has(val)) {
-            seen.add(val);
-            values.push({ value: val, available: p.variants.some(vv => vv.options[optIdx] === val && vv.available) });
-          }
-        });
-        const selectedVal = v.options[optIdx];
-        html += `<div class="koraa-qa-section">
-          <p class="koraa-qa-section-title">${optionName}: <span style="color:#111;">${selectedVal}</span></p>
-          <div class="koraa-qa-sizes">`;
-        values.forEach(item => {
-          const sel = item.value === selectedVal ? 'is-selected' : '';
-          const unavail = !item.available ? 'is-unavailable' : '';
-          html += `<button type="button" class="koraa-qa-size-btn ${sel} ${unavail}" 
-            onclick="koraaSelectOption(${optIdx}, '${item.value.replace(/'/g, "\\'")}')"
-            ${!item.available ? 'disabled' : ''}>${item.value}</button>`;
-        });
-        html += '</div></div>';
-      });
-    }
-
-    // Quantity
-    html += `<div class="koraa-qa-section">
-      <p class="koraa-qa-section-title">Quantity</p>
-      <div class="koraa-qa-qty">
-        <button type="button" onclick="koraaChangeQty(-1)">−</button>
-        <div class="koraa-qa-qty-val" id="koraaQAQtyVal">${koraaQAQty}</div>
-        <button type="button" onclick="koraaChangeQty(1)">+</button>
-      </div>
-    </div>`;
-
-    // Add to Cart button
-    html += `<div class="koraa-qa-atc">
-      <button type="button" class="koraa-qa-atc-btn" id="koraaQAAddBtn" 
-        onclick="koraaAddToCart()" ${!v.available ? 'disabled' : ''}>
-        ${v.available ? 'ADD TO CART' : 'SOLD OUT'}
-      </button>
-    </div>`;
-
-    content.innerHTML = html;
-  }
-
-  function koraaSelectOption(optIdx, value) {
-    const p = koraaQAData;
-    // Build selected options array from current variant
-    const selectedOptions = [...koraaQASelectedVariant.options];
-    selectedOptions[optIdx] = value;
-    // Find matching variant
-    const match = p.variants.find(v => v.options.every((o, i) => o === selectedOptions[i]));
-    if (match) {
-      koraaQASelectedVariant = match;
-      koraaRenderQuickAdd();
-    }
-  }
-
-  function koraaChangeQty(delta) {
-    koraaQAQty = Math.max(1, koraaQAQty + delta);
-    const el = document.getElementById('koraaQAQtyVal');
-    if (el) el.textContent = koraaQAQty;
-  }
-
-  async function koraaAddToCart() {
-    const btn = document.getElementById('koraaQAAddBtn');
-    if (!btn || !koraaQASelectedVariant) return;
-    btn.disabled = true;
-    btn.textContent = 'ADDING...';
-    try {
-      await fetch(window.Shopify.routes.root + 'cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: [{ id: koraaQASelectedVariant.id, quantity: koraaQAQty }] })
-      });
-      btn.textContent = 'ADDED ✓';
-      btn.style.background = '#2e7d32';
-      // Update cart count badge
-      if (typeof window.Shopify !== 'undefined') {
-        try {
-          const cartRes = await fetch(window.Shopify.routes.root + 'cart.js');
-          const cart = await cartRes.json();
-          document.querySelectorAll('.cart-bubble__count, [data-cart-count]').forEach(el => {
-            el.textContent = cart.item_count;
-          });
-        } catch(e) {}
-      }
-      setTimeout(() => koraaCloseQuickAdd(), 800);
-    } catch(err) {
-      btn.textContent = 'ERROR - TRY AGAIN';
-      btn.style.background = '#c62828';
-      btn.disabled = false;
-      setTimeout(() => { btn.textContent = 'ADD TO CART'; btn.style.background = '#111'; }, 2000);
-    }
-  }
-
-  function koraaCloseQuickAdd() {
-    document.getElementById('koraaQuickAddOverlay')?.classList.remove('is-open');
-    document.getElementById('koraaQuickAddDrawer')?.classList.remove('is-open');
+  function closeQuickAddDrawer() {
+    if (qaDrawerEl) qaDrawerEl.classList.remove('active');
+    if (qaOverlayEl) qaOverlayEl.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  function koraaFormatMoney(cents) {
-    return '₹' + (cents / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function renderDrawerContent() {
+    const p = qaProductData;
+    const v = qaSelectedVariant;
+    const comparePrice = v.compare_at_price && v.compare_at_price > v.price ? v.compare_at_price : null;
+    const formatMoney = (cents) => {
+      if (window.Shopify && Shopify.formatMoney) return Shopify.formatMoney(cents);
+      return '₹' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    };
+
+    // Build options HTML
+    let optionsHTML = '';
+    if (!p.has_only_default_variant) {
+      p.options.forEach((optName, optIdx) => {
+        const uniqueVals = [...new Set(p.variants.map(vr => vr.options[optIdx]))];
+        optionsHTML += `<div class="qa-option-group">
+          <div class="qa-option-label">${optName}</div>
+          <div class="qa-option-values">`;
+        uniqueVals.forEach(val => {
+          const isActive = v.options[optIdx] === val;
+          optionsHTML += `<button type="button" class="qa-opt-btn${isActive ? ' active' : ''}" data-option-index="${optIdx}" data-value="${val}">${val}</button>`;
+        });
+        optionsHTML += `</div></div>`;
+      });
+    }
+
+    qaDrawerEl.innerHTML = `
+      <div class="qa-handle"></div>
+      <button class="qa-close" onclick="closeQuickAddDrawer()" aria-label="Close">&times;</button>
+      <div class="qa-body">
+        <div class="qa-product-header">
+          <img class="qa-product-img" src="${v.featured_image ? v.featured_image.src : p.featured_image}" alt="${p.title}">
+          <div class="qa-product-meta">
+            <div class="qa-product-title">${p.title}</div>
+            <div class="qa-product-price">
+              <span class="qa-price-current">${formatMoney(v.price)}</span>
+              ${comparePrice ? `<span class="qa-price-compare">${formatMoney(comparePrice)}</span>` : ''}
+            </div>
+            ${!v.available ? '<div class="qa-sold-out">Sold Out</div>' : ''}
+          </div>
+        </div>
+        ${optionsHTML}
+        <div class="qa-option-group">
+          <div class="qa-option-label">Quantity</div>
+          <div class="qa-qty-row">
+            <button type="button" class="qa-qty-btn" onclick="qaChangeQty(-1)">−</button>
+            <span class="qa-qty-val" id="qa-qty-val">${qaQuantity}</span>
+            <button type="button" class="qa-qty-btn" onclick="qaChangeQty(1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="qa-footer">
+        <button type="button" class="qa-add-btn" id="qa-add-btn" ${!v.available ? 'disabled' : ''} onclick="qaAddToCart()">
+          ${v.available ? 'ADD TO CART' : 'SOLD OUT'}
+        </button>
+      </div>
+    `;
+
+    // Attach option button listeners
+    qaDrawerEl.querySelectorAll('.qa-opt-btn').forEach(btn => {
+      btn.addEventListener('click', () => qaSelectOption(parseInt(btn.dataset.optionIndex), btn.dataset.value));
+    });
+
+    // Swipe to close
+    let touchStartY = 0;
+    qaDrawerEl.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, {passive:true});
+    qaDrawerEl.addEventListener('touchend', e => {
+      const diff = e.changedTouches[0].clientY - touchStartY;
+      if (diff > 100) closeQuickAddDrawer();
+    });
+  }
+
+  function qaSelectOption(optionIndex, value) {
+    // Find matching variant
+    const currentOptions = [...qaSelectedVariant.options];
+    currentOptions[optionIndex] = value;
+    const match = qaProductData.variants.find(v => v.options.every((o, i) => o === currentOptions[i]));
+    if (match) {
+      qaSelectedVariant = match;
+      renderDrawerContent();
+    }
+  }
+
+  function qaChangeQty(delta) {
+    qaQuantity = Math.max(1, qaQuantity + delta);
+    const el = document.getElementById('qa-qty-val');
+    if (el) el.textContent = qaQuantity;
+  }
+
+  async function qaAddToCart() {
+    const btn = document.getElementById('qa-add-btn');
+    if (!btn || !qaSelectedVariant || !qaSelectedVariant.available) return;
+    btn.disabled = true;
+    btn.textContent = 'ADDING...';
+
+    try {
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ items: [{ id: qaSelectedVariant.id, quantity: qaQuantity }] })
+      });
+      if (res.ok) {
+        btn.textContent = 'ADDED ✓';
+        btn.style.background = '#2e7d32';
+        // Refresh cart bubble
+        const cartDrawer = document.querySelector('cart-drawer-component');
+        if (cartDrawer && cartDrawer.fetchCart) cartDrawer.fetchCart();
+        setTimeout(() => closeQuickAddDrawer(), 1200);
+      } else {
+        btn.textContent = 'ERROR';
+        setTimeout(() => { btn.textContent = 'ADD TO CART'; btn.disabled = false; }, 2000);
+      }
+    } catch(err) {
+      btn.textContent = 'ERROR';
+      setTimeout(() => { btn.textContent = 'ADD TO CART'; btn.disabled = false; }, 2000);
+    }
   }
   
   // Set initial state on load
