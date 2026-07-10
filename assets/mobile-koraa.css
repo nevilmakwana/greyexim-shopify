@@ -1178,7 +1178,7 @@
 }
 
 /* --- Dynamic Checkout Button (Buy it now) matching Add to Cart --- */
-.shopify-payment-button__button--unbranded {
+html body button.shopify-payment-button__button--unbranded {
   background-color: #fff !important;
   color: #111 !important;
   border: 1px solid #111 !important;
@@ -1190,7 +1190,7 @@
   transition: all 0.2s ease !important;
 }
 
-.shopify-payment-button__button--unbranded:hover {
+html body button.shopify-payment-button__button--unbranded:hover {
   background-color: #f5f5f5 !important;
   color: #000 !important;
 }

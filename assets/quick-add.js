@@ -241,6 +241,7 @@ export class QuickAddComponent extends Component {
       productDetails?.remove();
     }
 
+    productGrid.classList.add('quick-add-modal__content');
     morph(modalContent, productGrid);
 
     this.#syncVariantSelection(modalContent);
