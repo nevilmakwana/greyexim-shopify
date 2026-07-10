@@ -88,28 +88,36 @@
               <div class="koraa-product-card__badge-bestseller" style="position: absolute; top: 12px; left: 12px; background: #000; color: #fff; font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; z-index: 2; letter-spacing: 0.5px;">Best Seller</div>
             {% endif %}
 
-            <div class="koraa-card-carousel" data-product-id="{{ product.id }}">
-              <div class="koraa-card-carousel__track">
-                {%- for image in product.images -%}
-                  <a href="{{ product.url }}" class="koraa-card-carousel__slide" draggable="false">
-                    <img
-                      class="koraa-product-card__image"
-                      src="{{ image | image_url: width: 600 }}"
-                      alt="{{ image.alt | default: product.title }}"
-                      loading="lazy"
-                      draggable="false"
-                    >
-                  </a>
-                {%- endfor -%}
-              </div>
-              {%- if product.images.size > 1 -%}
-                <div class="koraa-card-carousel__dots">
-                  {%- for image in product.images -%}
-                    <span class="koraa-card-carousel__dot{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.index0 }}"></span>
-                  {%- endfor -%}
+            <a href="{{ product.url }}" ref="productCardLink" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;" class="koraa-card-link">
+              {% if product.images.size > 1 %}
+                <div class="koraa-swipe-carousel" data-product-id="{{ product.id }}">
+                  <div class="koraa-swipe-track">
+                    {% for image in product.images limit: 5 %}
+                      <div class="koraa-swipe-slide">
+                        <img
+                          class="koraa-product-card__image"
+                          src="{{ image | image_url: width: 600 }}"
+                          alt="{{ image.alt | default: product.title }}"
+                          loading="lazy"
+                        >
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <div class="koraa-swipe-dots">
+                    {% for image in product.images limit: 5 %}
+                      <span class="koraa-swipe-dot{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}"></span>
+                    {% endfor %}
+                  </div>
                 </div>
-              {%- endif -%}
-            </div>
+              {% elsif product.featured_image %}
+                <img
+                  class="koraa-product-card__image"
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.title }}"
+                  loading="lazy"
+                >
+              {% endif %}
+            </a>
 
             <!-- Floating Action Icons (Outside the Anchor Tag to prevent navigation) -->
             <div class="product-card__action-icons" style="position: absolute; bottom: 8px; right: 8px; display: flex; flex-direction: row; gap: 6px; z-index: 9999;">
@@ -266,6 +274,62 @@
   .koraa-products__grid.is-visible .koraa-product-card:nth-child(8) { transition-delay: 0.56s; }
   .koraa-products__grid.is-visible .koraa-product-card:nth-child(9) { transition-delay: 0.64s; }
   .koraa-products__grid.is-visible .koraa-product-card:nth-child(n+10) { transition-delay: 0.72s; }
+
+  /* Swipeable Product Image Carousel */
+  .koraa-swipe-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .koraa-swipe-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  .koraa-swipe-track.is-swiping {
+    transition: none !important;
+  }
+
+  .koraa-swipe-slide {
+    min-width: 100%;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .koraa-swipe-slide .koraa-product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .koraa-swipe-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .koraa-swipe-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .koraa-swipe-dot.active {
+    background: #fff;
+    transform: scale(1.3);
+  }
 </style>
 
 <script>
@@ -368,6 +432,76 @@
           grid.scrollLeft = scrollLeft - walk;
         });
       }
+
+      // 3. Setup Swipeable Product Image Carousels
+      const carousels = section.querySelectorAll('.koraa-swipe-carousel');
+      carousels.forEach(carousel => {
+        const track = carousel.querySelector('.koraa-swipe-track');
+        const dots = carousel.querySelectorAll('.koraa-swipe-dot');
+        const slides = carousel.querySelectorAll('.koraa-swipe-slide');
+        const link = carousel.closest('.koraa-card-link');
+        if (!track || slides.length < 2) return;
+
+        let currentIndex = 0;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        let didSwipe = false;
+
+        const setSlide = (index) => {
+          currentIndex = Math.max(0, Math.min(index, slides.length - 1));
+          track.style.transform = `translateX(-${currentIndex * 100}%)`;
+          dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+        };
+
+        // Prevent link navigation if user swiped
+        if (link) {
+          link.addEventListener('click', (e) => {
+            if (didSwipe) {
+              e.preventDefault();
+              didSwipe = false;
+            }
+          });
+        }
+
+        carousel.addEventListener('touchstart', (e) => {
+          isDragging = true;
+          didSwipe = false;
+          startX = e.touches[0].clientX;
+          currentX = startX;
+          track.classList.add('is-swiping');
+        }, { passive: true });
+
+        carousel.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          currentX = e.touches[0].clientX;
+          const diff = currentX - startX;
+          const offset = -(currentIndex * 100) + (diff / carousel.offsetWidth) * 100;
+          track.style.transform = `translateX(${offset}%)`;
+        }, { passive: true });
+
+        carousel.addEventListener('touchend', () => {
+          if (!isDragging) return;
+          isDragging = false;
+          track.classList.remove('is-swiping');
+          const diff = currentX - startX;
+          const threshold = carousel.offsetWidth * 0.2; // 20% threshold
+
+          if (Math.abs(diff) > threshold) {
+            didSwipe = true;
+            if (diff < 0 && currentIndex < slides.length - 1) {
+              setSlide(currentIndex + 1);
+            } else if (diff > 0 && currentIndex > 0) {
+              setSlide(currentIndex - 1);
+            } else {
+              setSlide(currentIndex); // snap back
+            }
+          } else {
+            setSlide(currentIndex); // snap back
+          }
+        });
+      });
+
     });
   });
 </script>
@@ -457,88 +591,6 @@
         btn.querySelector('svg').style.fill = '#e74c3c';
         btn.querySelector('svg').style.stroke = '#e74c3c';
       }
-    });
-  });
-
-  /* ── Product Card Image Carousel (Swipe) ── */
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.koraa-card-carousel').forEach(function(carousel) {
-      const track = carousel.querySelector('.koraa-card-carousel__track');
-      const slides = carousel.querySelectorAll('.koraa-card-carousel__slide');
-      const dots = carousel.querySelectorAll('.koraa-card-carousel__dot');
-      if (!track || slides.length <= 1) return;
-
-      let currentIndex = 0;
-      let startX = 0;
-      let currentX = 0;
-      let isDragging = false;
-      let hasSwiped = false;
-      const totalSlides = slides.length;
-      const SWIPE_THRESHOLD = 40;
-
-      function goToSlide(index) {
-        currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
-        track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
-        dots.forEach(function(dot, i) {
-          dot.classList.toggle('is-active', i === currentIndex);
-        });
-      }
-
-      // Dot click navigation
-      dots.forEach(function(dot) {
-        dot.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          goToSlide(parseInt(dot.dataset.index));
-        });
-      });
-
-      // Touch events
-      track.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-        hasSwiped = false;
-        track.classList.add('is-dragging');
-      }, {passive: true});
-
-      track.addEventListener('touchmove', function(e) {
-        if (!isDragging) return;
-        currentX = e.touches[0].clientX;
-        var diffX = currentX - startX;
-        if (Math.abs(diffX) > 10) hasSwiped = true;
-        var offset = -(currentIndex * 100) + (diffX / carousel.offsetWidth * 100);
-        track.style.transform = 'translateX(' + offset + '%)';
-      }, {passive: true});
-
-      track.addEventListener('touchend', function(e) {
-        if (!isDragging) return;
-        isDragging = false;
-        track.classList.remove('is-dragging');
-        var diffX = currentX - startX;
-        if (Math.abs(diffX) > SWIPE_THRESHOLD) {
-          if (diffX < 0 && currentIndex < totalSlides - 1) {
-            goToSlide(currentIndex + 1);
-          } else if (diffX > 0 && currentIndex > 0) {
-            goToSlide(currentIndex - 1);
-          } else {
-            goToSlide(currentIndex);
-          }
-        } else {
-          goToSlide(currentIndex);
-        }
-        currentX = 0;
-        startX = 0;
-      });
-
-      // Prevent link navigation if user swiped
-      slides.forEach(function(slide) {
-        slide.addEventListener('click', function(e) {
-          if (hasSwiped) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        });
-      });
     });
   });
 </script>
