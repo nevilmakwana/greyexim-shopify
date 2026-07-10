@@ -625,4 +625,123 @@
       transform: translateY(0);
     }
   }
+
+/* ================================================================ */
+/* QUICK ADD MODAL - POLISHED MOBILE UI (RCA FIX)                   */
+/* ================================================================ */
+@media screen and (max-width: 749px) {
+  /* 1. Structural Fixes (Image Height & Dots) */
+  #quick-add-modal-content .product-media-container img {
+    max-height: 35vh !important;
+    object-fit: contain !important;
+    background-color: #f7f7f7 !important;
+  }
+  
+  #quick-add-modal-content .slideshow-controls__dots {
+    display: none !important;
+  }
+
+  /* 2. Close Button Redesign */
+  .quick-add-modal__close {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    background-color: #ffffff !important;
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    z-index: 100 !important;
+  }
+
+  /* 3. Variant & Quantity Polish */
+  #quick-add-modal-content fieldset.variant-option {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  /* Force Size blocks to be inline pills, not full width */
+  #quick-add-modal-content fieldset.variant-option input + label,
+  #quick-add-modal-content .product-form__input input[type="radio"] + label {
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    padding: 10px 14px !important;
+    border: 1px solid #e2e2e2 !important;
+    background-color: transparent !important;
+    color: #000 !important;
+    min-width: 44px !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    margin: 0 !important;
+    display: inline-block !important;
+    width: auto !important;
+  }
+  
+  #quick-add-modal-content fieldset.variant-option input:checked + label,
+  #quick-add-modal-content .product-form__input input[type="radio"]:checked + label {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
+  }
+
+  /* Restore Quantity Selector */
+  #quick-add-modal-content quantity-input,
+  #quick-add-modal-content .quantity-selector-wrapper,
+  #quick-add-modal-content .quantity-wrapper {
+    display: flex !important;
+    margin-bottom: 20px !important;
+    justify-content: flex-start !important;
+  }
+  
+  #quick-add-modal-content quantity-input {
+    height: 44px !important;
+    border: 1px solid #e2e2e2 !important;
+    border-radius: 4px !important;
+    max-width: 120px !important;
+  }
+
+  /* Typography alignment */
+  #quick-add-modal-content .product__title,
+  #quick-add-modal-content .price {
+    margin-bottom: 12px !important;
+  }
+
+  /* 4. Action Button Consistency (Square Edges) */
+  #quick-add-modal-content .product-form__submit,
+  #quick-add-modal-content div[data-shopify="payment-button"] button,
+  #quick-add-modal-content .shopify-payment-button__button,
+  #quick-add-modal-content .shopify-payment-button__button--unbranded {
+    width: 100% !important;
+    border-radius: 0 !important; /* Sharp squares */
+    padding: 16px 0 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    margin-bottom: 10px !important;
+    background-image: none !important;
+  }
+  
+  /* Add to Cart */
+  #quick-add-modal-content .product-form__submit {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 1px solid #000 !important;
+  }
+
+  /* Buy it Now */
+  #quick-add-modal-content div[data-shopify="payment-button"] button,
+  #quick-add-modal-content .shopify-payment-button__button,
+  #quick-add-modal-content .shopify-payment-button__button--unbranded {
+    background-color: #1a1a1a !important;
+    color: #fff !important;
+    border: none !important;
+  }
+}
 {% endstylesheet %}
