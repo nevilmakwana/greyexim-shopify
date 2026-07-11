@@ -2626,8 +2626,10 @@ div[data-rating] {
   .slideshow-controls__dots button {
     font-size: 0 !important;
     color: transparent !important;
-    width: 8px !important;
-    height: 8px !important;
+    width: 6px !important;
+    height: 6px !important;
+    min-width: unset !important;
+    min-height: unset !important;
     margin: 0 !important;
     padding: 0 !important;
     border-radius: 50% !important;
