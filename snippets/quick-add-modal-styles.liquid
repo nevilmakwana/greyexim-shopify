@@ -934,16 +934,21 @@
     justify-content: flex-start !important;
     width: auto !important;
     min-width: 120px !important;
+    --inputs-radius: 0px !important;
+    --inputs-radius-outset: 0px !important;
     border-radius: 0 !important;
   }
   #quick-add-modal-content quantity-input,
   #quick-add-modal-content .quantity {
     border: 1px solid #e2e2e2 !important;
-    border-radius: 0 !important; /* Sharp corners for quantity */
     height: 44px !important;
   }
   #quick-add-modal-content .quantity::after,
   #quick-add-modal-content .quantity::before {
+    border-radius: 0 !important;
+  }
+  #quick-add-modal-content .quantity__button {
+    --inputs-radius: 0px !important;
     border-radius: 0 !important;
   }
   
@@ -951,8 +956,11 @@
   #quick-add-modal-content .product-form__submit,
   #quick-add-modal-content div[data-shopify="payment-button"] button,
   #quick-add-modal-content .shopify-payment-button__button,
-  #quick-add-modal-content .shopify-payment-button__button--unbranded {
+  #quick-add-modal-content .shopify-payment-button__button--unbranded,
+  #quick-add-modal-content .button {
     width: 100% !important;
+    --buttons-radius: 0px !important;
+    --buttons-radius-outset: 0px !important;
     border-radius: 0 !important; /* Theme default sharp edges */
     padding: 16px 0 !important;
     font-size: 14px !important;
@@ -970,27 +978,27 @@
   #quick-add-modal-content .product-form__submit::after,
   #quick-add-modal-content .product-form__submit::before,
   #quick-add-modal-content .shopify-payment-button__button::after,
-  #quick-add-modal-content .shopify-payment-button__button::before {
+  #quick-add-modal-content .shopify-payment-button__button::before,
+  #quick-add-modal-content .button::after,
+  #quick-add-modal-content .button::before {
     border-radius: 0 !important;
   }
   
-  /* Add to Cart */
+  /* Both Buttons - Match Product Page UI (White BG, Black Text, Black Border) */
   #quick-add-modal-content button.product-form__submit,
-  #quick-add-modal-content .product-form__submit {
-    background-color: #fff !important;
-    color: #000 !important;
-    border: 1px solid #000 !important;
-    border-radius: 0 !important;
-  }
-
-  /* Buy it Now */
+  #quick-add-modal-content .product-form__submit,
   #quick-add-modal-content div[data-shopify="payment-button"] button,
   #quick-add-modal-content .shopify-payment-button__button,
   #quick-add-modal-content .shopify-payment-button__button--unbranded {
     background-color: #fff !important;
     color: #000 !important;
     border: 1px solid #000 !important;
-    border-radius: 0 !important;
+  }
+
+  /* Buy it Now specific styling to change text */
+  #quick-add-modal-content div[data-shopify="payment-button"] button,
+  #quick-add-modal-content .shopify-payment-button__button,
+  #quick-add-modal-content .shopify-payment-button__button--unbranded {
     font-size: 0 !important; /* Hide original text */
   }
   #quick-add-modal-content div[data-shopify="payment-button"] button::after,
