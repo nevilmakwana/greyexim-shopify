@@ -765,6 +765,201 @@
   
   /* Add to Cart */
   #quick-add-modal-content .product-form__submit {
+      scroll-snap-type: none;
+    }
+
+    .quick-add-modal__content .product-information__media slideshow-slide {
+      width: 100%;
+      flex: none;
+      scroll-snap-align: unset;
+      position: relative;
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s var(--animation-easing);
+    }
+
+    .quick-add-modal__content .product-information__media slideshow-slide[aria-hidden='true'] {
+      /* Keep visible on desktop for vertical scrolling */
+    }
+
+    .quick-add-modal__content .product-information__media slideshow-slide:nth-child(1) {
+      animation: fadeSlideIn 0.3s var(--animation-timing-fade-in) both;
+    }
+    .quick-add-modal__content .product-information__media slideshow-slide:nth-child(2) {
+      animation: fadeSlideIn 0.3s var(--animation-timing-fade-in) both;
+      animation-delay: 0.1s;
+    }
+    .quick-add-modal__content .product-information__media slideshow-slide:nth-child(3) {
+      animation: fadeSlideIn 0.3s var(--animation-timing-fade-in) both;
+      animation-delay: 0.2s;
+    }
+    .quick-add-modal__content .product-information__media :is(slideshow-controls, slideshow-controls[thumbnails]) {
+      display: none;
+    }
+  }
+
+  .quick-add-modal__content .sticky-content,
+  .quick-add-modal__content .sticky-content--desktop {
+    top: 0;
+  }
+
+  .quick-add-modal__content .text-block.rte:not(product-price),
+  .quick-add-modal__content .view-more-details__wrapper {
+    display: none;
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+/* ================================================================ */
+/* QUICK ADD MODAL - POLISHED MOBILE UI (RCA FIX)                   */
+/* ================================================================ */
+@media screen and (max-width: 749px) {
+  /* 1. Header & Close Button */
+  .quick-add-modal__content {
+    position: relative !important;
+    padding-top: 48px !important; /* Make room for header */
+  }
+  .quick-add-modal__content::before {
+    content: "CHOOSE OPTIONS";
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #000;
+    pointer-events: none;
+  }
+  
+  .quick-add-modal__close {
+    position: absolute !important;
+    top: 6px !important;
+    right: 8px !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    width: 40px !important;
+    height: 40px !important;
+    box-shadow: none !important;
+    z-index: 100 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .quick-add-modal__close svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* 2. Centered Title & Price */
+  #quick-add-modal-content .product__title {
+    text-align: center !important;
+    margin-top: 16px !important;
+    margin-bottom: 8px !important;
+  }
+  #quick-add-modal-content .product__title h2,
+  #quick-add-modal-content .product__title h1,
+  #quick-add-modal-content .product__title a {
+    text-align: center !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+  }
+  #quick-add-modal-content .price {
+    display: flex !important;
+    justify-content: center !important;
+    margin-bottom: 24px !important;
+    gap: 8px !important;
+  }
+  #quick-add-modal-content .price .price-item {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+  }
+  #quick-add-modal-content .price .price-item--sale {
+    color: #000 !important;
+    font-weight: 700 !important;
+  }
+
+  /* 3. Square Variant Boxes (Size) */
+  #quick-add-modal-content fieldset.variant-option {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  #quick-add-modal-content fieldset.variant-option input + label,
+  #quick-add-modal-content .product-form__input input[type="radio"] + label {
+    border-radius: 0 !important;
+    font-weight: 400 !important;
+    padding: 0 !important;
+    width: 44px !important;
+    height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid #e2e2e2 !important;
+    background-color: transparent !important;
+    color: #000 !important;
+    font-size: 13px !important;
+    margin: 0 !important;
+  }
+  #quick-add-modal-content fieldset.variant-option input:checked + label,
+  #quick-add-modal-content .product-form__input input[type="radio"]:checked + label {
+    border-color: #000 !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    font-weight: 700 !important;
+  }
+
+  /* 4. Quantity Selector */
+  #quick-add-modal-content quantity-input,
+  #quick-add-modal-content .quantity-selector-wrapper,
+  #quick-add-modal-content .quantity-wrapper {
+    display: inline-flex !important;
+    margin-bottom: 20px !important;
+    justify-content: flex-start !important;
+    width: auto !important;
+    min-width: 120px !important;
+  }
+  #quick-add-modal-content quantity-input {
+    border: 1px solid #e2e2e2 !important;
+    border-radius: 0 !important; /* Sharp corners for quantity */
+    height: 44px !important;
+  }
+  
+  /* 5. Action Buttons (Pill Shape) */
+  #quick-add-modal-content .product-form__submit,
+  #quick-add-modal-content div[data-shopify="payment-button"] button,
+  #quick-add-modal-content .shopify-payment-button__button,
+  #quick-add-modal-content .shopify-payment-button__button--unbranded {
+    width: 100% !important;
+    border-radius: 50px !important; /* Pill shape */
+    padding: 16px 0 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    margin-bottom: 10px !important;
+    background-image: none !important;
+  }
+  
+  /* Add to Cart */
+  #quick-add-modal-content .product-form__submit {
     background-color: #000 !important;
     color: #fff !important;
     border: 1px solid #000 !important;
@@ -777,5 +972,31 @@
     background-color: #1a1a1a !important;
     color: #fff !important;
     border: none !important;
+  }
+
+  /* 6. Carousel Fix */
+  #quick-add-modal-content slideshow-component {
+    overflow: hidden !important;
+  }
+  #quick-add-modal-content slideshow-slides {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  #quick-add-modal-content slideshow-slides::-webkit-scrollbar {
+    display: none !important;
+  }
+  #quick-add-modal-content slideshow-slide {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    scroll-snap-align: start !important;
+    display: block !important;
+  }
 }
 </style>
