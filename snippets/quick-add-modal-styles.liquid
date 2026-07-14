@@ -940,13 +940,13 @@
     height: 44px !important;
   }
   
-  /* 5. Action Buttons (Pill Shape) */
+  /* 5. Action Buttons (Theme UI Sharp) */
   #quick-add-modal-content .product-form__submit,
   #quick-add-modal-content div[data-shopify="payment-button"] button,
   #quick-add-modal-content .shopify-payment-button__button,
   #quick-add-modal-content .shopify-payment-button__button--unbranded {
     width: 100% !important;
-    border-radius: 50px !important; /* Pill shape */
+    border-radius: 0 !important; /* Theme default sharp edges */
     padding: 16px 0 !important;
     font-size: 14px !important;
     font-weight: 700 !important;
@@ -956,9 +956,13 @@
     box-shadow: none !important;
     margin-bottom: 10px !important;
     background-image: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   /* Add to Cart */
+  #quick-add-modal-content button.product-form__submit,
   #quick-add-modal-content .product-form__submit {
     background-color: #000 !important;
     color: #fff !important;
@@ -969,9 +973,16 @@
   #quick-add-modal-content div[data-shopify="payment-button"] button,
   #quick-add-modal-content .shopify-payment-button__button,
   #quick-add-modal-content .shopify-payment-button__button--unbranded {
-    background-color: #1a1a1a !important;
+    background-color: #000 !important;
     color: #fff !important;
-    border: none !important;
+    border: 1px solid #000 !important;
+    font-size: 0 !important; /* Hide original text */
+  }
+  #quick-add-modal-content div[data-shopify="payment-button"] button::after,
+  #quick-add-modal-content .shopify-payment-button__button::after,
+  #quick-add-modal-content .shopify-payment-button__button--unbranded::after {
+    content: "BUY NOW" !important;
+    font-size: 14px !important;
   }
 
   /* 6. Carousel Fix */
