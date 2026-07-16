@@ -40,7 +40,6 @@ export class QuickAddComponent extends Component {
       url.searchParams.set('variant', selectedVariantId);
     }
 
-    url.searchParams.set('section_id', 'product-information');
     return url.toString();
   }
 
