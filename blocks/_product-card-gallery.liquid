@@ -26,11 +26,12 @@
         </div>
       {%- endif -%}
     </div>
-    <div class="product-card__action-icons">
+    <div class="product-card__action-icons" style="position: absolute; top: 10px; right: 10px; display: flex !important; flex-direction: column; gap: 8px; z-index: 9999 !important; opacity: 1 !important; visibility: visible !important; pointer-events: none;">
       <!-- Wishlist Icon -->
       <button
         type="button"
         class="product-title-wishlist-btn product-card-action-btn"
+        style="pointer-events: auto; display: flex !important; align-items: center; justify-content: center; width: 36px !important; height: 36px !important; border-radius: 50% !important; background: rgba(255, 255, 255, 0.85) !important; backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important; border: 1px solid rgba(0,0,0,0.05) !important; color: #111 !important; padding: 0 !important; cursor: pointer; opacity: 1 !important; visibility: visible !important;"
         data-product-id="{{ product.id }}"
         data-variant-id="{{ product.selected_or_first_available_variant.id }}"
         data-product-url="{{ product.url }}"
@@ -39,13 +40,13 @@
         data-product-price="{{ product.price | money }}"
         aria-label="Add to wishlist"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; stroke: currentColor; fill: none;">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
       </button>
 
       <!-- Cart Icon / Quick Add -->
-      <div class="product-card-action-btn-wrapper">
+      <div class="product-card-action-btn-wrapper" style="pointer-events: auto; display: flex !important; opacity: 1 !important; visibility: visible !important;">
         {% render 'quick-add', product: product, section_id: section.id %}
       </div>
     </div>
