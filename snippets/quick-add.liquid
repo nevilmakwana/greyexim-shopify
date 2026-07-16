@@ -28,7 +28,7 @@
 
 <quick-add-component
   class="quick-add color-{{ color_scheme }} "
-  style="display: flex !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important;"
+  style="position: static !important; display: flex !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important;"
   ref="quickAdd"
   data-product-title="{{ product.title }}"
   data-product-url="{{ product.url }}"
@@ -74,13 +74,19 @@
             - There is only one product option, and it is displayed as swatches on the product card, and no swatch is selected
             - There is more than one product option
       {% endcomment %}
-      {% render 'add-to-cart-button',
-        add_to_cart_text: add_to_cart_text,
-        class: 'button quick-add__button quick-add__button--add add-to-cart-button',
-        can_add_to_cart: can_add_to_cart,
-        icon_only_on_mobile: true,
-        product: product
-      %}
+      <button
+        class="button quick-add__button quick-add__button--add add-to-cart-button"
+        type="submit"
+        name="add"
+        {% unless can_add_to_cart %}disabled{% endunless %}
+        style="display: flex !important; align-items: center; justify-content: center; width: 26px !important; height: 26px !important; min-width: 0 !important; min-height: 0 !important; border-radius: 50% !important; background: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important; border: none !important; color: #111 !important; padding: 0 !important; cursor: pointer; opacity: 1 !important; visibility: visible !important;"
+      >
+        <svg style="width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5px; fill: none; margin: 0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+      </button>
 
       <button
         class="button quick-add__button quick-add__button--choose add-to-cart-button"
