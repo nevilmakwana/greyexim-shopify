@@ -1062,11 +1062,11 @@
 /* --- PRODUCT CARD ACTION ICONS (WISHLIST & CART) --- */
 .product-card__action-icons {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  bottom: 8px;
+  right: 8px;
   display: flex !important;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  gap: 6px;
   z-index: 99 !important;
   pointer-events: none; /* Let clicks pass through empty space */
   opacity: 1 !important;
@@ -1133,16 +1133,16 @@
   opacity: 1 !important;
   align-items: center;
   justify-content: center;
-  width: 36px !important;
-  height: 36px !important;
+  width: 26px !important;
+  height: 26px !important;
   min-width: unset !important;
   min-height: unset !important;
   border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
   -webkit-backdrop-filter: blur(8px) !important;
   backdrop-filter: blur(8px) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  border: none !important;
   color: #111 !important;
   padding: 0 !important;
   transform: none !important;
@@ -1153,6 +1153,11 @@
 .product-card-action-btn-wrapper .quick-add__button:active {
   transform: scale(0.92) !important;
   background: #f4f4f4 !important;
+}
+
+.product-card-action-btn-wrapper .quick-add__button svg {
+  width: 14px !important;
+  height: 14px !important;
 }
 
 .product-card-action-btn-wrapper .add-to-cart-icon {
