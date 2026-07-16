@@ -682,6 +682,7 @@
   .quick-add-modal__content slideshow-component {
     display: block !important;
     overflow: hidden !important;
+    position: relative !important;
   }
   .quick-add-modal__content slideshow-slides {
     display: flex !important;
@@ -705,13 +706,21 @@
   }
 
   /* Restore Carousel Dots */
+  .quick-add-modal__content slideshow-controls {
+    position: absolute !important;
+    bottom: 8px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 5 !important;
+  }
   .quick-add-modal__content .slideshow-controls__dots {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
     align-items: center !important;
     gap: 8px !important;
-    padding: 12px 0 !important;
+    padding: 8px 0 !important;
   }
   .quick-add-modal__content .slideshow-controls__dots button.button {
     width: 8px !important;
