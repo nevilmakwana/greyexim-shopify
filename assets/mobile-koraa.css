@@ -1064,11 +1064,13 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: 8px;
-  z-index: 10;
+  z-index: 99 !important;
   pointer-events: none; /* Let clicks pass through empty space */
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .product-card__action-icons > * {
@@ -1113,12 +1115,16 @@
 }
 
 /* Quick Add cart button override inside our wrapper */
-.product-card-action-btn-wrapper {
+.product-card-action-btn-wrapper,
+.product-card-action-btn-wrapper .quick-add,
+.product-card-action-btn-wrapper quick-add-component {
   /* Override quick-add logic hiding it by default */
-  --quick-add-mobile-display: flex;
-  --quick-add-display: flex;
-  --quick-add-mobile-opacity: 1;
-  opacity: 1;
+  --quick-add-mobile-display: flex !important;
+  --quick-add-display: flex !important;
+  --quick-add-mobile-opacity: 1 !important;
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .product-card-action-btn-wrapper .quick-add__button {
