@@ -102,7 +102,23 @@ export class QuickAddComponent extends Component {
     // Check if we have cached content for this URL
     let productGrid = this.#cachedContent.get(currentUrl);
 
+    // Open modal immediately for instant perceived performance and smooth animation
+    this.#openQuickAddModal();
+
     if (!productGrid) {
+      const modalContent = document.getElementById('quick-add-modal-content');
+      if (modalContent) {
+        modalContent.innerHTML = `
+          <div style="display: flex; justify-content: center; align-items: center; height: 400px; width: 100%;">
+            <div class="loading-overlay__spinner">
+              <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+              </svg>
+            </div>
+          </div>
+        `;
+      }
+
       // Fetch and cache the content
       const html = await this.fetchProductPage(currentUrl);
       if (html) {
@@ -121,8 +137,6 @@ export class QuickAddComponent extends Component {
       await this.updateQuickAddModal(freshContent);
       this.#updateVariantPicker(productGrid);
     }
-
-    this.#openQuickAddModal();
   };
 
   #resetScroll() {
