@@ -51,6 +51,9 @@ export class QuickAddComponent extends Component {
     return productCard?.getSelectedVariantId() || null;
   }
 
+  /** @type {IntersectionObserver | null} */
+  #observer = null;
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -62,6 +65,15 @@ export class QuickAddComponent extends Component {
     
     this.addEventListener('mouseenter', this.#prefetchContent.bind(this), { passive: true });
     this.addEventListener('touchstart', this.#prefetchContent.bind(this), { passive: true });
+
+    // Preload when scrolled into view (especially for mobile) to ensure zero lag
+    this.#observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        this.#prefetchContent();
+        this.#observer?.disconnect(); // Only fetch once
+      }
+    }, { rootMargin: '200px 0px' });
+    this.#observer.observe(this);
   }
 
   disconnectedCallback() {
@@ -74,6 +86,8 @@ export class QuickAddComponent extends Component {
     
     this.removeEventListener('mouseenter', this.#prefetchContent.bind(this));
     this.removeEventListener('touchstart', this.#prefetchContent.bind(this));
+    
+    this.#observer?.disconnect();
   }
 
   #prefetchContent = () => {
