@@ -31,15 +31,14 @@ export class QuickAddComponent extends Component {
 
     const url = new URL(href, window.location.origin);
 
-    if (url.searchParams.has('variant')) {
-      return url.toString();
+    if (!url.searchParams.has('variant')) {
+      const selectedVariantId = this.#getSelectedVariantId();
+      if (selectedVariantId) {
+        url.searchParams.set('variant', selectedVariantId);
+      }
     }
 
-    const selectedVariantId = this.#getSelectedVariantId();
-    if (selectedVariantId) {
-      url.searchParams.set('variant', selectedVariantId);
-    }
-
+    url.searchParams.set('section_id', 'product-information');
     return url.toString();
   }
 
@@ -60,6 +59,9 @@ export class QuickAddComponent extends Component {
       signal: this.#cartUpdateAbortController.signal,
     });
     document.addEventListener(ThemeEvents.variantSelected, this.#updateQuickAddButtonState.bind(this));
+    
+    this.addEventListener('mouseenter', this.#prefetchContent.bind(this), { passive: true });
+    this.addEventListener('touchstart', this.#prefetchContent.bind(this), { passive: true });
   }
 
   disconnectedCallback() {
@@ -69,7 +71,24 @@ export class QuickAddComponent extends Component {
     this.#abortController?.abort();
     this.#cartUpdateAbortController.abort();
     document.removeEventListener(ThemeEvents.variantSelected, this.#updateQuickAddButtonState.bind(this));
+    
+    this.removeEventListener('mouseenter', this.#prefetchContent.bind(this));
+    this.removeEventListener('touchstart', this.#prefetchContent.bind(this));
   }
+
+  #prefetchContent = () => {
+    const currentUrl = this.productPageUrl;
+    if (!this.#cachedContent.has(currentUrl)) {
+      this.fetchProductPage(currentUrl).then((html) => {
+        if (html && !this.#cachedContent.has(currentUrl)) {
+          const gridElement = html.querySelector('[data-product-grid-content]');
+          if (gridElement) {
+            this.#cachedContent.set(currentUrl, gridElement.cloneNode(true));
+          }
+        }
+      });
+    }
+  };
 
   /**
    * Clears the cached content when cart is updated
@@ -180,6 +199,9 @@ export class QuickAddComponent extends Component {
     dialogComponent.closeDialog();
   };
 
+  /** @type {Map<string, Promise<Document | null>>} */
+  #fetchPromises = new Map();
+
   /**
    * Fetches the product page content
    * @param {string} productPageUrl - The URL of the product page to fetch
@@ -188,32 +210,42 @@ export class QuickAddComponent extends Component {
   async fetchProductPage(productPageUrl) {
     if (!productPageUrl) return null;
 
+    if (this.#fetchPromises.has(productPageUrl)) {
+      return this.#fetchPromises.get(productPageUrl);
+    }
+
     // We use this to abort the previous fetch request if it's still pending.
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    try {
-      const response = await fetch(productPageUrl, {
-        signal: this.#abortController.signal,
-      });
+    const fetchPromise = (async () => {
+      try {
+        const response = await fetch(productPageUrl, {
+          signal: this.#abortController.signal,
+        });
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch product page: HTTP error ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch product page: HTTP error ${response.status}`);
+        }
+
+        const responseText = await response.text();
+        const html = new DOMParser().parseFromString(responseText, 'text/html');
+
+        return html;
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          return null;
+        } else {
+          throw error;
+        }
+      } finally {
+        this.#abortController = null;
+        this.#fetchPromises.delete(productPageUrl);
       }
-
-      const responseText = await response.text();
-      const html = new DOMParser().parseFromString(responseText, 'text/html');
-
-      return html;
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        return null;
-      } else {
-        throw error;
-      }
-    } finally {
-      this.#abortController = null;
-    }
+    })();
+    
+    this.#fetchPromises.set(productPageUrl, fetchPromise);
+    return fetchPromise;
   }
 
   /**
