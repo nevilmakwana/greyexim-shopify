@@ -281,12 +281,29 @@ class ProductFormComponent extends Component {
 
   /** @param {Event} event */
   handleSubmit(event) {
+    event.preventDefault();
     if (event.submitter?.name === 'return_to' && event.submitter?.value === '/checkout') {
-      // Allow native form submission for instant checkout redirect (Buy Now button)
+      const submitter = event.submitter;
+      const originalText = submitter.innerText;
+      submitter.innerHTML = '<div class="loading-overlay__spinner"><svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg></div>';
+      submitter.disabled = true;
+
+      const form = this.closest('form');
+      const formData = new FormData(form);
+      const fetchCfg = fetchConfig('javascript', { body: formData });
+      
+      fetch(Theme.routes.cart_add_url, {
+        ...fetchCfg,
+        headers: { ...fetchCfg.headers, Accept: 'text/html' }
+      }).then(() => {
+        window.location.href = '/checkout';
+      }).catch((e) => {
+        console.error(e);
+        submitter.innerText = originalText;
+        submitter.disabled = false;
+      });
       return;
     }
-
-    event.preventDefault();
 
     if (this.#variantChangeInProgress) {
       const intendedVariantId = this.#getIntendedVariantId();

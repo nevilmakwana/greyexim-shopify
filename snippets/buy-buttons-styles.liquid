@@ -12,6 +12,16 @@
     width: 100%;
   }
 
+  /* Hide Buy Now button globally (Product Page) */
+  .accelerated-checkout-block {
+    display: none !important;
+  }
+
+  /* Show Buy Now button ONLY inside Quick Add Modal */
+  .quick-add-modal__content .accelerated-checkout-block {
+    display: block !important;
+  }
+
   .product-form-buttons {
     display: flex;
     flex-wrap: wrap;
