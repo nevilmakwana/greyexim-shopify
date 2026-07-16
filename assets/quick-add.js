@@ -53,6 +53,9 @@ export class QuickAddComponent extends Component {
     return productCard?.getSelectedVariantId() || null;
   }
 
+  /** @type {IntersectionObserver | null} */
+  #observer = null;
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -64,6 +67,15 @@ export class QuickAddComponent extends Component {
     
     this.addEventListener('mouseenter', this.#prefetchContent.bind(this), { passive: true });
     this.addEventListener('touchstart', this.#prefetchContent.bind(this), { passive: true });
+
+    // Preload when scrolled into view (especially for mobile) to ensure zero lag
+    this.#observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        this.#prefetchContent();
+        this.#observer?.disconnect(); // Only fetch once
+      }
+    }, { rootMargin: '200px 0px' });
+    this.#observer.observe(this);
   }
 
   disconnectedCallback() {
@@ -76,6 +88,8 @@ export class QuickAddComponent extends Component {
     
     this.removeEventListener('mouseenter', this.#prefetchContent.bind(this));
     this.removeEventListener('touchstart', this.#prefetchContent.bind(this));
+    
+    this.#observer?.disconnect();
   }
 
   #prefetchContent = () => {
@@ -118,12 +132,6 @@ export class QuickAddComponent extends Component {
   handleClick = async (event) => {
     event.preventDefault();
 
-    const button = event.currentTarget || event.target.closest('.quick-add__button');
-    const originalHTML = button ? button.innerHTML : '';
-    if (button) {
-      button.innerHTML = '<div class="loading-overlay__spinner" style="display:flex;justify-content:center;align-items:center;height:100%;"><svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px;"><circle class="path" fill="none" stroke-width="6" stroke="#000" cx="33" cy="33" r="30"></circle></svg></div>';
-    }
-
     const currentUrl = this.productPageUrl;
 
     // Check if we have cached content for this URL
@@ -140,10 +148,6 @@ export class QuickAddComponent extends Component {
           this.#cachedContent.set(currentUrl, productGrid);
         }
       }
-    }
-
-    if (button) {
-      button.innerHTML = originalHTML;
     }
 
     if (productGrid) {
