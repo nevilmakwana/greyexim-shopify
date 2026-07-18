@@ -1,0 +1,425 @@
+<!-- H&M-Style Mobile Footer for Grey Exim -->
+<style>
+  /* ============================================
+     H&M-STYLE FOOTER — KORAA CUSTOM
+     ============================================ */
+  .koraa-hm-footer {
+    background: #fff;
+    color: #222;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding-bottom: 100px; /* Space for mobile bottom nav */
+  }
+
+  /* Hide on desktop — only show on mobile */
+  @media screen and (min-width: 750px) {
+    .koraa-hm-footer {
+      display: none !important;
+    }
+  }
+
+  /* ---- Accordion Sections ---- */
+  .koraa-hm-footer__accordions {
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .koraa-hm-footer__accordion {
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .koraa-hm-footer__accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 18px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .koraa-hm-footer__accordion-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #222;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .koraa-hm-footer__accordion-icon {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .koraa-hm-footer__accordion-icon::before,
+  .koraa-hm-footer__accordion-icon::after {
+    content: '';
+    position: absolute;
+    background: #222;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Horizontal line */
+  .koraa-hm-footer__accordion-icon::before {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    transform: translateY(-50%);
+  }
+
+  /* Vertical line (rotates to 0 when open) */
+  .koraa-hm-footer__accordion-icon::after {
+    top: 0;
+    left: 50%;
+    width: 1.5px;
+    height: 100%;
+    transform: translateX(-50%);
+  }
+
+  .koraa-hm-footer__accordion.is-open .koraa-hm-footer__accordion-icon::after {
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  .koraa-hm-footer__accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .koraa-hm-footer__accordion.is-open .koraa-hm-footer__accordion-content {
+    max-height: 500px;
+  }
+
+  .koraa-hm-footer__accordion-links {
+    list-style: none;
+    margin: 0;
+    padding: 0 20px 18px 20px;
+  }
+
+  .koraa-hm-footer__accordion-links li {
+    margin-bottom: 14px;
+  }
+
+  .koraa-hm-footer__accordion-links li:last-child {
+    margin-bottom: 0;
+  }
+
+  .koraa-hm-footer__accordion-links a {
+    color: #222;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+    transition: opacity 0.2s ease;
+  }
+
+  .koraa-hm-footer__accordion-links a:active {
+    opacity: 0.5;
+  }
+
+  /* ---- Brand / Logo Section ---- */
+  .koraa-hm-footer__brand {
+    padding: 40px 20px 0;
+  }
+
+  .koraa-hm-footer__logo {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #222;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  /* ---- Region ---- */
+  .koraa-hm-footer__region {
+    padding: 24px 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .koraa-hm-footer__region-text {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #222;
+  }
+
+  /* ---- Social Icons ---- */
+  .koraa-hm-footer__social {
+    padding: 32px 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .koraa-hm-footer__social a {
+    color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    transition: opacity 0.2s ease;
+  }
+
+  .koraa-hm-footer__social a:active {
+    opacity: 0.5;
+  }
+
+  .koraa-hm-footer__social svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* ---- Copyright ---- */
+  .koraa-hm-footer__copyright {
+    padding: 36px 20px 0;
+  }
+
+  .koraa-hm-footer__copyright p {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ---- Payments ---- */
+  .koraa-hm-footer__payments {
+    padding: 40px 20px 20px;
+  }
+
+  .koraa-hm-footer__payments-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 16px 0;
+  }
+
+  .koraa-hm-footer__payments-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .koraa-hm-footer__payments-icons svg,
+  .koraa-hm-footer__payments-icons img {
+    height: 24px;
+    width: auto;
+  }
+
+  .koraa-hm-footer__payment-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 4px 6px;
+    background: #f8f8f8;
+    border-radius: 4px;
+    border: 1px solid #eee;
+  }
+</style>
+
+<div class="koraa-hm-footer">
+  <!-- Accordion Sections -->
+  <div class="koraa-hm-footer__accordions">
+
+    <!-- SHOP -->
+    <div class="koraa-hm-footer__accordion">
+      <button class="koraa-hm-footer__accordion-header" aria-expanded="false">
+        <span class="koraa-hm-footer__accordion-title">Shop</span>
+        <span class="koraa-hm-footer__accordion-icon"></span>
+      </button>
+      <div class="koraa-hm-footer__accordion-content">
+        <ul class="koraa-hm-footer__accordion-links">
+          <li><a href="/collections/all">All Products</a></li>
+          <li><a href="/collections">Collections</a></li>
+          <li><a href="/collections/scarves">Scarves</a></li>
+          <li><a href="/collections/stoles">Stoles</a></li>
+          <li><a href="/collections/shawls">Shawls</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ABOUT US -->
+    <div class="koraa-hm-footer__accordion">
+      <button class="koraa-hm-footer__accordion-header" aria-expanded="false">
+        <span class="koraa-hm-footer__accordion-title">About Us</span>
+        <span class="koraa-hm-footer__accordion-icon"></span>
+      </button>
+      <div class="koraa-hm-footer__accordion-content">
+        <ul class="koraa-hm-footer__accordion-links">
+          <li><a href="/pages/about-us">Our Story</a></li>
+          <li><a href="/pages/sustainability">Sustainability</a></li>
+          <li><a href="/pages/contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- HELP -->
+    <div class="koraa-hm-footer__accordion">
+      <button class="koraa-hm-footer__accordion-header" aria-expanded="false">
+        <span class="koraa-hm-footer__accordion-title">Help</span>
+        <span class="koraa-hm-footer__accordion-icon"></span>
+      </button>
+      <div class="koraa-hm-footer__accordion-content">
+        <ul class="koraa-hm-footer__accordion-links">
+          <li><a href="/pages/shipping-delivery">Shipping & Delivery</a></li>
+          <li><a href="/pages/returns-exchange">Returns & Exchange</a></li>
+          <li><a href="/pages/faq">FAQ</a></li>
+          <li><a href="/pages/track-order">Track Order</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- POLICIES -->
+    <div class="koraa-hm-footer__accordion">
+      <button class="koraa-hm-footer__accordion-header" aria-expanded="false">
+        <span class="koraa-hm-footer__accordion-title">Policies</span>
+        <span class="koraa-hm-footer__accordion-icon"></span>
+      </button>
+      <div class="koraa-hm-footer__accordion-content">
+        <ul class="koraa-hm-footer__accordion-links">
+          <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/policies/terms-of-service">Terms of Service</a></li>
+          <li><a href="/policies/refund-policy">Refund Policy</a></li>
+          <li><a href="/policies/shipping-policy">Shipping Policy</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Brand Logo -->
+  <div class="koraa-hm-footer__brand">
+    <div class="koraa-hm-footer__logo">Grey Exim</div>
+  </div>
+
+  <!-- Region -->
+  <div class="koraa-hm-footer__region">
+    <span class="koraa-hm-footer__region-text">INDIA (₹)</span>
+  </div>
+
+  <!-- Social Icons -->
+  <div class="koraa-hm-footer__social">
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/greyexim/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    </a>
+    <!-- YouTube -->
+    <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.43z"></path>
+        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+      </svg>
+    </a>
+    <!-- Facebook -->
+    <a href="https://www.facebook.com/greyexim" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+      </svg>
+    </a>
+    <!-- X / Twitter -->
+    <a href="https://x.com/" target="_blank" rel="noopener" aria-label="X">
+      <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      </svg>
+    </a>
+    <!-- Pinterest -->
+    <a href="https://www.pinterest.com/" target="_blank" rel="noopener" aria-label="Pinterest">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C6.48 2 2 6.48 2 12c0 4.25 2.67 7.9 6.44 9.34-.09-.78-.17-1.99.04-2.85.19-.78 1.2-5.08 1.2-5.08s-.31-.61-.31-1.52c0-1.42.82-2.48 1.85-2.48.87 0 1.29.66 1.29 1.44 0 .88-.56 2.19-.85 3.41-.24 1.02.51 1.85 1.52 1.85 1.82 0 3.22-1.92 3.22-4.69 0-2.45-1.76-4.17-4.28-4.17-2.91 0-4.62 2.18-4.62 4.44 0 .88.34 1.82.76 2.34.08.1.1.19.07.29-.08.31-.25 1.02-.28 1.16-.05.19-.15.23-.35.14-1.31-.61-2.13-2.53-2.13-4.07 0-3.31 2.41-6.36 6.94-6.36 3.64 0 6.48 2.6 6.48 6.07 0 3.62-2.28 6.53-5.45 6.53-1.06 0-2.07-.55-2.41-1.21l-.66 2.5c-.24.91-.88 2.06-1.31 2.75.99.31 2.03.47 3.12.47 5.52 0 10-4.48 10-10S17.52 2 12 2z"></path>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Copyright -->
+  <div class="koraa-hm-footer__copyright">
+    <p>The content of this site is copyright-protected and is the property of Grey Exim.</p>
+    <p style="margin-top: 4px;">&copy; {{ 'now' | date: '%Y' }} Grey Exim. All rights reserved.</p>
+  </div>
+
+  <!-- Payments -->
+  <div class="koraa-hm-footer__payments">
+    <h3 class="koraa-hm-footer__payments-title">Payments</h3>
+    <div class="koraa-hm-footer__payments-icons">
+      <!-- Visa -->
+      <div class="koraa-hm-footer__payment-icon">
+        <svg viewBox="0 0 48 32" width="40" height="24" fill="none">
+          <rect width="48" height="32" rx="4" fill="#fff"/>
+          <path d="M19.5 21h-2.7l1.7-10.4h2.7L19.5 21z" fill="#1A1F71"/>
+          <path d="M30.2 10.8c-.5-.2-1.4-.4-2.4-.4-2.7 0-4.5 1.4-4.5 3.4 0 1.5 1.3 2.3 2.4 2.8 1 .5 1.4.8 1.4 1.3 0 .7-.8 1-1.6 1-1.1 0-1.6-.2-2.5-.5l-.3-.2-.4 2.2c.6.3 1.8.5 3 .5 2.8 0 4.7-1.4 4.7-3.5 0-1.2-.7-2.1-2.2-2.8-1-.5-1.5-.8-1.5-1.3 0-.4.5-.9 1.6-.9.9 0 1.5.2 2 .4l.2.1.1-2.1z" fill="#1A1F71"/>
+          <path d="M34.5 10.6h-2.1c-.6 0-1.1.2-1.4.9l-4 9.5h2.8l.6-1.5h3.5l.3 1.5h2.5l-2.2-10.4zm-3.4 6.7l1.1-3 .3-.8.2.7.6 3.1h-2.2z" fill="#1A1F71"/>
+          <path d="M16.3 10.6l-2.6 7.1-.3-1.4c-.5-1.7-2-3.5-3.7-4.4l2.4 9.1h2.9l4.3-10.4h-3z" fill="#1A1F71"/>
+          <path d="M11.4 10.6H7.1l0 .2c3.4.9 5.6 2.9 6.5 5.4l-.9-4.7c-.2-.7-.7-.9-1.3-.9z" fill="#EC982D"/>
+        </svg>
+      </div>
+      <!-- Mastercard -->
+      <div class="koraa-hm-footer__payment-icon">
+        <svg viewBox="0 0 48 32" width="40" height="24" fill="none">
+          <rect width="48" height="32" rx="4" fill="#fff"/>
+          <circle cx="19" cy="16" r="8" fill="#EB001B"/>
+          <circle cx="29" cy="16" r="8" fill="#F79E1B"/>
+          <path d="M24 10.3a7.96 7.96 0 0 0-3 5.7 7.96 7.96 0 0 0 3 5.7 7.96 7.96 0 0 0 3-5.7 7.96 7.96 0 0 0-3-5.7z" fill="#FF5F00"/>
+        </svg>
+      </div>
+      <!-- UPI -->
+      <div class="koraa-hm-footer__payment-icon">
+        <svg viewBox="0 0 48 32" width="40" height="24" fill="none">
+          <rect width="48" height="32" rx="4" fill="#fff"/>
+          <text x="24" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#4CAF50" font-family="Arial, sans-serif">UPI</text>
+        </svg>
+      </div>
+      <!-- COD -->
+      <div class="koraa-hm-footer__payment-icon">
+        <svg viewBox="0 0 48 32" width="40" height="24" fill="none">
+          <rect width="48" height="32" rx="4" fill="#fff"/>
+          <text x="24" y="18" text-anchor="middle" font-size="8" font-weight="700" fill="#222" font-family="Arial, sans-serif">CASH ON</text>
+          <text x="24" y="26" text-anchor="middle" font-size="7" font-weight="600" fill="#222" font-family="Arial, sans-serif">DELIVERY</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // H&M-style accordion toggle
+  (function() {
+    document.querySelectorAll('.koraa-hm-footer__accordion-header').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var accordion = this.closest('.koraa-hm-footer__accordion');
+        var isOpen = accordion.classList.contains('is-open');
+        
+        // Close all others first (H&M behavior: only one open at a time)
+        document.querySelectorAll('.koraa-hm-footer__accordion.is-open').forEach(function(other) {
+          if (other !== accordion) {
+            other.classList.remove('is-open');
+            other.querySelector('.koraa-hm-footer__accordion-header').setAttribute('aria-expanded', 'false');
+          }
+        });
+        
+        // Toggle current
+        if (isOpen) {
+          accordion.classList.remove('is-open');
+          this.setAttribute('aria-expanded', 'false');
+        } else {
+          accordion.classList.add('is-open');
+          this.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  })();
+</script>

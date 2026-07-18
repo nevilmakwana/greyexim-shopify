@@ -281,9 +281,17 @@
       {{ content_for_layout }}
     </main>
 
-    <footer>
+    {% render 'koraa-footer' %}
+    <footer class="koraa-desktop-footer-only">
       {% sections 'footer-group' %}
     </footer>
+    <style>
+      @media screen and (max-width: 749px) {
+        .koraa-desktop-footer-only {
+          display: none !important;
+        }
+      }
+    </style>
 
     {% render 'search-modal' %}
 
