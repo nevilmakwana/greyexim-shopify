@@ -930,62 +930,69 @@ footer .section-background {
 /* --- Newsletter Section --- */
 .koraa-newsletter {
   padding: 56px 40px;
-  background: var(--koraa-black);
+  background: #1a1a1a;
   text-align: center;
-  color: var(--koraa-white);
+  color: #ffffff;
 }
 
 .koraa-newsletter__title {
-  font-size: 1.1rem;
-  font-weight: 400;
-  margin: 0 0 8px 0;
-  color: var(--koraa-white);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #ffffff;
 }
 
 .koraa-newsletter__subtitle {
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.7);
-  margin: 0 0 24px 0;
+  font-size: 0.9rem;
+  color: #e5e5e5;
+  margin: 0 auto 24px auto;
+  max-width: 90%;
+  line-height: 1.4;
 }
 
 .koraa-newsletter__form {
   display: flex;
-  gap: 0;
+  flex-direction: column;
+  gap: 12px;
   max-width: 440px;
   margin: 0 auto;
 }
 
 .koraa-newsletter__input {
-  flex: 1;
-  padding: 12px 16px;
-  border: 1px solid rgba(255,255,255,0.3);
-  background: transparent;
-  color: white;
-  font-size: 0.85rem;
-  border-radius: 0;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  background: #cccccc;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  border-radius: 2px;
+  text-align: center;
   outline: none;
+  font-family: inherit;
 }
 
 .koraa-newsletter__input::placeholder {
-  color: rgba(255,255,255,0.5);
+  color: #ffffff;
 }
 
 .koraa-newsletter__button {
-  padding: 12px 24px;
-  background: white;
-  color: var(--koraa-black);
-  border: 1px solid white;
-  font-size: 0.75rem;
+  width: 100%;
+  padding: 16px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
+  font-family: inherit;
 }
 
 .koraa-newsletter__button:hover {
-  background: var(--koraa-accent-soft);
-  border-color: var(--koraa-accent-soft);
-  color: white;
+  opacity: 0.8;
 }
 
 /* --- Section Backgrounds --- */
