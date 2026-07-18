@@ -929,42 +929,45 @@ footer .section-background {
 
 /* --- Newsletter Section --- */
 .koraa-newsletter {
-  padding: 56px 40px;
-  background: #1a1a1a;
+  padding: 56px 20px;
+  background: #ffffff;
   text-align: center;
-  color: #ffffff;
+  color: #222222;
+  border-top: 1px solid #e5e5e5;
 }
 
 .koraa-newsletter__title {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   margin: 0 0 12px 0;
-  color: #ffffff;
+  color: #222222;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .koraa-newsletter__subtitle {
-  font-size: 0.9rem;
-  color: #e5e5e5;
+  font-size: 0.85rem;
+  color: #666666;
   margin: 0 auto 24px auto;
   max-width: 90%;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .koraa-newsletter__form {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 440px;
+  max-width: 400px;
   margin: 0 auto;
 }
 
 .koraa-newsletter__input {
   width: 100%;
-  padding: 16px;
-  border: none;
-  background: #cccccc;
-  color: #1a1a1a;
-  font-size: 0.95rem;
+  padding: 14px 16px;
+  border: 1px solid #cccccc;
+  background: #ffffff;
+  color: #222222;
+  font-size: 0.9rem;
   border-radius: 2px;
   text-align: center;
   outline: none;
@@ -972,27 +975,27 @@ footer .section-background {
 }
 
 .koraa-newsletter__input::placeholder {
-  color: #ffffff;
+  color: #999999;
 }
 
 .koraa-newsletter__button {
   width: 100%;
-  padding: 16px;
-  background: #ffffff;
-  color: #000000;
+  padding: 14px 16px;
+  background: #222222;
+  color: #ffffff;
   border: none;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 1px;
   border-radius: 2px;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: background 0.3s ease;
   font-family: inherit;
 }
 
 .koraa-newsletter__button:hover {
-  opacity: 0.8;
+  background: #000000;
 }
 
 /* --- Section Backgrounds --- */
