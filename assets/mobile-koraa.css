@@ -2,6 +2,13 @@
    MOBILE OPTIMIZATIONS + GLASS BOTTOM NAV
    ============================================= */
 
+/* Prevent horizontal scroll (white space on right side) */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
 /* --- Koraa-Style Announcement Bar (all devices) --- */
 .announcement-bar {
   background-color: #1A1A1A !important;
