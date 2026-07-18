@@ -62,33 +62,66 @@
   }
 
   .quick-add-modal[open] {
-    animation: modalSlideInTop var(--animation-speed) var(--animation-easing) forwards;
+    animation: premiumSlideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
   }
   
   @media screen and (max-width: 749px) {
     .quick-add-modal[open] {
-      animation: modalSlideUpBottom 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+      animation: mobileBottomSheetSlideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
     }
   }
 
   .quick-add-modal.dialog-closing {
-    animation: modalSlideOutTop var(--animation-speed) var(--animation-easing) forwards;
+    animation: premiumSlideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
   }
   
   @media screen and (max-width: 749px) {
     .quick-add-modal.dialog-closing {
-      animation: modalSlideDownBottom 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards !important;
+      animation: mobileBottomSheetSlideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
     }
   }
 
-  @keyframes modalSlideUpBottom {
-    from {
+  @keyframes premiumSlideUp {
+    0% {
+      transform: translateY(40px) scale(0.98);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes premiumSlideDown {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(30px) scale(0.98);
+      opacity: 0;
+    }
+  }
+
+  @keyframes mobileBottomSheetSlideUp {
+    0% {
       transform: translateY(100%);
       opacity: 0;
     }
-    to {
+    100% {
       transform: translateY(0);
       opacity: 1;
+    }
+  }
+
+  @keyframes mobileBottomSheetSlideDown {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100%);
+      opacity: 0;
     }
   }
 
