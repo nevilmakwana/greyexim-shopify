@@ -354,3 +354,90 @@
     }
   });
 </script>
+
+<script>
+  // Global Wishlist Functions
+  function koraaGetWishlist() {
+    try { return JSON.parse(localStorage.getItem('greyexim_wishlist')) || []; }
+    catch(e) { return []; }
+  }
+
+  function koraaSaveWishlist(list) {
+    localStorage.setItem('greyexim_wishlist', JSON.stringify(list));
+    if (typeof window.updateWishlistBadge === 'function') window.updateWishlistBadge();
+    if (typeof window.updateBadge === 'function') window.updateBadge();
+  }
+
+  function koraaIsInWishlist(productId) {
+    return koraaGetWishlist().some(item => String(item.id) === String(productId));
+  }
+
+  function handleCustomWishlistClick(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const productId = btn.dataset.productId;
+    
+    if (koraaIsInWishlist(productId)) {
+      const list = koraaGetWishlist().filter(item => String(item.id) !== String(productId));
+      koraaSaveWishlist(list);
+      btn.classList.remove('is-wishlisted');
+      btn.querySelector('svg').style.fill = 'none';
+      btn.querySelector('svg').style.stroke = '#111';
+      if (typeof showToast === 'function') showToast('Removed from Wishlist');
+    } else {
+      const list = koraaGetWishlist();
+      list.push({
+        id: productId,
+        variantId: btn.dataset.variantId,
+        url: btn.dataset.productUrl,
+        title: btn.dataset.productTitle,
+        image: btn.dataset.productImage,
+        price: btn.dataset.productPrice,
+        addedAt: Date.now()
+      });
+      koraaSaveWishlist(list);
+      btn.classList.add('is-wishlisted');
+      btn.querySelector('svg').style.fill = '#e74c3c';
+      btn.querySelector('svg').style.stroke = '#e74c3c';
+      if (typeof showToast === 'function') showToast('Added to Wishlist ♥');
+    }
+  }
+
+  function handleCustomCartClick(e, productUrl) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const card = e.target.closest('product-card');
+    if (card) {
+      const quickAddComponent = card.querySelector('quick-add-component');
+      const quickAddBtn = card.querySelector('.quick-add__button--choose') || card.querySelector('.quick-add__button--add');
+      
+      if (quickAddComponent && typeof quickAddComponent.handleClick === 'function') {
+        quickAddComponent.handleClick(e);
+        return;
+      } else if (quickAddBtn) {
+        quickAddBtn.click();
+        return;
+      }
+      
+      const quickViewBtn = card.querySelector('.koraa-product-card__quickview');
+      if (quickViewBtn) {
+        quickViewBtn.click();
+        return;
+      }
+    }
+    
+    window.location.href = productUrl;
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.custom-wishlist-trigger').forEach(btn => {
+      if (koraaIsInWishlist(btn.dataset.productId)) {
+        btn.classList.add('is-wishlisted');
+        btn.querySelector('svg').style.fill = '#e74c3c';
+        btn.querySelector('svg').style.stroke = '#e74c3c';
+      }
+    });
+  });
+</script>
