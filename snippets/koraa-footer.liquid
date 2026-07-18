@@ -6,7 +6,7 @@
   .koraa-hm-footer {
     background: #fff;
     color: #222;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-body-family, var(--font-body--family, "Archivo", sans-serif));
     padding-bottom: 100px; /* Space for mobile bottom nav */
   }
 
@@ -129,13 +129,19 @@
     padding: 40px 20px 0;
   }
 
-  .koraa-hm-footer__logo {
+  .koraa-hm-footer__logo-text {
     font-size: 28px;
     font-weight: 800;
     letter-spacing: 1px;
     color: #222;
     text-transform: uppercase;
     line-height: 1;
+  }
+
+  .koraa-hm-footer__logo-image {
+    max-height: 40px;
+    width: auto;
+    display: block;
   }
 
   /* ---- Region ---- */
@@ -213,7 +219,7 @@
 
   .koraa-hm-footer__payments-icons svg,
   .koraa-hm-footer__payments-icons img {
-    height: 24px;
+    height: 28px;
     width: auto;
   }
 
@@ -221,8 +227,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 32px;
-    padding: 4px 6px;
+    height: 38px;
+    min-width: 54px;
+    padding: 4px 8px;
     background: #f8f8f8;
     border-radius: 4px;
     border: 1px solid #eee;
@@ -301,7 +308,11 @@
 
   <!-- Brand Logo -->
   <div class="koraa-hm-footer__brand">
-    <div class="koraa-hm-footer__logo">Grey Exim</div>
+    {%- if settings.logo != blank -%}
+      {{ settings.logo | image_url: width: 400 | image_tag: class: 'koraa-hm-footer__logo-image', loading: 'lazy' }}
+    {%- else -%}
+      <div class="koraa-hm-footer__logo-text">Grey Exim</div>
+    {%- endif -%}
   </div>
 
   <!-- Region -->
@@ -358,7 +369,7 @@
     <div class="koraa-hm-footer__payments-icons">
       <!-- Visa -->
       <div class="koraa-hm-footer__payment-icon">
-        <svg viewBox="0 0 48 32" width="40" height="24" fill="none">
+        <svg viewBox="0 0 48 32" width="48" height="32" fill="none">
           <rect width="48" height="32" rx="4" fill="#fff"/>
           <path d="M19.5 21h-2.7l1.7-10.4h2.7L19.5 21z" fill="#1A1F71"/>
           <path d="M30.2 10.8c-.5-.2-1.4-.4-2.4-.4-2.7 0-4.5 1.4-4.5 3.4 0 1.5 1.3 2.3 2.4 2.8 1 .5 1.4.8 1.4 1.3 0 .7-.8 1-1.6 1-1.1 0-1.6-.2-2.5-.5l-.3-.2-.4 2.2c.6.3 1.8.5 3 .5 2.8 0 4.7-1.4 4.7-3.5 0-1.2-.7-2.1-2.2-2.8-1-.5-1.5-.8-1.5-1.3 0-.4.5-.9 1.6-.9.9 0 1.5.2 2 .4l.2.1.1-2.1z" fill="#1A1F71"/>
@@ -378,9 +389,9 @@
       </div>
       <!-- UPI -->
       <div class="koraa-hm-footer__payment-icon">
-        <svg viewBox="0 0 48 32" width="40" height="24" fill="none">
+        <svg viewBox="0 0 48 32" width="48" height="32" fill="none">
           <rect width="48" height="32" rx="4" fill="#fff"/>
-          <text x="24" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#4CAF50" font-family="Arial, sans-serif">UPI</text>
+          <text x="24" y="21" text-anchor="middle" font-size="14" font-weight="700" fill="#4CAF50" font-family="var(--font-body-family, sans-serif)">UPI</text>
         </svg>
       </div>
       <!-- COD -->
